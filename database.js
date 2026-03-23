@@ -521,7 +521,7 @@ async function updateAvatar(userId,avatar){await q(`UPDATE users SET avatar=$1 W
 async function getAvatar(userId){const r=await q(`SELECT avatar FROM users WHERE id=$1`,[userId]);return r[0]?.avatar||null;}
 async function deleteUser(userId){await q(`DELETE FROM users WHERE id=$1`,[userId]);}
 
-async function createSession(userId,ttlMs=8*60*60*1000){
+async function createSession(userId,ttlMs=2*60*60*1000){
   const{randomBytes}=require('crypto');
   const token=randomBytes(32).toString('hex');
   await q(`INSERT INTO sessions(token,user_id,expires_at) VALUES($1,$2,$3)`,[token,userId,new Date(Date.now()+ttlMs)]);
@@ -532,7 +532,6 @@ async function validateSession(token){
   await q(`DELETE FROM sessions WHERE expires_at<NOW()`);
   const rows=await q(`SELECT user_id FROM sessions WHERE token=$1`,[token]);
   if(!rows.length) return null;
-  await q(`UPDATE sessions SET expires_at=$1 WHERE token=$2`,[new Date(Date.now()+8*60*60*1000),token]);
   return rows[0].user_id;
 }
 async function destroySession(token){await q(`DELETE FROM sessions WHERE token=$1`,[token]);}
