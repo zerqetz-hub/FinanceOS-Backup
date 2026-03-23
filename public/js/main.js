@@ -17,7 +17,7 @@ function _computeAlerts() {
       const budget = S.budgets?.[cat];
       const spent  = cf.expenses?.[cat] || 0;
       if (budget && spent > budget)
-        alerts.push({ type:'danger', msg:'Budget ' + cat + ' terlampaui: ' + fmtS(spent) + ' dari ' + fmtS(budget) + '.' });
+        alerts.push({ type:'danger', msg:'Budget ' + esc(cat) + ' terlampaui: ' + fmtS(spent) + ' dari ' + fmtS(budget) + '.' });
     });
   }
   const dti = latestCF() && latestCF().income > 0 ? totalCicilan() / latestCF().income : 0;
@@ -139,7 +139,10 @@ async function bootApp() {
     if (emailEl) emailEl.textContent = me.email || '';
     if (me.avatar) {
       const btn = document.getElementById('avatarBtn');
-      if (btn) {
+      // Sanitasi: hanya izinkan MIME aman — blokir SVG dan format lain yang bisa XSS
+      const SAFE_AVATAR_MIME = ['data:image/jpeg;', 'data:image/png;', 'data:image/webp;'];
+      const safeAvatar = SAFE_AVATAR_MIME.some(p => me.avatar.startsWith(p));
+      if (btn && safeAvatar) {
         btn.style.backgroundImage    = "url('" + me.avatar + "')";
         btn.style.backgroundSize     = 'cover';
         btn.style.backgroundPosition = 'center';

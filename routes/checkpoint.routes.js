@@ -4,7 +4,7 @@
 const router = require('express').Router();
 const db     = require('../database');
 
-const e500 = (res, e) => res.status(500).json({ error: e.message });
+const e500 = (res, e) => res.status(500).json({ error: e.message || 'Internal server error' });
 
 // ─── SINGLE CHECKPOINT ────────────────────────────────────────────────────────
 router.post('/save',    async (req, res) => { try { const savedAt = await db.saveCheckpoint(req.userId); res.json({ ok: true, savedAt }); } catch (e) { e500(res, e); } });
