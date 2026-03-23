@@ -1,0 +1,43 @@
+{
+  "name": "financeos",
+  "version": "5.5.0",
+  "description": "FinanceOS v5.5 — Personal Finance System (NUMERIC precision, split render, test suite)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "npx nodemon server.js",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch --runInBand",
+    "test:coverage": "jest --coverage --runInBand"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "pg": "^8.11.3",
+    "@sentry/node": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "validators.js",
+      "auth.js",
+      "errors.js",
+      "routes/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "lines": 70
+      }
+    }
+  }
+}
