@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>FinanceOS — Personal Finance System</title>
+<meta name="theme-color" content="#1a6b4a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Kelola keuangan pribadi dengan cerdas — dashboard lengkap untuk pemasukan, pengeluaran, aset, hutang, dan tujuan finansial Anda.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-theme="light">
+
+<!-- LANDING PAGE — ditampilkan ke pengunjung yang belum login -->
+<div id="landingPage" style="display:none">
+<style id="landing-css">
+/* ══════════════════════════════════════════════════════════
+   LANDING PAGE — isolated CSS, all prefixed with #landingPage
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Base ── */
+#landingPage { min-height:100vh; background:#f5f4f0; font-family:'DM Sans',sans-serif; }
+[data-theme=dark] #landingPage { background:#0f0f0d; }
+
+#landingPage .landing-nav { display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;border-bottom:1px solid rgba(0,0,0,.08);background:#f5f4f0; }
+[data-theme=dark] #landingPage .landing-nav { background:#0f0f0d;border-color:rgba(255,255,255,.08); }
+#landingPage .landing-nav-logo { font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px; }
+#landingPage .landing-nav-logo span { width:28px;height:28px;background:#1a6b4a;color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700; }
+#landingPage .landing-nav-actions { display:flex;gap:10px; }
+#landingPage .btn-landing-login { background:none;border:1px solid rgba(0,0,0,.15);color:#1a1915;padding:7px 18px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit; }
+[data-theme=dark] #landingPage .btn-landing-login { color:#f0ede4;border-color:rgba(255,255,255,.2); }
+#landingPage .btn-landing-register { background:#1a6b4a;color:#fff;border:none;padding:7px 18px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;font-family:inherit; }
+
+/* ── Hero ── */
+#landingPage .landing-hero { display:flex;align-items:flex-start;gap:48px;padding:72px 40px 80px;max-width:1100px;margin:0 auto; }
+#landingPage .landing-hero-content { flex:0 0 440px;padding-top:20px; }
+#landingPage .landing-badge { display:inline-block;background:#e8f5ef;color:#1a6b4a;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:20px; }
+[data-theme=dark] #landingPage .landing-badge { background:#0d2a1e;color:#3adb8e; }
+#landingPage .landing-title { font-size:44px;font-weight:700;line-height:1.12;color:#1a1915;margin:0 0 18px;letter-spacing:-.5px; }
+[data-theme=dark] #landingPage .landing-title { color:#f0ede4; }
+#landingPage .landing-sub { font-size:16px;color:#6b6960;line-height:1.7;margin:0 0 32px; }
+#landingPage .landing-cta { display:flex;gap:12px;flex-wrap:wrap; }
+#landingPage .btn-cta-primary { background:#1a6b4a;color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s; }
+#landingPage .btn-cta-primary:hover { opacity:.9; }
+#landingPage .btn-cta-secondary { background:none;border:1px solid rgba(0,0,0,.15);color:#6b6960;padding:12px 20px;border-radius:10px;font-size:15px;cursor:pointer;font-family:inherit;transition:all .15s; }
+[data-theme=dark] #landingPage .btn-cta-secondary { color:#9b9a93;border-color:rgba(255,255,255,.15); }
+
+/* ── Visual area ── */
+#landingPage .landing-hero-visual { flex:1;min-width:0; }
+
+/* ══════════════════════════════════════════════════════════
+   CARD STACK — stacked cards with side peeks
+   Active card fills the container.
+   Prev/Next: behind active, peeking as strips on left/right.
+   ══════════════════════════════════════════════════════════ */
+
+#landingPage .hs-scene { position: relative; }
+
+/* White container box — active card fits inside */
+#landingPage .hs-stack {
+  position: relative;
+  height: 510px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.09);
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(0,0,0,.1);
+}
+[data-theme=dark] #landingPage .hs-stack { background:#1a1916; border-color:rgba(255,255,255,.09); }
+
+/* ── Base card ── */
+#landingPage .hs-card {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 100%;
+  background: inherit;
+  transition:
+    left .45s cubic-bezier(.22,1,.36,1),
+    opacity .3s ease,
+    filter .3s ease,
+    border-color .2s ease;
+}
+
+/* ── ACTIVE: fills the stack ── */
+#landingPage .hs-card.hs-active {
+  left: 0;
+  z-index: 3;
+  filter: none;
+  opacity: 1;
+  cursor: default;
+}
+#landingPage .hs-card.hs-active .hs-card-body { opacity:1; pointer-events:auto; }
+#landingPage .hs-card.hs-active .hs-peek-strip { display:none; }
+
+/* ── PREV: peek strip visible on left edge ── */
+#landingPage .hs-card.hs-prev {
+  left: calc(-100% + 44px);
+  z-index: 2;
+  filter: saturate(.3) brightness(.97);
+  opacity: 1;
+  cursor: pointer;
+}
+#landingPage .hs-card.hs-prev .hs-card-body { opacity:0; pointer-events:none; }
+#landingPage .hs-card.hs-prev .hs-peek-strip {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 44px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap:6px;
+  background: rgba(240,239,233,.96);
+  border-left: 1px solid rgba(0,0,0,.07);
+  transition: background .2s, border-color .2s;
+}
+[data-theme=dark] #landingPage .hs-card.hs-prev .hs-peek-strip { background:rgba(35,35,32,.96); border-color:rgba(255,255,255,.1); }
+#landingPage .hs-card.hs-prev:hover .hs-peek-strip {
+  background: #e8f5ef;
+  border-color: #1a6b4a;
+  border-width: 2px;
+}
+[data-theme=dark] #landingPage .hs-card.hs-prev:hover .hs-peek-strip { background:#0d2a1e; border-color:#3adb8e; }
+
+/* ── NEXT: peek strip visible on right edge ── */
+#landingPage .hs-card.hs-next {
+  left: calc(100% - 44px);
+  z-index: 2;
+  filter: saturate(.3) brightness(.97);
+  opacity: 1;
+  cursor: pointer;
+}
+#landingPage .hs-card.hs-next .hs-card-body { opacity:0; pointer-events:none; }
+#landingPage .hs-card.hs-next .hs-peek-strip {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 44px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap:6px;
+  background: rgba(240,239,233,.96);
+  border-right: 1px solid rgba(0,0,0,.07);
+  transition: background .2s, border-color .2s;
+}
+[data-theme=dark] #landingPage .hs-card.hs-next .hs-peek-strip { background:rgba(35,35,32,.96); border-color:rgba(255,255,255,.1); }
+#landingPage .hs-card.hs-next:hover .hs-peek-strip {
+  background: #e8f5ef;
+  border-color: #1a6b4a;
+  border-right-width: 2px;
+}
+[data-theme=dark] #landingPage .hs-card.hs-next:hover .hs-peek-strip { background:#0d2a1e; border-color:#3adb8e; }
+
+/* ── HIDDEN ── */
+#landingPage .hs-card.hs-hidden {
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Enter animations ── */
+@keyframes hsSlideFromLeft  { from{left:calc(-100% + 44px);opacity:.4} to{left:0;opacity:1} }
+@keyframes hsSlideFromRight { from{left:calc(100% - 44px);opacity:.4}  to{left:0;opacity:1} }
+#landingPage .hs-card.hs-active.hs-enter-left  { animation: hsSlideFromLeft  .42s cubic-bezier(.22,1,.36,1) both; }
+#landingPage .hs-card.hs-active.hs-enter-right { animation: hsSlideFromRight .42s cubic-bezier(.22,1,.36,1) both; }
+
+/* ── Card body ── */
+#landingPage .hs-card-body {
+  padding: 16px 18px;
+  height: 510px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+#landingPage .hs-card-spacer { flex:1; }
+
+/* ── Mac dots in card header ── */
+#landingPage .hs-mac-dots {
+  display: flex; gap: 5px; margin-bottom: 10px; flex-shrink: 0;
+}
+#landingPage .hs-mac-dots span {
+  width: 10px; height: 10px; border-radius: 50%; display: block;
+}
+#landingPage .preview-title-bar {
+  font-size: 12px; font-weight: 600; color: #6b6960;
+  margin-bottom: 12px; flex-shrink: 0;
+}
+[data-theme=dark] #landingPage .preview-title-bar { color:#9b9a93; }
+
+/* ── Peek strip elements ── */
+#landingPage .hs-peek-dots {
+  display: flex; flex-direction: column; gap: 3px; align-items: center;
+}
+#landingPage .hs-peek-dots span { width:5px;height:5px;border-radius:50%;display:block;opacity:.5; }
+#landingPage .hs-peek-icon { font-size:14px;opacity:.75; }
+#landingPage .hs-peek-lbl {
+  font-size: 9px; font-weight: 600; color: #6b6960;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  white-space: nowrap; max-height: 90px; overflow: hidden;
+  letter-spacing: .3px; font-family: inherit;
+}
+[data-theme=dark] #landingPage .hs-peek-lbl { color:#9b9a93; }
+
+/* ── Navigation dots ── */
+#landingPage .hs-dots {
+  display: flex; justify-content: center; gap: 6px; padding: 12px 0 0;
+}
+#landingPage .hs-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(0,0,0,.2); cursor: pointer;
+  transition: all .2s;
+}
+#landingPage .hs-dot.active { background: #1a6b4a; transform: scale(1.35); }
+[data-theme=dark] #landingPage .hs-dot { background: rgba(255,255,255,.25); }
+
+/* ── Preview elements (sliders, metrics) ── */
+#landingPage .preview-header { display:flex;align-items:center;gap:6px;margin-bottom:12px;flex-shrink:0; }
+#landingPage .preview-dot { width:10px;height:10px;border-radius:50%; }
+#landingPage .preview-title { font-size:12px;font-weight:600;color:#6b6960;margin-left:4px; }
+[data-theme=dark] #landingPage .preview-title { color:#9b9a93; }
+#landingPage .preview-metric-row { display:flex;gap:8px;margin-bottom:10px;flex-shrink:0; }
+#landingPage .preview-metric { flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,.08);background:#fff; }
+[data-theme=dark] #landingPage .preview-metric { background:#232320;border-color:rgba(255,255,255,.08); }
+#landingPage .preview-metric.green { background:#e8f5ef;border-color:#b2d8c4; }
+#landingPage .preview-metric.blue  { background:#e8f0fb;border-color:#b2c8ee; }
+#landingPage .preview-metric.amber { background:#fef3e2;border-color:#f5d898; }
+#landingPage .preview-metric-label { font-size:9px;font-weight:600;color:#9b9a93;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px; }
+#landingPage .preview-metric-value { font-size:15px;font-weight:700;color:#1a1915;letter-spacing:-.3px; }
+[data-theme=dark] #landingPage .preview-metric-value { color:#f0ede4; }
+#landingPage .preview-slider-group { margin-bottom:11px;flex-shrink:0; }
+#landingPage .preview-slider-top { display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px; }
+#landingPage .preview-slider-label { font-size:9px;font-weight:600;color:#9b9a93;text-transform:uppercase;letter-spacing:.5px; }
+#landingPage .preview-slider-val { font-size:12px;font-weight:700;color:#1a1915; }
+[data-theme=dark] #landingPage .preview-slider-val { color:#f0ede4; }
+#landingPage .preview-slider { -webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:rgba(0,0,0,.12);outline:none;cursor:pointer; }
+[data-theme=dark] #landingPage .preview-slider { background:rgba(255,255,255,.18); }
+#landingPage .preview-slider::-webkit-slider-thumb { -webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#1a6b4a;cursor:pointer;box-shadow:0 1px 4px rgba(26,107,74,.3); }
+#landingPage .preview-slider::-moz-range-thumb { width:14px;height:14px;border-radius:50%;background:#1a6b4a;cursor:pointer;border:none; }
+#landingPage .preview-slider-minmax { display:flex;justify-content:space-between;font-size:9px;color:#9b9a93;margin-top:3px; }
+
+/* ── Asset rows ── */
+#landingPage .hs-asset-list { display:flex;flex-direction:column;gap:7px;margin-bottom:10px;flex-shrink:0; }
+#landingPage .hs-asset-row { display:flex;align-items:center;gap:8px;padding:7px 10px;background:#f0efe9;border:1px solid rgba(0,0,0,.07);border-radius:8px; }
+[data-theme=dark] #landingPage .hs-asset-row { background:#232320;border-color:rgba(255,255,255,.07); }
+#landingPage .hs-asset-row:hover { background:#e8f5ef;border-color:rgba(26,107,74,.2); }
+#landingPage .hs-asset-info { display:flex;align-items:center;gap:7px;flex-shrink:0;width:130px; }
+#landingPage .hs-asset-icon { font-size:15px; }
+#landingPage .hs-asset-name { font-size:11px;font-weight:500;color:#6b6960; }
+#landingPage .hs-asset-type { font-size:9px;color:#9b9a93; }
+#landingPage .hs-asset-right { flex:1;min-width:0; }
+#landingPage .hs-asset-slider { width:100%;margin-bottom:3px; }
+#landingPage .hs-asset-vals { display:flex;justify-content:space-between;align-items:baseline; }
+#landingPage .hs-asset-amount { font-size:11px;font-weight:700;color:#1a1915; }
+[data-theme=dark] #landingPage .hs-asset-amount { color:#f0ede4; }
+#landingPage .hs-asset-return { font-size:9px;color:#9b9a93; }
+#landingPage .hs-asset-return.up { color:#1a6b4a; }
+#landingPage .hs-asset-summary { display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px;flex-shrink:0; }
+#landingPage .hs-asset-summary .preview-metric { padding:8px 10px; }
+#landingPage .hs-asset-summary .preview-metric-value { font-size:13px; }
+
+/* ── Gauge ── */
+#landingPage .hs-gauge-wrap { flex-shrink:0;margin-top:4px; }
+#landingPage .hs-gauge-area { position:relative;display:flex;justify-content:center; }
+#landingPage .hs-gauge-svg { width:100%;max-width:180px;height:auto;display:block;margin:0 auto; }
+#landingPage .hs-gauge-bg { stroke:rgba(0,0,0,.1);opacity:.7; }
+#landingPage .hs-gauge-fill { transition:stroke-dasharray .4s ease,stroke .3s; }
+#landingPage .hs-gauge-center { position:absolute;bottom:4px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none; }
+#landingPage .hs-gauge-pct { display:block;font-size:22px;font-weight:700;color:#1a1915;line-height:1; }
+[data-theme=dark] #landingPage .hs-gauge-pct { color:#f0ede4; }
+#landingPage .hs-gauge-sublabel { font-size:9px;color:#9b9a93;text-transform:uppercase;letter-spacing:.4px; }
+#landingPage .hs-gauge-ticks { display:flex;justify-content:space-between;padding:0 18px;font-size:9px;margin-top:2px; }
+#landingPage .hs-gauge-label-row { margin-bottom:4px; }
+
+/* ── Donut ── */
+#landingPage .hs-donut-wrap { display:flex;align-items:center;gap:14px;flex-shrink:0;margin-top:8px; }
+#landingPage .hs-donut-chart-area { position:relative;flex-shrink:0; }
+#landingPage .hs-donut-chart-area canvas { display:block!important;width:80px!important;height:80px!important;min-width:80px;min-height:80px; }
+#landingPage .hs-donut-center { position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center; }
+#landingPage .hs-donut-total { font-size:10px;font-weight:700;color:#1a1915;line-height:1.2; }
+[data-theme=dark] #landingPage .hs-donut-total { color:#f0ede4; }
+#landingPage .hs-donut-label { font-size:8px;color:#9b9a93;text-transform:uppercase; }
+#landingPage .hs-donut-legend { flex:1;display:flex;flex-direction:column;gap:5px; }
+#landingPage .hs-donut-leg-item { display:flex;align-items:center;gap:6px; }
+#landingPage .hs-donut-leg-item span:first-child { width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0; }
+#landingPage .hs-donut-leg-name { font-size:11px;color:#6b6960;flex:1; }
+[data-theme=dark] #landingPage .hs-donut-leg-name { color:#9b9a93; }
+#landingPage .hs-donut-leg-pct { font-size:11px;font-weight:600;color:#1a1915; }
+[data-theme=dark] #landingPage .hs-donut-leg-pct { color:#f0ede4; }
+
+/* ── Ring (Goals) ── */
+#landingPage .hs-ring-wrap { display:flex;align-items:center;gap:18px;flex-shrink:0;margin-top:6px;padding:12px 14px;background:#f0efe9;border:1px solid rgba(0,0,0,.07);border-radius:8px; }
+[data-theme=dark] #landingPage .hs-ring-wrap { background:#232320;border-color:rgba(255,255,255,.08); }
+#landingPage .hs-ring-area { position:relative;flex-shrink:0; }
+#landingPage .hs-ring-svg { width:80px;height:80px;min-width:80px;min-height:80px;display:block;transform:rotate(-90deg); }
+#landingPage .hs-ring-bg { fill:none;stroke:rgba(0,0,0,.1);stroke-width:8; }
+#landingPage .hs-ring-fill { fill:none;stroke:#1a6b4a;stroke-width:8;stroke-linecap:round;transition:stroke-dasharray .5s ease,stroke .3s; }
+#landingPage .hs-ring-center { position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center; }
+#landingPage .hs-ring-pct { font-size:15px;font-weight:700;color:#1a1915;line-height:1; }
+[data-theme=dark] #landingPage .hs-ring-pct { color:#f0ede4; }
+#landingPage .hs-ring-label { font-size:8px;color:#9b9a93;text-transform:uppercase;letter-spacing:.4px; }
+#landingPage .hs-ring-info { flex:1;display:flex;flex-direction:column;gap:10px; }
+#landingPage .hs-ring-row { display:flex;flex-direction:column;gap:2px; }
+#landingPage .hs-ring-key { font-size:14px;font-weight:700;color:#1a1915; }
+[data-theme=dark] #landingPage .hs-ring-key { color:#f0ede4; }
+#landingPage .hs-ring-sub { font-size:9px;color:#9b9a93;text-transform:uppercase;letter-spacing:.4px; }
+
+/* ── Inv chart ── */
+#landingPage .preview-chart-wrap { position:relative;height:115px;margin-bottom:4px;flex-shrink:0; }
+#landingPage .preview-chart-wrap canvas { width:100%!important;height:100%!important; }
+#landingPage .preview-chart-tooltip { display:none;position:absolute;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;padding:7px 10px;font-size:11px;box-shadow:0 4px 14px rgba(0,0,0,.1);pointer-events:none;z-index:10;min-width:140px;white-space:nowrap; }
+[data-theme=dark] #landingPage .preview-chart-tooltip { background:#1a1916; }
+#landingPage .preview-tooltip-year { font-weight:600;color:#1a1915;margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid rgba(0,0,0,.08);font-size:11px; }
+[data-theme=dark] #landingPage .preview-tooltip-year { color:#f0ede4; }
+#landingPage .preview-tooltip-row { display:flex;align-items:center;gap:6px;margin-top:3px;color:#6b6960;font-size:10px; }
+#landingPage .preview-tooltip-row strong { margin-left:auto;color:#1a1915; }
+[data-theme=dark] #landingPage .preview-tooltip-row strong { color:#f0ede4; }
+#landingPage .preview-tooltip-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
+#landingPage .preview-chart-legend { display:flex;gap:12px;font-size:10px;color:#9b9a93;margin-top:3px;flex-shrink:0; }
+#landingPage .preview-legend-item { display:flex;align-items:center;gap:4px; }
+#landingPage .preview-legend-solid { display:inline-block;width:12px;height:2px;border-radius:1px; }
+#landingPage .preview-legend-dashed { display:inline-block;width:12px;height:0;border-top:2px dashed #9b9a93; }
+
+/* ── Features ── */
+#landingPage .landing-features { background:#f0efe9;padding:64px 40px;border-top:1px solid rgba(0,0,0,.08); }
+[data-theme=dark] #landingPage .landing-features { background:#1a1916;border-color:rgba(255,255,255,.08); }
+#landingPage .landing-features-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:1100px;margin:0 auto; }
+#landingPage .landing-feature-card { background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:22px;transition:border-color .2s,transform .2s; }
+[data-theme=dark] #landingPage .landing-feature-card { background:#1a1916;border-color:rgba(255,255,255,.08); }
+#landingPage .landing-feature-card:hover { border-color:#1a6b4a;transform:translateY(-2px); }
+#landingPage .feature-icon { font-size:24px;margin-bottom:10px; }
+#landingPage .landing-feature-card h3 { font-size:15px;font-weight:600;color:#1a1915;margin:0 0 7px; }
+[data-theme=dark] #landingPage .landing-feature-card h3 { color:#f0ede4; }
+#landingPage .landing-feature-card p { font-size:13px;color:#6b6960;line-height:1.6;margin:0; }
+#landingPage .landing-cta-bottom { text-align:center;padding:64px 40px;border-top:1px solid rgba(0,0,0,.08); }
+#landingPage .landing-cta-bottom h2 { font-size:30px;font-weight:700;color:#1a1915;margin:0 0 10px; }
+[data-theme=dark] #landingPage .landing-cta-bottom h2 { color:#f0ede4; }
+#landingPage .landing-cta-bottom p { font-size:15px;color:#6b6960;margin:0 0 24px; }
+#landingPage .landing-footer { display:flex;justify-content:space-between;padding:18px 40px;border-top:1px solid rgba(0,0,0,.08);font-size:12px;color:#9b9a93; }
+
+/* ── Responsive ── */
+@media (max-width:860px) {
+  #landingPage .landing-hero { flex-direction:column;padding:40px 20px 48px;gap:32px; }
+  #landingPage .landing-hero-content { flex:none;width:100%; }
+  #landingPage .landing-title { font-size:30px; }
+  #landingPage .landing-nav { padding:0 16px; }
+  #landingPage .landing-features { padding:40px 16px; }
+  #landingPage .landing-cta-bottom { padding:40px 16px; }
+  #landingPage .landing-footer { padding:16px;flex-direction:column;gap:4px; }
+  #landingPage .hs-stack { margin:0 40px; }
+}
+</style>
+  <nav class="landing-nav">
+    <div class="landing-nav-logo"><span>F</span> FinanceOS</div>
+    <div class="landing-nav-actions">
+      <button class="btn-landing-login" onclick="showLandingAuth('login')">Masuk</button>
+      <button class="btn-landing-register" onclick="showLandingAuth('register')">Daftar Gratis</button>
+    </div>
+  </nav>
+
+  <section class="landing-hero">
+    <div class="landing-hero-content">
+      <div class="landing-badge">✦ Gratis selamanya</div>
+      <h1 class="landing-title">Kelola Keuangan<br>Pribadi dengan Cerdas</h1>
+      <p class="landing-sub">Dashboard lengkap untuk mencatat pemasukan, pengeluaran, aset, hutang, dan tujuan finansial Anda — semua dalam satu tempat.</p>
+      <div class="landing-cta">
+        <button class="btn-cta-primary" onclick="showLandingAuth('register')">Mulai Sekarang — Gratis</button>
+        <button class="btn-cta-secondary" onclick="showLandingAuth('login')">Sudah punya akun</button>
+      </div>
+    </div>
+
+    <div class="landing-hero-visual">
+      <div class="hs-scene" id="hsScene">
+        <div class="hs-stack" id="hsStack">
+        <!-- CARD: Cash Flow -->
+        <div class="hs-card hs-active" id="hs-card-cf" onclick="hsClick('cf')">
+          <div class="hs-peek-strip">
+              <div class="hs-peek-dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+              <span class="hs-peek-icon">💰</span>
+              <span class="hs-peek-lbl">Cash Flow</span>
+            </div>
+          <div class="hs-card-body">
+            
+            <div class="preview-header">
+              <div class="preview-dot" style="background:#ff5f57"></div>
+              <div class="preview-dot" style="background:#febc2e"></div>
+              <div class="preview-dot" style="background:#28c840"></div>
+              <span class="preview-title">💰 Cash Flow</span>
+            </div>
+            <div class="preview-slider-group">
+              <div class="preview-slider-top"><span class="preview-slider-label">Pemasukan / bulan</span><span class="preview-slider-val" id="cf-income-val">Rp 8jt</span></div>
+              <input class="preview-slider" type="range" id="cf-income" min="1000000" max="30000000" step="500000" value="8000000" oninput="cfCalc()">
+              <div class="preview-slider-minmax"><span>Rp 1jt</span><span>Rp 30jt</span></div>
+            </div>
+            <div class="preview-slider-group">
+              <div class="preview-slider-top"><span class="preview-slider-label">Pengeluaran / bulan</span><span class="preview-slider-val" id="cf-expense-val">Rp 5,5jt</span></div>
+              <input class="preview-slider" type="range" id="cf-expense" min="500000" max="29500000" step="500000" value="5500000" oninput="cfCalc()">
+              <div class="preview-slider-minmax"><span>Rp 500rb</span><span>Rp 29,5jt</span></div>
+            </div>
+            <div class="preview-slider-group" style="margin-bottom:12px">
+              <div class="preview-slider-top"><span class="preview-slider-label">Cicilan hutang / bulan</span><span class="preview-slider-val" id="cf-debt-val">Rp 0</span></div>
+              <input class="preview-slider" type="range" id="cf-debt" min="0" max="10000000" step="200000" value="0" oninput="cfCalc()">
+              <div class="preview-slider-minmax"><span>Rp 0</span><span>Rp 10jt</span></div>
+            </div>
+            <div class="preview-metric-row">
+              <div class="preview-metric green" id="cf-m-sisa"><div class="preview-metric-label">Sisa / bln</div><div class="preview-metric-value" id="cf-sisa">Rp 2,5jt</div></div>
+              <div class="preview-metric blue"><div class="preview-metric-label">Saving Rate</div><div class="preview-metric-value" id="cf-rate">31%</div></div>
+              <div class="preview-metric amber"><div class="preview-metric-label">DTI Ratio</div><div class="preview-metric-value" id="cf-dti">0%</div></div>
+            </div>
+            <div class="hs-gauge-wrap">
+              <div class="hs-gauge-label-row"><span class="preview-slider-label">Rasio pengeluaran</span></div>
+              <div class="hs-gauge-area">
+                <svg class="hs-gauge-svg" viewBox="0 0 120 68" id="cf-gauge-svg">
+                  <path class="hs-gauge-bg" d="M10,64 A54,54 0 0,1 110,64" fill="none" stroke-width="10" stroke-linecap="round"/>
+                  <path class="hs-gauge-fill" id="cf-gauge-fill" d="M10,64 A54,54 0 0,1 110,64" fill="none" stroke-width="10" stroke-linecap="round"/>
+                </svg>
+                <div class="hs-gauge-center">
+                  <span class="hs-gauge-pct" id="cf-ratio-pct">69%</span>
+                  <span class="hs-gauge-sublabel">Pengeluaran</span>
+                </div>
+              </div>
+              <div class="hs-gauge-ticks"><span style="color:var(--accent)">0%</span><span style="color:var(--amber)">70%</span><span style="color:var(--red)">100%</span></div>
+            </div>
+            <div class="hs-card-spacer"></div>
+          </div>
+        </div>
+        <!-- CARD: Portofolio Aset -->
+        <div class="hs-card hs-next" id="hs-card-asset" onclick="hsClick('asset')">
+          <div class="hs-peek-strip">
+              <div class="hs-peek-dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+              <span class="hs-peek-icon">🏦</span>
+              <span class="hs-peek-lbl">Portofolio Aset</span>
+            </div>
+          <div class="hs-card-body">
+            
+            <div class="preview-header">
+              <div class="preview-dot" style="background:#ff5f57"></div>
+              <div class="preview-dot" style="background:#febc2e"></div>
+              <div class="preview-dot" style="background:#28c840"></div>
+              <span class="preview-title">🏦 Portofolio Aset</span>
+            </div>
+            <div class="hs-asset-list">
+              <div class="hs-asset-row">
+                <div class="hs-asset-info"><span class="hs-asset-icon">🏦</span><div><div class="hs-asset-name">Tabungan BCA</div><div class="hs-asset-type">Perbankan · 3,5% p.a.</div></div></div>
+                <div class="hs-asset-right">
+                  <input class="preview-slider hs-asset-slider" type="range" id="pa-bca" min="0" max="500000000" step="1000000" value="50000000" oninput="assetCalc()">
+                  <div class="hs-asset-vals"><span class="hs-asset-amount" id="pa-bca-val">Rp 50jt</span><span class="hs-asset-return up" id="pa-bca-ret">+Rp 1,75jt/thn</span></div>
+                </div>
+              </div>
+              <div class="hs-asset-row">
+                <div class="hs-asset-info"><span class="hs-asset-icon">🥇</span><div><div class="hs-asset-name">Emas</div><div class="hs-asset-type">Komoditas · 12% p.a.</div></div></div>
+                <div class="hs-asset-right">
+                  <input class="preview-slider hs-asset-slider" type="range" id="pa-gold" min="0" max="500000000" step="1000000" value="30000000" oninput="assetCalc()">
+                  <div class="hs-asset-vals"><span class="hs-asset-amount" id="pa-gold-val">Rp 30jt</span><span class="hs-asset-return up" id="pa-gold-ret">+Rp 3,6jt/thn</span></div>
+                </div>
+              </div>
+              <div class="hs-asset-row">
+                <div class="hs-asset-info"><span class="hs-asset-icon">📊</span><div><div class="hs-asset-name">Reksa Dana</div><div class="hs-asset-type">Pasar Modal · 7% p.a.</div></div></div>
+                <div class="hs-asset-right">
+                  <input class="preview-slider hs-asset-slider" type="range" id="pa-rd" min="0" max="500000000" step="1000000" value="20000000" oninput="assetCalc()">
+                  <div class="hs-asset-vals"><span class="hs-asset-amount" id="pa-rd-val">Rp 20jt</span><span class="hs-asset-return up" id="pa-rd-ret">+Rp 1,4jt/thn</span></div>
+                </div>
+              </div>
+              <div class="hs-asset-row">
+                <div class="hs-asset-info"><span class="hs-asset-icon">₿</span><div><div class="hs-asset-name">Kripto (BTC)</div><div class="hs-asset-type">Digital Asset · 30% p.a.</div></div></div>
+                <div class="hs-asset-right">
+                  <input class="preview-slider hs-asset-slider" type="range" id="pa-btc" min="0" max="500000000" step="1000000" value="10000000" oninput="assetCalc()">
+                  <div class="hs-asset-vals"><span class="hs-asset-amount" id="pa-btc-val">Rp 10jt</span><span class="hs-asset-return up" id="pa-btc-ret">+Rp 3jt/thn</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="hs-asset-summary">
+              <div class="preview-metric green"><div class="preview-metric-label">Total Aset</div><div class="preview-metric-value" id="pa-total">Rp 110jt</div></div>
+              <div class="preview-metric blue"><div class="preview-metric-label">Return / tahun</div><div class="preview-metric-value" id="pa-yearly">Rp 8,35jt</div></div>
+              <div class="preview-metric amber"><div class="preview-metric-label">Avg. Return</div><div class="preview-metric-value" id="pa-avgret">7,6%</div></div>
+            </div>
+            <div class="hs-donut-wrap">
+              <div class="hs-donut-chart-area">
+                <canvas id="pa-donut" width="90" height="90"></canvas>
+                <div class="hs-donut-center"><div class="hs-donut-total" id="pa-donut-total">Rp 110jt</div><div class="hs-donut-label">Total</div></div>
+              </div>
+              <div class="hs-donut-legend">
+                <div class="hs-donut-leg-item"><span style="background:#1a6b4a"></span><span class="hs-donut-leg-name">BCA</span><span class="hs-donut-leg-pct" id="pa-pct-bca">45%</span></div>
+                <div class="hs-donut-leg-item"><span style="background:#b87614"></span><span class="hs-donut-leg-name">Emas</span><span class="hs-donut-leg-pct" id="pa-pct-gold">27%</span></div>
+                <div class="hs-donut-leg-item"><span style="background:#1a5ba6"></span><span class="hs-donut-leg-name">Reksa Dana</span><span class="hs-donut-leg-pct" id="pa-pct-rd">18%</span></div>
+                <div class="hs-donut-leg-item"><span style="background:#5a3fb5"></span><span class="hs-donut-leg-name">Kripto</span><span class="hs-donut-leg-pct" id="pa-pct-btc">10%</span></div>
+              </div>
+            </div>
+            <div class="hs-card-spacer"></div>
+          </div>
+        </div>
+        <!-- CARD: Investasi -->
+        <div class="hs-card hs-hidden" id="hs-card-inv" onclick="hsClick('inv')">
+          <div class="hs-peek-strip">
+              <div class="hs-peek-dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+              <span class="hs-peek-icon">💼</span>
+              <span class="hs-peek-lbl">Investasi</span>
+            </div>
+          <div class="hs-card-body">
+            
+            <div class="preview-header">
+              <div class="preview-dot" style="background:#ff5f57"></div>
+              <div class="preview-dot" style="background:#febc2e"></div>
+              <div class="preview-dot" style="background:#28c840"></div>
+              <span class="preview-title">💼 Simulasi Investasi</span>
+            </div>
+            <div class="preview-slider-group">
+              <div class="preview-slider-top"><span class="preview-slider-label">Investasi rutin / bulan</span><span class="preview-slider-val" id="inv-monthly-val">Rp 1jt</span></div>
+              <input class="preview-slider" type="range" id="inv-monthly" min="0" max="10000000" step="200000" value="1000000" oninput="invCalc()">
+              <div class="preview-slider-minmax"><span>Rp 0</span><span>Rp 10jt</span></div>
+            </div>
+            <div class="preview-slider-group">
+              <div class="preview-slider-top"><span class="preview-slider-label">Return / tahun</span><span class="preview-slider-val" id="inv-rate-val">10%</span></div>
+              <input class="preview-slider" type="range" id="inv-rate" min="0" max="30" step="0.5" value="10" oninput="invCalc()">
+              <div class="preview-slider-minmax"><span>0%</span><span>30%</span></div>
+            </div>
+            <div class="preview-slider-group" style="margin-bottom:12px">
+              <div class="preview-slider-top"><span class="preview-slider-label">Jangka waktu</span><span class="preview-slider-val" id="inv-year-val">10 tahun</span></div>
+              <input class="preview-slider" type="range" id="inv-years" min="1" max="30" step="1" value="10" oninput="invCalc()">
+              <div class="preview-slider-minmax"><span>1 thn</span><span>30 thn</span></div>
+            </div>
+            <div class="preview-metric-row" style="margin-bottom:10px">
+              <div class="preview-metric green"><div class="preview-metric-label">Nilai akhir</div><div class="preview-metric-value" id="inv-final">Rp 217jt</div></div>
+              <div class="preview-metric blue"><div class="preview-metric-label">Total setor</div><div class="preview-metric-value" id="inv-deposit">Rp 130jt</div></div>
+              <div class="preview-metric amber"><div class="preview-metric-label">Return total</div><div class="preview-metric-value" id="inv-return">Rp 87jt</div></div>
+            </div>
+            <div class="preview-chart-wrap" id="inv-chart-wrap">
+              <canvas id="inv-chart"></canvas>
+              <div class="preview-chart-tooltip" id="inv-tooltip">
+                <div class="preview-tooltip-year" id="inv-tt-year"></div>
+                <div class="preview-tooltip-row"><span class="preview-tooltip-dot" style="background:#1a5ba6"></span><span>Nilai portofolio</span><strong id="inv-tt-val"></strong></div>
+                <div class="preview-tooltip-row"><span class="preview-tooltip-dot" style="background:#9b9a93"></span><span>Total setor</span><strong id="inv-tt-dep"></strong></div>
+              </div>
+            </div>
+            <div class="preview-chart-legend">
+              <span class="preview-legend-item"><span class="preview-legend-solid" style="background:#1a5ba6"></span>Nilai portofolio</span>
+              <span class="preview-legend-item"><span class="preview-legend-dashed"></span>Total setor</span>
+            </div>
+            <div class="hs-card-spacer"></div>
+          </div>
+        </div>
+        <!-- CARD: Goals -->
+        <div class="hs-card hs-prev" id="hs-card-goals" onclick="hsClick('goals')">
+          <div class="hs-peek-strip">
+              <div class="hs-peek-dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+              <span class="hs-peek-icon">🎯</span>
+              <span class="hs-peek-lbl">Goals</span>
+            </div>
+          <div class="hs-card-body">
+            
+            <div class="preview-header">
+              <div class="preview-dot" style="background:#ff5f57"></div>
+              <div class="preview-dot" style="background:#febc2e"></div>
+              <div class="preview-dot" style="background:#28c840"></div>
+              <span class="preview-title">🎯 Goal Tracker</span>
+            </div>
+            <div class="preview-slider-group">
+              <div class="preview-slider-top"><span class="preview-slider-label">Target dana</span><span class="preview-slider-val" id="gl-target-val">Rp 500jt</span></div>
+              <input class="preview-slider" type="range" id="gl-target" min="10000000" max="2000000000" step="10000000" value="500000000" oninput="goalsCalc()">
+              <div class="preview-slider-minmax"><span>Rp 10jt</span><span>Rp 2M</span></div>
+            </div>
+            <div class="preview-slider-group">
+              <div class="preview-slider-top"><span class="preview-slider-label">Dana terkumpul</span><span class="preview-slider-val" id="gl-saved-val">Rp 50jt</span></div>
+              <input class="preview-slider" type="range" id="gl-saved" min="0" max="1990000000" step="10000000" value="50000000" oninput="goalsCalc()">
+              <div class="preview-slider-minmax"><span>Rp 0</span><span>Rp 1,99M</span></div>
+            </div>
+            <div class="preview-slider-group" style="margin-bottom:12px">
+              <div class="preview-slider-top"><span class="preview-slider-label">Tabungan rutin / bulan</span><span class="preview-slider-val" id="gl-monthly-val">Rp 2jt</span></div>
+              <input class="preview-slider" type="range" id="gl-monthly" min="100000" max="15000000" step="100000" value="2000000" oninput="goalsCalc()">
+              <div class="preview-slider-minmax"><span>Rp 100rb</span><span>Rp 15jt</span></div>
+            </div>
+            <div class="preview-metric-row" style="margin-bottom:12px">
+              <div class="preview-metric green" id="gl-m-pct"><div class="preview-metric-label">Tercapai</div><div class="preview-metric-value" id="gl-pct">10%</div></div>
+              <div class="preview-metric blue"><div class="preview-metric-label">Estimasi selesai</div><div class="preview-metric-value" id="gl-eta" style="font-size:13px">~18 thn 4 bln</div></div>
+              <div class="preview-metric amber"><div class="preview-metric-label">Sisa target</div><div class="preview-metric-value" id="gl-sisa">Rp 450jt</div></div>
+            </div>
+            <div class="hs-ring-wrap">
+              <div class="hs-ring-area">
+                <svg class="hs-ring-svg" viewBox="0 0 80 80">
+                  <circle class="hs-ring-bg" cx="40" cy="40" r="32"/>
+                  <circle class="hs-ring-fill" id="gl-ring-fill" cx="40" cy="40" r="32" stroke-dasharray="0 202" stroke-dashoffset="0"/>
+                </svg>
+                <div class="hs-ring-center"><span class="hs-ring-pct" id="gl-ring-pct">10%</span><span class="hs-ring-label">tercapai</span></div>
+              </div>
+              <div class="hs-ring-info">
+                <div class="hs-ring-row"><span class="hs-ring-key" id="gl-bar-label">Rp 50jt</span><span class="hs-ring-sub">terkumpul</span></div>
+                <div class="hs-ring-row"><span class="hs-ring-key" id="gl-ring-remain">Rp 450jt</span><span class="hs-ring-sub">tersisa</span></div>
+              </div>
+            </div>
+            <div class="hs-card-spacer"></div>
+          </div>
+        </div>
+        </div>
+        <div class="hs-dots" id="hsDots"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-features">
+    <div class="landing-features-grid">
+      <div class="landing-feature-card"><div class="feature-icon">📊</div><h3>Dashboard Komprehensif</h3><p>Lihat ringkasan keuangan bulan ini, tren saving rate, dan peringatan budget dalam satu layar.</p></div>
+      <div class="landing-feature-card"><div class="feature-icon">💼</div><h3>Manajemen Aset</h3><p>Pantau saham, reksa dana, crypto, properti, dan emas. Hitung return investasi secara otomatis.</p></div>
+      <div class="landing-feature-card"><div class="feature-icon">🎯</div><h3>Goal Tracker</h3><p>Tetapkan target finansial — dana pensiun, beli rumah, liburan — dan pantau progresnya.</p></div>
+      <div class="landing-feature-card"><div class="feature-icon">📉</div><h3>Manajemen Hutang</h3><p>Catat semua cicilan, pantau DTI ratio, dan rencanakan pelunasan hutang lebih cepat.</p></div>
+      <div class="landing-feature-card"><div class="feature-icon">🛡️</div><h3>Dana Darurat</h3><p>Monitor kesiapan dana darurat Anda — target 6 bulan pengeluaran selalu terlihat jelas.</p></div>
+      <div class="landing-feature-card"><div class="feature-icon">💾</div><h3>Snapshot & Restore</h3><p>Buat snapshot data kapan saja untuk backup. Restore ke kondisi sebelumnya jika ada kesalahan input.</p></div>
+    </div>
+  </section>
+
+  <section class="landing-cta-bottom">
+    <h2>Mulai gratis hari ini</h2>
+    <p>Tidak perlu kartu kredit. Daftar dalam 30 detik.</p>
+    <button class="btn-cta-primary" onclick="showLandingAuth('register')">Buat Akun Gratis</button>
+  </section>
+
+  <footer class="landing-footer">
+    <span>© 2026 FinanceOS</span>
+    <span>Sistem Informasi Keuangan Pribadi</span>
+  </footer>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay">
+  <div class="logo">F</div>
+  <div class="spinner"></div>
+  <div class="msg">Memuat data...</div>
+</div>
+
+<!-- AUTH OVERLAY — shown before app when session missing -->
+<div id="authOverlay">
+  <div class="auth-card">
+    <div class="auth-logo">F</div>
+
+    <!-- REGISTER SCREEN -->
+    <div id="authRegisterScreen" style="display:none">
+      <div class="auth-title">Buat Akun</div>
+      <div class="auth-sub">Selamat datang di FinanceOS!<br>Daftar untuk mulai mencatat keuangan Anda.</div>
+      <form onsubmit="authRegister(event)">
+        <div class="auth-field">
+          <label>Email</label>
+          <input type="email" id="regEmail" placeholder="contoh@email.com" autocomplete="email" required autofocus>
+        </div>
+        <div class="auth-field">
+          <label>Nama <span style="font-weight:400;opacity:.6">(opsional)</span></label>
+          <input type="text" id="regName" placeholder="Contoh: Budi Santoso" autocomplete="name" maxlength="40">
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <div class="auth-pw-wrap">
+            <input type="password" id="regPw" placeholder="Min 8 karakter, huruf + angka" autocomplete="new-password" required>
+            <button type="button" class="auth-pw-toggle" onclick="togglePw('regPw',this)">👁</button>
+          </div>
+        </div>
+        <div class="auth-field">
+          <label>Konfirmasi Password</label>
+          <div class="auth-pw-wrap">
+            <input type="password" id="regPw2" placeholder="Ulangi password" autocomplete="new-password" required>
+            <button type="button" class="auth-pw-toggle" onclick="togglePw('regPw2',this)">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="auth-submit" id="registerBtn">Daftar & Masuk</button>
+        <div class="auth-err" id="registerErr"></div>
+      </form>
+      <div class="auth-switch">Sudah punya akun? <button type="button" class="auth-switch-btn" onclick="showAuthScreen('login')">Masuk</button></div>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div id="authLoginScreen" style="display:none">
+      <div class="auth-title">Selamat Datang</div>
+      <div class="auth-sub">Masuk dengan email dan password Anda.</div>
+      <form onsubmit="authLogin(event)">
+        <div class="auth-field">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="contoh@email.com" autocomplete="email" required autofocus>
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <div class="auth-pw-wrap">
+            <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password" required>
+            <button type="button" class="auth-pw-toggle" onclick="togglePw('loginPw',this)">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="auth-submit" id="loginBtn">Masuk</button>
+        <div class="auth-err" id="loginErr"></div>
+      </form>
+      <div class="auth-switch">Belum punya akun? <button type="button" class="auth-switch-btn" onclick="showAuthScreen('register')">Daftar</button></div>
+    </div>
+
+  </div>
+</div>
+
+<div id="appShell" style="display:none">
+<nav class="nav">
+  <div class="nav-logo">
+    <button class="mob-menu-btn" onclick="toggleMobileMenu()" id="mobMenuBtn" aria-label="Menu">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <span>F</span> FinanceOS
+  </div>
+  <div class="nav-right">
+    <span class="save-badge" id="saveBadge">✓ Tersimpan</span>
+    <!-- Undo/Redo: Ctrl+Z / Ctrl+Y tersedia lewat keyboard -->
+    <button id="undoBtn" style="display:none" onclick="historyUndo()"></button>
+    <button id="redoBtn" style="display:none" onclick="historyRedo()"></button>
+    <button class="currency-btn" onclick="toggleCurrency()" id="currencyBtn">🇮🇩 IDR</button>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+    <button class="save-checkpoint-btn" onclick="openCheckpointModal()" title="Kelola snapshot data">💾 Snapshots <span id="checkpointMeta" style="font-size:10px;opacity:.7;font-weight:400;margin-left:2px"></span></button>
+    <button class="restore-checkpoint-btn" id="restoreBtn" onclick="restoreCheckpoint()" title="Kembalikan ke save terakhir" disabled>↩ Restore</button>
+    <!-- Avatar dropdown -->
+    <div class="avatar-wrap" id="avatarWrap">
+      <button class="avatar-btn" id="avatarBtn" onclick="toggleAvatarMenu()" title="Akun">
+        <span id="avatarInitial">?</span>
+      </button>
+      <div class="avatar-menu" id="avatarMenu">
+        <div class="avatar-menu-name" id="avatarMenuName">—</div>
+        <div class="avatar-menu-divider"></div>
+        <div class="avatar-menu-email" id="avatarMenuEmail" style="font-size:11px;opacity:.5;padding:0 12px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+        <button class="avatar-menu-item" onclick="showPage('profile');closeAvatarMenu()">⚙️ Profil &amp; Pengaturan</button>
+        <div class="avatar-menu-divider"></div>
+        <button class="avatar-menu-item avatar-menu-logout" onclick="authLogout()"><svg style="width:13px;height:13px;margin-right:6px;vertical-align:-1px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/><polyline points="11 11 14 8 11 5"/><line x1="14" y1="8" x2="6" y2="8"/></svg>Keluar</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileMenu()"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <button class="nav-item active" onclick="showPage('dashboard',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity=".3"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity=".3"/></svg>Dashboard
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Finance</div>
+      <button class="nav-item" onclick="showPage('cashflow',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Cash Flow
+      </button>
+      <button class="nav-item" onclick="showPage('assets',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Assets
+      </button>
+      <button class="nav-item" onclick="showPage('debts',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.5"/></svg>Debts
+      </button>
+      <button class="nav-item" onclick="showPage('networth',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 12L6 8l3 3 5-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Net Worth
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Planning</div>
+      <button class="nav-item" onclick="showPage('goals',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>Goals
+      </button>
+      <button class="nav-item" onclick="showPage('emergency',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M8 2L2 14h12L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Emergency Fund
+      </button>
+      <button class="nav-item" onclick="showPage('investment',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 14L6 7l3 4 2-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Investment
+      </button>
+    </div>
+    <div class="sidebar-section" style="margin-top:auto;padding-top:12px;border-top:1px solid var(--border)">
+      <button class="nav-item" onclick="showPage('profile',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Profil
+      </button>
+    </div>
+  </aside>
+  <main class="main">
+    <div id="page-dashboard" class="page active">
+      <!-- Alert banner — rendered by renderAlerts() -->
+      <div id="alertBanner" style="margin-bottom:16px"></div>
+      <div class="page-header">
+        <div><div class="page-title">Dashboard</div><div class="page-sub" id="dash-sub">Ringkasan keuangan personal</div></div>
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="setFilter(this)">Bulanan</button>
+          <button class="filter-btn" onclick="setFilter(this)">Kuartal</button>
+          <button class="filter-btn" onclick="setFilter(this)">Tahunan</button>
+        
+          <button class="tutorial-btn" onclick="startTutorial('dashboard')" title="Buka tutorial halaman ini" style="display:inline-flex;align-items:center;gap:5px;white-space:nowrap"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button>
+        </div>
+      </div>
+      <div id="dash-nw-callout"></div>
+      <div class="grid-4" id="dash-metrics"></div>
+      <div class="card" style="margin-bottom:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="section-title" style="margin-bottom:0">Income vs Pengeluaran</div>
+          <div style="display:flex;gap:16px;font-size:12px;color:var(--text3)">
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#1a6b4a;display:inline-block"></span>Income</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#c23b3b;display:inline-block"></span>Expense</span>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:240px"><canvas id="incomeExpChart"></canvas></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-title">Expense Breakdown</div>
+          <div id="expLegend" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+          <div class="chart-wrap" style="height:220px"><canvas id="expBreakChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="section-title">Alokasi Aset</div>
+          <div id="allocLegend" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+          <div class="chart-wrap" style="height:220px"><canvas id="allocChart"></canvas></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="section-title" style="margin-bottom:0">Transaksi Terbaru <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:6px">— catatan harian, terpisah dari Cash Flow</span></div>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="openAddTxModal()">+ Tambah</button>
+        </div>
+        <div id="recentTxList"></div>
+        <div id="txLoadMoreContainer"></div>
+      </div>
+    </div>
+
+    <div id="page-cashflow" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Cash Flow Management</div><div class="page-sub">Kelola pemasukan, pengeluaran, dan tabungan</div></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button class="tutorial-btn" onclick="startTutorial('cashflow')" title="Buka tutorial" style="display:inline-flex;align-items:center;gap:5px"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button>
+          <button class="history-btn" onclick="shiftCFMonth(-1)" id="cfMonthPrev" title="Bulan sebelumnya">‹</button>
+          <select id="cfMonthSelect" onchange="setCFMonth(this.value)" style="padding:5px 10px;border:1px solid var(--border);border-radius:20px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:12px;cursor:pointer;outline:none"></select>
+          <button class="history-btn" onclick="shiftCFMonth(1)" id="cfMonthNext" title="Bulan berikutnya">›</button>
+          <!-- Kategori dikelola langsung dari form tambah income/expense -->
+          <button class="income-btn" onclick="openModal('income')"><span>+ Tambah Income</span></button>
+          <button class="btn btn-primary" onclick="openModal('expense')"><span>+ Tambah Expense</span></button>
+        </div>
+      </div>
+      <div class="grid-3" id="cf-metrics"></div>
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div class="section-title" style="margin-bottom:0">Rincian Pengeluaran per Kategori</div>
+          <span style="font-size:11px;color:var(--text3)" id="cf-budget-month"></span>
+        </div>
+        <div id="expenseBreakdown"></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="section-title" style="margin-bottom:0">Detail Income per Kategori</div>
+          <span style="font-size:11px;color:var(--text3)" id="cf-income-month"></span>
+        </div>
+        <div id="incomeBreakdownView"><div class="empty-state"><div class="icon">💰</div>Tambah data income untuk melihat detail breakdown</div></div>
+      </div>
+      <div class="card">
+        <div class="section-title">Histori Cash Flow Bulanan</div>
+        <div class="chart-wrap" style="height:220px;margin-bottom:16px"><canvas id="cashflowHistChart"></canvas></div>
+        <div class="table-scroll-hint">← Geser untuk melihat selengkapnya →</div><div class="table-wrap">
+          <table><thead><tr><th>Bulan</th><th class="text-right">Income</th><th class="text-right">Expense</th><th class="text-right">Saldo</th><th class="text-right">Saving Rate</th><th></th></tr></thead>
+          <tbody id="cashflowTable"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-assets" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Asset Management</div><div class="page-sub">Kelola dan pantau semua aset portofolio</div></div><div style="display:flex;gap:8px;align-items:center">
+          <button class="tutorial-btn" onclick="startTutorial('assets')" title="Buka tutorial" style="display:inline-flex;align-items:center;gap:5px"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button>
+          <button class="btn btn-primary" onclick="openModal('asset')">+ Tambah Aset</button>
+        </div>
+      </div>
+      <div class="grid-3" id="asset-metrics"></div>
+      <div id="assetCards" class="grid-2"></div>
+      <div class="card" style="margin-top:16px" id="assetHistCard">
+        <div style="margin-bottom:12px">
+          <div class="section-title" style="margin-bottom:0">Perkembangan Nilai Aset per Bulan</div>
+        </div>
+        <div class="chart-wrap" style="height:260px"><canvas id="assetHistChart"></canvas></div>
+      </div>
+    </div>
+
+    <div id="page-debts" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Debt Management</div><div class="page-sub">Pantau semua kewajiban dan cicilan</div></div><div style="display:flex;gap:8px;align-items:center">
+          <button class="tutorial-btn" onclick="startTutorial('debts')" title="Buka tutorial" style="display:inline-flex;align-items:center;gap:5px"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button>
+          <button class="btn btn-primary" onclick="openModal('debt')">+ Tambah Hutang</button>
+        </div>
+      </div>
+      <div class="grid-3" id="debt-metrics"></div>
+      <div class="card"><div class="section-title">Daftar Hutang Aktif</div><div id="debtList"></div></div>
+      <div class="card" style="margin-top:16px" id="paidDebtCard">
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="togglePaidDebts()">
+          <div class="section-title" style="margin-bottom:0">✅ Hutang Lunas</div>
+          <span id="paidDebtToggleIcon" style="font-size:12px;color:var(--text3)">▸ Tampilkan</span>
+        </div>
+        <div id="paidDebtList" style="display:none;margin-top:12px"></div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="section-title" style="margin-bottom:0">Riwayat Sisa Hutang per Bulan</div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer;user-select:none">
+            <input type="checkbox" id="showPaidInChart" onchange="renderDebtHistChart()" style="accent-color:var(--accent)"><span> Tampilkan hutang lunas</span>
+          </label>
+        </div>
+        <div class="chart-wrap" style="height:260px"><canvas id="debtHistChart"></canvas></div>
+      </div>
+    </div>
+
+    <div id="page-networth" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Net Worth</div><div class="page-sub">Kekayaan bersih = Total Aset − Total Hutang</div></div>
+        <div style="display:flex;gap:8px;align-items:center"><button class="tutorial-btn" onclick="startTutorial('networth')" title="Buka tutorial" style="display:inline-flex;align-items:center;gap:5px"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button></div>
+      </div>
+      <div id="nw-callout"></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="section-title">Perkiraan Pertumbuhan Net Worth</div>
+        <div class="chart-wrap" style="height:240px"><canvas id="nwGrowthChart"></canvas></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+          <div>
+            <div class="section-title" style="margin-bottom:2px">Simulasi Pertumbuhan Net Worth</div>
+            <div style="font-size:11px;color:var(--text3)">Proyeksi berdasarkan tren tabungan historis + pertumbuhan aset</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+            <label style="font-size:12px;color:var(--text2)">Horizon</label>
+            <select id="nwSimHorizon" onchange="renderNWSimulator()" style="font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+              <option value="12">12 Bulan</option>
+              <option value="24">24 Bulan</option>
+              <option value="36">36 Bulan</option>
+              <option value="60">5 Tahun</option>
+            </select>
+            <label style="font-size:12px;color:var(--text2)">Skenario</label>
+            <select id="nwSimScenario" onchange="renderNWSimulator()" style="font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+              <option value="base">Normal</option>
+              <option value="opt">Optimis +20%</option>
+              <option value="pes">Pesimis −20%</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:240px"><canvas id="nwSimChart"></canvas></div>
+        <div id="nwSimMilestones" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px"></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="section-title">Komposisi Aset</div><div id="nwAssetBreak"></div></div>
+        <div class="card"><div class="section-title">Komposisi Hutang</div><div id="nwDebtBreak"></div></div>
+      </div>
+    </div>
+
+    <div id="page-goals" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Financial Goal Tracker</div><div class="page-sub">Pantau progress target keuangan</div></div><div style="display:flex;gap:8px;align-items:center">
+          <button class="tutorial-btn" onclick="startTutorial('goals')" title="Buka tutorial" style="display:inline-flex;align-items:center;gap:5px"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button>
+          <button class="btn btn-primary" onclick="openModal('goal')">+ Tambah Goal</button>
+        </div>
+      </div>
+      <div class="grid-3" id="goal-metrics"></div>
+      <div class="card"><div id="goalList"></div></div>
+    </div>
+
+    <div id="page-emergency" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Emergency Fund Tracker</div><div class="page-sub">Dana darurat = <strong>kas likuid</strong> (tabungan yang mudah dicairkan). Ideal: 6× pengeluaran bulanan rata-rata.</div></div>
+        <div style="display:flex;gap:8px;align-items:center"><button class="tutorial-btn" onclick="startTutorial('emergency')" title="Buka tutorial" style="display:inline-flex;align-items:center;gap:5px"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button></div>
+      </div>
+      <div id="ef-main"></div>
+      <div class="grid-3" id="ef-metrics"></div>
+      <div class="card" style="margin-top:16px">
+        <div class="section-title">Simulasi Akumulasi Dana Darurat</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="efChart"></canvas></div>
+      </div>
+    </div>
+
+    <div id="page-investment" class="page">
+      <div class="page-header">
+        <div><div class="page-title">Investment Performance</div><div class="page-sub">Performa dan return setiap instrumen investasi</div></div>
+        <div style="display:flex;gap:8px;align-items:center"><button class="tutorial-btn" onclick="startTutorial('investment')" title="Buka tutorial" style="display:inline-flex;align-items:center;gap:5px"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button></div>
+      </div>
+      <div class="grid-4" id="invest-metrics"></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="section-title">Nilai Investasi per Aset</div>
+        <div class="chart-wrap" style="height:220px"><canvas id="perfChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="section-title">Return per Aset</div>
+        <div class="table-scroll-hint">← Geser untuk melihat selengkapnya →</div><div class="table-wrap">
+          <table><thead><tr><th>Aset</th><th>Jenis</th><th>Tanggal</th><th class="text-right">Modal</th><th class="text-right">Nilai Sekarang</th><th class="text-right">Return</th><th class="text-right">Gain/Loss</th><th></th></tr></thead>
+          <tbody id="investTable"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-profile" class="page">
+      <!-- Konten dirender oleh profile.js renderProfile() -->
+    </div>
+  </main>
+</div>
+
+<!-- CHECKPOINT MODAL -->
+<div class="modal-overlay" id="cpModal" style="display:none">
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-header">
+      <div style="font-size:15px;font-weight:600">💾 Kelola Snapshots</div>
+      <button class="modal-close" onclick="closeCPModal()">×</button>
+    </div>
+    <div style="padding-bottom:12px">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5">Snapshot menyimpan semua data kamu saat ini. Kamu bisa restore ke snapshot mana pun kapan saja.</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <input id="cpLabelInput" type="text" placeholder="Nama snapshot (opsional)" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:13px;outline:none">
+        <button onclick="saveCheckpoint()" class="btn btn-primary" style="white-space:nowrap">+ Simpan Sekarang</button>
+      </div>
+      <div id="cpList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <div class="confirm-title" id="confirmTitle">Hapus data ini?</div>
+    <div class="confirm-msg" id="confirmMsg">Tindakan ini tidak dapat dibatalkan.</div>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Batal</button>
+      <button class="btn btn-danger" id="confirmOkBtn">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span id="toastMsg">Selesai</span>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div style="font-size:15px;font-weight:600" id="modalTitle">Tambah Data</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- TOUR -->
+<div id="tourSpot"></div>
+<div id="tourTip">
+  <div class="tour-tip-prog"><div class="tour-tip-prog-fill" id="tourProgFill"></div></div>
+  <div class="tour-tip-body">
+    <div class="tour-tip-step" id="tourStepLabel"></div>
+    <div class="tour-tip-title" id="tourTipTitle"></div>
+    <div class="tour-tip-desc" id="tourTipDesc"></div>
+    <div class="tour-tip-action" id="tourTipAction"></div>
+  </div>
+  <div class="tour-tip-footer">
+    <button class="tour-btn tour-btn-skip" onclick="stopTour()">✕ Skip</button>
+    <span class="tour-tip-count" id="tourTipCount"></span>
+    <div style="display:flex;gap:6px">
+      <button class="tour-btn tour-btn-prev" id="tourPrevBtn" onclick="tourPrev()">← Prev</button>
+      <button class="tour-btn tour-btn-next" id="tourNextBtn" onclick="tourNext()">Lanjut →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Load order matters: each file uses globals from previous files -->
+<!-- Sentry browser SDK — error monitoring frontend -->
+<script>
+  // Hanya aktif jika meta tag sentry-dsn ada (diisi server-side jika perlu)
+  // Untuk sekarang: tangkap unhandled JS errors dan kirim ke console
+  window.addEventListener('unhandledrejection', function(event) {
+    console.error('[FinanceOS] Unhandled Promise rejection:', event.reason);
+  });
+  window.addEventListener('error', function(event) {
+    console.error('[FinanceOS] JS Error:', event.message, 'at', event.filename + ':' + event.lineno);
+  });
+</script>
+<script src="js/api.js"></script>
+<script src="js/state.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/render.core.js"></script>
+<script src="js/render.dashboard.js"></script>
+<script src="js/render.cashflow.js"></script>
+<script src="js/render.assets.js"></script>
+<script src="js/render.debts.js"></script>
+<script src="js/render.planning.js"></script>
+<script src="js/render.charts.js"></script>
+<script src="js/render.transactions.js"></script>
+<script src="js/ui.js"></script>
+<!-- actions — split by domain for maintainability -->
+<script src="js/actions.cashflow.js"></script>
+<script src="js/actions.assets.js"></script>
+<script src="js/actions.debts.js"></script>
+<script src="js/actions.goals.js"></script>
+<script src="js/actions.transactions.js"></script>
+<script src="js/actions.edit-modal.js"></script>
+<script src="js/actions.export.js"></script>
+<script src="js/actions.tour.js"></script>
+<script src="js/checkpoint.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/transactions.js"></script>
+<script src="js/tutorial.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* ── LANDING CARD STACK — Rotary carousel with 3D flip ──────────────────────
+   4 cards in a circular sequence.
+   Active: front center.
+   Prev: left, rotated clockwise  (rotateY +22°), peek strip on right edge.
+   Next: right, rotated counter-CW (rotateY -22°), peek strip on left edge.
+   Click prev → active flips from right. Click next → active flips from left.
+   ────────────────────────────────────────────────────────────────────────── */
+
+var HS_CARDS  = ['cf','asset','inv','goals'];
+var HS_ACTIVE = 0;
+var hInvChart = null, paDonutInst = null;
+var hInvFV=[], hInvDep=[], hInvLabels=[];
+
+/* ── Formatter ── */
+function hFmt(n){
+  var neg=n<0; n=Math.abs(n); var s;
+  if(n>=1e9)      s='Rp '+(n/1e9).toFixed(2).replace(/\.?0+$/,'')+'M';
+  else if(n>=1e6) s='Rp '+(n/1e6).toFixed(1).replace(/\.0$/,'')+'jt';
+  else if(n>=1e3) s='Rp '+Math.round(n/1000)+'rb';
+  else            s='Rp '+Math.round(n).toLocaleString('id-ID');
+  return neg?'-'+s:s;
+}
+function hFmtBulan(m){
+  m=Math.round(m);
+  if(m<=0) return 'Sudah tercapai!';
+  var y=Math.floor(m/12),mo=m%12;
+  if(y===0) return mo+' bln';
+  if(mo===0) return '~'+y+' thn';
+  return '~'+y+' thn '+mo+' bln';
+}
+
+/* ── Stack state ── */
+function hsUpdateAll(dir) {
+  var n = HS_CARDS.length;
+  HS_CARDS.forEach(function(c, i) {
+    var el = document.getElementById('hs-card-'+c);
+    if (!el) return;
+    var diff = (i - HS_ACTIVE + n) % n;
+    var enterClass = '';
+    if (diff === 0 && dir !=  null) {
+      // Active card entering: flip direction depends on which side it came from
+      enterClass = (dir === 1) ? ' hs-enter-right' : ' hs-enter-left';
+    }
+    var cls = diff === 0   ? 'hs-card hs-active' + enterClass
+            : diff === n-1 ? 'hs-card hs-prev'
+            : diff === 1   ? 'hs-card hs-next'
+            :                'hs-card hs-hidden';
+    el.className = cls;
+  });
+  // Render dots
+  var dotsEl = document.getElementById('hsDots');
+  if (dotsEl) {
+    dotsEl.innerHTML = '';
+    HS_CARDS.forEach(function(c, i) {
+      var d = document.createElement('span');
+      d.className = 'hs-dot' + (i === HS_ACTIVE ? ' active' : '');
+      d.onclick = (function(idx){ return function(){ hsNavTo(idx); }; })(i);
+      dotsEl.appendChild(d);
+    });
+  }
+}
+
+function hsNavTo(idx, dir) {
+  if (idx === HS_ACTIVE) return;
+  var n = HS_CARDS.length;
+  if (dir === undefined) {
+    var diff = (idx - HS_ACTIVE + n) % n;
+    // Shortest path direction
+    dir = diff <= n/2 ? 1 : -1;
+  }
+  HS_ACTIVE = idx;
+  hsUpdateAll(dir);
+  // Re-run calcs for newly active card
+  var c = HS_CARDS[idx];
+  if (c === 'asset') assetCalc();
+  if (c === 'inv')   invCalc();
+  if (c === 'goals') goalsCalc();
+}
+
+function hsClick(card) {
+  var idx = HS_CARDS.indexOf(card);
+  if (idx === HS_ACTIVE) return;
+  var n    = HS_CARDS.length;
+  var diff = (idx - HS_ACTIVE + n) % n;
+  // diff===1 = next (right) → clicked right peek → card flies in from right → dir=1
+  // diff===n-1 = prev (left) → clicked left peek → card flies in from left → dir=-1
+  var dir = diff === 1 ? 1 : -1;
+  hsNavTo(idx, dir);
+}
+
+/* ── Cash Flow ── */
+function cfCalc(){
+  var inc=parseFloat(document.getElementById('cf-income').value)||0;
+  var exp=parseFloat(document.getElementById('cf-expense').value)||0;
+  var debt=parseFloat(document.getElementById('cf-debt').value)||0;
+  var sisa=inc-exp-debt, deficit=sisa<0;
+  var rate=inc>0?Math.max(Math.round(sisa/inc*100),0):0;
+  var dti=inc>0?Math.min(Math.round(debt/inc*100),100):0;
+  var ratio=inc>0?Math.min(Math.round((exp+debt)/inc*100),100):0;
+  document.getElementById('cf-income-val').textContent=hFmt(inc);
+  document.getElementById('cf-expense-val').textContent=hFmt(exp);
+  document.getElementById('cf-debt-val').textContent=debt===0?'Rp 0':hFmt(debt);
+  var sisaEl=document.getElementById('cf-sisa');
+  if(sisaEl){sisaEl.textContent=hFmt(sisa);sisaEl.style.color=deficit?'var(--red)':'';}
+  var sisaCard=document.getElementById('cf-m-sisa');
+  if(sisaCard){sisaCard.className='preview-metric '+(deficit?'':'green');sisaCard.style.background=deficit?'var(--red-light)':'';sisaCard.style.borderColor=deficit?'rgba(194,59,59,.3)':'';}
+  var rEl=document.getElementById('cf-rate');if(rEl){rEl.textContent=rate+'%';rEl.style.color=rate>=20?'':rate>=10?'var(--amber)':'var(--red)';}
+  var dEl=document.getElementById('cf-dti');if(dEl){dEl.textContent=dti+'%';dEl.style.color=dti<36?'':dti<50?'var(--amber)':'var(--red)';}
+  var rpEl=document.getElementById('cf-ratio-pct');if(rpEl)rpEl.textContent=ratio+'%';
+  cfRenderGauge(ratio);
+}
+function cfRenderGauge(pct){
+  pct=Math.min(Math.max(pct,0),100);
+  var fill=document.getElementById('cf-gauge-fill');if(!fill)return;
+  var L=Math.PI*54,used=L*pct/100;
+  fill.setAttribute('stroke-dasharray',used+' '+L);
+  fill.setAttribute('stroke-dashoffset','0');
+  fill.setAttribute('stroke',pct<70?'#1a6b4a':pct<90?'#b87614':'#c23b3b');
+}
+
+/* ── Portfolio Aset ── */
+var PA_ASSETS=[{id:'bca',rate:3.5},{id:'gold',rate:12},{id:'rd',rate:7},{id:'btc',rate:30}];
+function assetCalc(){
+  var total=0,yearlyReturn=0;
+  PA_ASSETS.forEach(function(a){
+    var el=document.getElementById('pa-'+a.id);if(!el)return;
+    var val=parseFloat(el.value)||0,ret=val*a.rate/100;
+    total+=val;yearlyReturn+=ret;
+    var amtEl=document.getElementById('pa-'+a.id+'-val');if(amtEl)amtEl.textContent=hFmt(val);
+    var retEl=document.getElementById('pa-'+a.id+'-ret');if(retEl){retEl.textContent='+'+hFmt(ret)+'/thn';retEl.className='hs-asset-return '+(a.rate>0?'up':'');}
+  });
+  var avgRet=total>0?(yearlyReturn/total*100).toFixed(1):'0';
+  var paTotal=document.getElementById('pa-total');if(paTotal)paTotal.textContent=hFmt(total);
+  var paYearly=document.getElementById('pa-yearly');if(paYearly)paYearly.textContent=hFmt(yearlyReturn);
+  var paAvg=document.getElementById('pa-avgret');if(paAvg)paAvg.textContent=avgRet+'%';
+  var colors=['#1a6b4a','#b87614','#1a5ba6','#5a3fb5'];
+  var donutVals=[];
+  PA_ASSETS.forEach(function(a,i){
+    var el=document.getElementById('pa-'+a.id);if(!el)return;
+    var val=parseFloat(el.value)||0,pct=total>0?Math.round(val/total*100):0;
+    var pEl=document.getElementById('pa-pct-'+a.id);if(pEl)pEl.textContent=pct+'%';
+    donutVals.push(val||0.001);
+  });
+  var tEl=document.getElementById('pa-donut-total');if(tEl)tEl.textContent=hFmt(total);
+  paRenderDonut(donutVals,colors);
+}
+function paRenderDonut(vals,colors){
+  var canvas=document.getElementById('pa-donut');if(!canvas||typeof Chart==='undefined')return;
+  if(paDonutInst){paDonutInst.data.datasets[0].data=vals;paDonutInst.data.datasets[0].backgroundColor=colors;paDonutInst.update('active');return;}
+  paDonutInst=new Chart(canvas,{type:'doughnut',data:{datasets:[{data:vals,backgroundColor:colors,borderWidth:2,borderColor:'#f0efe9',hoverOffset:4}]},options:{responsive:false,cutout:'68%',animation:{duration:300},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return hFmt(ctx.raw);}}}}}});
+}
+
+/* ── Investment simulation ── */
+function invCalc(){
+  var pmtEl=document.getElementById('inv-monthly');if(!pmtEl)return;
+  var pmt=parseFloat(pmtEl.value)||0,rPct=parseFloat(document.getElementById('inv-rate').value)||0,years=parseInt(document.getElementById('inv-years').value)||1;
+  var r=rPct/100/12;
+  var mvEl=document.getElementById('inv-monthly-val');if(mvEl)mvEl.textContent=hFmt(pmt);
+  var rvEl=document.getElementById('inv-rate-val');if(rvEl)rvEl.textContent=rPct+'%';
+  var yvEl=document.getElementById('inv-year-val');if(yvEl)yvEl.textContent=years+' tahun';
+  hInvLabels=[];hInvFV=[];hInvDep=[];
+  for(var y=0;y<=years;y++){hInvLabels.push(y===0?'Kini':'Thn '+y);var m=y*12,dep=pmt*m;var fv=r===0?dep:pmt*((Math.pow(1+r,m)-1)/r);hInvDep.push(Math.round(dep));hInvFV.push(Math.round(fv));}
+  var fFV=hInvFV[years],fDep=hInvDep[years];
+  var finEl=document.getElementById('inv-final');if(finEl)finEl.textContent=hFmt(fFV);
+  var depEl=document.getElementById('inv-deposit');if(depEl)depEl.textContent=hFmt(fDep);
+  var retEl=document.getElementById('inv-return');if(retEl)retEl.textContent=hFmt(Math.max(fFV-fDep,0));
+  invRenderChart();
+}
+function invRenderChart(){
+  var canvas=document.getElementById('inv-chart');if(!canvas||typeof Chart==='undefined')return;
+  if(hInvChart){hInvChart.destroy();hInvChart=null;}
+  hInvChart=hMakeLineChart(canvas,'inv-tooltip',hInvLabels,
+    [{data:hInvFV,borderColor:'#1a5ba6',backgroundColor:'rgba(26,91,166,.08)',fill:true},
+     {data:hInvDep,borderColor:'#9b9a93',borderDash:[4,3]}],
+    ['inv-tt-year','inv-tt-val','inv-tt-dep'],hInvFV,hInvDep);
+}
+
+/* ── Goals ── */
+function goalsCalc(){
+  var tEl=document.getElementById('gl-target');if(!tEl)return;
+  var target=parseFloat(tEl.value)||1,saved=Math.min(parseFloat(document.getElementById('gl-saved').value)||0,target);
+  var monthly=parseFloat(document.getElementById('gl-monthly').value)||1;
+  var sisa=Math.max(target-saved,0),pct=Math.min(Math.round(saved/target*100),100);
+  var eta=monthly>0?Math.ceil(sisa/monthly):9999;
+  var tvEl=document.getElementById('gl-target-val');if(tvEl)tvEl.textContent=hFmt(target);
+  var svEl=document.getElementById('gl-saved-val');if(svEl)svEl.textContent=hFmt(saved);
+  var mvEl2=document.getElementById('gl-monthly-val');if(mvEl2)mvEl2.textContent=hFmt(monthly);
+  var pEl=document.getElementById('gl-pct');if(pEl)pEl.textContent=pct+'%';
+  var eEl=document.getElementById('gl-eta');if(eEl)eEl.textContent=hFmtBulan(eta);
+  var sEl=document.getElementById('gl-sisa');if(sEl)sEl.textContent=hFmt(sisa);
+  var blEl=document.getElementById('gl-bar-label');if(blEl)blEl.textContent=hFmt(saved);
+  var rEl2=document.getElementById('gl-ring-remain');if(rEl2)rEl2.textContent=hFmt(sisa);
+  glRenderRing(pct);
+  var mCard=document.getElementById('gl-m-pct');if(mCard)mCard.className='preview-metric '+(pct>=100?'green':pct>=50?'blue':'');
+}
+function glRenderRing(pct){
+  pct=Math.min(Math.max(pct,0),100);
+  var ring=document.getElementById('gl-ring-fill'),pctEl=document.getElementById('gl-ring-pct');
+  if(!ring)return;
+  var C=2*Math.PI*32,used=C*pct/100;
+  ring.setAttribute('stroke-dasharray',used+' '+(C+1));
+  ring.setAttribute('stroke',pct>=100?'#1a6b4a':pct>=50?'#1a5ba6':'#b87614');
+  if(pctEl)pctEl.textContent=pct+'%';
+}
+
+/* ── Shared line chart factory ── */
+function hMakeLineChart(canvas,tooltipId,labels,datasets,ttIds,d1,d2){
+  var ds=datasets.map(function(d,i){return Object.assign({borderWidth:i===0?2:1.5,fill:false,tension:0.35,pointRadius:0,pointHoverRadius:i===0?4:3,pointHoverBackgroundColor:d.borderColor},d);});
+  return new Chart(canvas,{type:'line',data:{labels:labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,animation:{duration:200},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{enabled:false,external:function(ctx){var tt=ctx.tooltip,el=document.getElementById(tooltipId);if(!el)return;if(tt.opacity===0){el.style.display='none';return;}var idx=tt.dataPoints[0].dataIndex;document.getElementById(ttIds[0]).textContent=labels[idx];document.getElementById(ttIds[1]).textContent=hFmt(d1[idx]);document.getElementById(ttIds[2]).textContent=hFmt(d2[idx]);var cRect=canvas.getBoundingClientRect();el.style.left=Math.min(tt.caretX+8,cRect.width-150)+'px';el.style.top='4px';el.style.display='block';}}},scales:{x:{grid:{display:false},ticks:{color:'#9b9a93',font:{size:9},maxTicksLimit:7,maxRotation:0}},y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#9b9a93',font:{size:9},callback:function(v){var neg=v<0;v=Math.abs(v);var s=v>=1e9?(v/1e9).toFixed(1)+'M':v>=1e6?(v/1e6).toFixed(0)+'jt':v>=1e3?(v/1e3).toFixed(0)+'rb':String(v);return neg?'-'+s:s;}}}}}});
+}
+
+/* ── Init ── */
+(function(){
+  var done=false;
+  function init(){
+    if(done)return;
+    var lp=document.getElementById('landingPage');
+    if(!lp||lp.style.display==='none')return;
+    done=true;
+    setTimeout(function(){
+      HS_ACTIVE=0;
+      hsUpdateAll(null);
+      cfCalc();assetCalc();invCalc();goalsCalc();
+      requestAnimationFrame(function(){requestAnimationFrame(function(){hsUpdateAll(null);});});
+    },150);
+  }
+  new MutationObserver(init).observe(document.body,{attributes:true,subtree:true,attributeFilter:['style']});
+  window.addEventListener('load',init);
+})();
+</script>
+</body>
+</html>
