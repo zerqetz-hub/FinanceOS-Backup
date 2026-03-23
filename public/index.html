@@ -64,12 +64,12 @@
   overflow: visible;
 }
 
-/* ── Base card: narrower than container ── */
+/* ── Base card ── */
 #landingPage .hs-card {
   position: absolute;
   top: 0;
   height: 500px;
-  width: 84%;
+  width: 76%;
   background: #fff;
   border: 1px solid rgba(0,0,0,.09);
   border-radius: 18px;
@@ -85,68 +85,88 @@
 
 /* ── ACTIVE: centered, front ── */
 #landingPage .hs-card.hs-active {
-  left: 8%;
+  left: 12% !important;
   z-index: 3;
-  transform: none;
-  opacity: 1;
-  filter: none;
+  transform: none !important;
+  opacity: 1 !important;
+  filter: none !important;
   box-shadow: 0 8px 40px rgba(0,0,0,.12);
   cursor: default;
 }
 #landingPage .hs-card.hs-active .hs-card-body   { opacity:1; pointer-events:auto; }
 #landingPage .hs-card.hs-active .hs-peek-strip   { display:none; }
 
-/* ── PREV: behind active, left sliver visible ──
-   Card 84% wide, starts at left:0 → right edge at 84%.
-   Active starts at left:8% → prev sliver = 0% to 8% = 8% visible on left.
+/* ── PREV: kiri aktif, 12% terlihat di kiri ──
+   Card 76% wide, starts at left:0 → right edge 76%.
+   Active starts at left:12% → prev sliver = 0% to 12% visible on left.
 ── */
 #landingPage .hs-card.hs-prev {
-  left: 0;
+  left: 0% !important;
   z-index: 1;
-  transform: scale(.93) translateY(6px);
-  transform-origin: 50% 0%;
-  opacity: .68;
-  filter: saturate(.18) brightness(.97);
+  transform: scale(.95) translateY(12px) !important;
+  transform-origin: left top;
+  opacity: .38 !important;
+  filter: saturate(.05) brightness(.75) !important;
   cursor: pointer;
   box-shadow: none;
 }
 #landingPage .hs-card.hs-prev:hover {
-  transform: scale(.95) translateY(3px);
-  opacity: .85;
-  filter: saturate(.5) brightness(1);
+  transform: scale(.97) translateY(8px) !important;
+  opacity: .65 !important;
+  filter: saturate(.35) brightness(.95) !important;
   border-color: #1a6b4a;
   box-shadow: 0 4px 20px rgba(26,107,74,.15);
 }
-#landingPage .hs-card.hs-prev .hs-card-body   { opacity:0; pointer-events:none; }
-#landingPage .hs-card.hs-prev .hs-peek-strip   { display:none; }
+#landingPage .hs-card.hs-prev .hs-card-body { opacity:0; pointer-events:none; }
+#landingPage .hs-card.hs-prev .hs-peek-strip {
+  display: flex;
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 70px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 0;
+}
 
-/* ── NEXT: behind active, right sliver visible ──
-   Card 84% wide, starts at left:16% → right edge at 100%.
-   Active ends at left+width = 8%+84% = 92% → next sliver = 92% to 100% = 8% visible on right.
+/* ── NEXT: kanan aktif, 12% terlihat di kanan ──
+   Card 76% wide, starts at left:24% → right edge 100%.
+   Active ends at left+width = 12%+76% = 88% → next sliver = 88% to 100% visible on right.
 ── */
 #landingPage .hs-card.hs-next {
-  left: 16%;
+  left: 24% !important;
   z-index: 1;
-  transform: scale(.93) translateY(6px);
-  transform-origin: 50% 0%;
-  opacity: .68;
-  filter: saturate(.18) brightness(.97);
+  transform: scale(.95) translateY(12px) !important;
+  transform-origin: right top;
+  opacity: .38 !important;
+  filter: saturate(.05) brightness(.75) !important;
   cursor: pointer;
   box-shadow: none;
 }
 #landingPage .hs-card.hs-next:hover {
-  transform: scale(.95) translateY(3px);
-  opacity: .85;
-  filter: saturate(.5) brightness(1);
+  transform: scale(.97) translateY(8px) !important;
+  opacity: .65 !important;
+  filter: saturate(.35) brightness(.95) !important;
   border-color: #1a6b4a;
   box-shadow: 0 4px 20px rgba(26,107,74,.15);
 }
-#landingPage .hs-card.hs-next .hs-card-body   { opacity:0; pointer-events:none; }
-#landingPage .hs-card.hs-next .hs-peek-strip   { display:none; }
+#landingPage .hs-card.hs-next .hs-card-body { opacity:0; pointer-events:none; }
+#landingPage .hs-card.hs-next .hs-peek-strip {
+  display: flex;
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 70px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 0;
+}
 
 /* ── HIDDEN ── */
 #landingPage .hs-card.hs-hidden {
-  left: 8%; /* same as active, hidden behind */
+  left: 12% !important; /* same as active, hidden behind */
   z-index: 0;
   opacity: 0;
   pointer-events: none;
@@ -154,8 +174,8 @@
 }
 
 /* ── Entry animations ── */
-@keyframes hsFromRight { from{left:100%;opacity:.3;transform:scale(.9) translateY(6px)} to{left:8%;opacity:1;transform:none} }
-@keyframes hsFromLeft  { from{left:-84%;opacity:.3;transform:scale(.9) translateY(6px)} to{left:8%;opacity:1;transform:none} }
+@keyframes hsFromRight { from{left:100%;opacity:.3;transform:scale(.9) translateY(6px)} to{left:12%;opacity:1;transform:none} }
+@keyframes hsFromLeft  { from{left:-76%;opacity:.3;transform:scale(.9) translateY(6px)} to{left:12%;opacity:1;transform:none} }
 #landingPage .hs-card.hs-active.hs-enter-right { animation: hsFromRight .46s cubic-bezier(.22,1,.36,1) both; }
 #landingPage .hs-card.hs-active.hs-enter-left  { animation: hsFromLeft  .46s cubic-bezier(.22,1,.36,1) both; }
 
@@ -204,12 +224,12 @@
 #landingPage .hs-peek-dots span { width:5px;height:5px;border-radius:50%;display:block;opacity:.5; }
 #landingPage .hs-peek-icon { font-size:14px;opacity:.75; }
 #landingPage .hs-peek-lbl {
-  font-size: 9px; font-weight: 600; color: #6b6960;
+  font-size: 11px; font-weight: 700; color: #1a1915;
   writing-mode: vertical-rl; transform: rotate(180deg);
-  white-space: nowrap; max-height: 90px; overflow: hidden;
-  letter-spacing: .3px; font-family: inherit;
+  white-space: nowrap; max-height: 120px; overflow: hidden;
+  letter-spacing: .6px; font-family: inherit;
 }
-[data-theme=dark] #landingPage .hs-peek-lbl { color:#9b9a93; }
+[data-theme=dark] #landingPage .hs-peek-lbl { color:#e8e5dc; }
 
 /* ── Navigation dots ── */
 #landingPage .hs-dot {
