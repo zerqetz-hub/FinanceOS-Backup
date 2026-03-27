@@ -422,29 +422,18 @@
 }
 
 /* ── Per-word green box on hover ── */
-#landingPage .lp-word {
-  display: inline-block;
-  border-radius: 7px;
-  border: 2px solid transparent;
-  padding: 2px 6px;
-  margin: 0 1px;
-  cursor: default;
-  transition: border-color .22s ease, box-shadow .22s ease, background .22s ease;
+#landingPage .lp-word { display: inline; cursor: default; }
+@keyframes lpWordPulse {
+  0%, 100% { outline-offset: 3px; }
+  50%       { outline-offset: 8px; }
 }
 #landingPage .lp-word:hover {
-  border-color: #1a6b4a;
-  background: rgba(26,107,74,.05);
-  box-shadow: 0 0 0 4px rgba(26,107,74,.09), 0 0 20px rgba(26,107,74,.12);
+  outline: 2px solid #1a6b4a;
+  outline-offset: 3px;
+  border-radius: 6px;
+  animation: lpWordPulse 1.6s ease-in-out infinite;
 }
-[data-theme=dark] #landingPage .lp-word:hover {
-  border-color: #3adb8e;
-  background: rgba(58,219,142,.06);
-  box-shadow: 0 0 0 4px rgba(58,219,142,.10), 0 0 20px rgba(58,219,142,.14);
-}
-/* Remove margin offset from heading when words have padding */
-#landingPage .landing-title,
-#landingPage .landing-features-heading h2,
-#landingPage .landing-cta-bottom h2 { margin-left: -6px; }
+[data-theme=dark] #landingPage .lp-word:hover { outline-color: #3adb8e; }
 
 #landingPage .landing-cta-bottom p {
   transition: color .3s ease;
