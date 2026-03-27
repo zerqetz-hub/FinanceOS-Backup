@@ -165,7 +165,7 @@ async function bootApp() {
 
   // Fix #14: restore halaman yang sedang aktif sebelum refresh
   try {
-    const savedPage = sessionStorage.getItem('fos_page');
+    const savedPage = sessionStorage.getItem('ku_page');
     if (savedPage) {
       const pageEl = document.getElementById('page-' + savedPage);
       const navEl  = document.querySelector('.nav-item[onclick*="\'' + savedPage + '\'"]');
@@ -181,7 +181,7 @@ async function bootApp() {
 
 // ─── ENTRY POINT ─────────────────────────────────────────────────────────────
 (async () => {
-  const savedTheme = localStorage.getItem('financeOS_theme');
+  const savedTheme = localStorage.getItem('ku_theme');
   if (savedTheme) {
     document.body.dataset.theme = savedTheme;
     const btn = document.getElementById('themeBtn');

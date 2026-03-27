@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const db     = require('./database');
 
 const SESSION_TTL_MS  = 2 * 60 * 60 * 1000;
-const COOKIE_NAME     = 'fos_session';
+const COOKIE_NAME     = 'ku_session';
 const TOKEN_RE        = /^[a-f0-9]{64}$/;
 const _attempts       = new Map();
 const MAX_ATTEMPTS    = 5;

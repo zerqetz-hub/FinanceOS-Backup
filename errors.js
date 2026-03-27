@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * errors.js — Custom error classes untuk FinanceOS.
+ * errors.js — Custom error classes untuk KepingUang.
  *
  * Menggantikan pola fragile eAuto() yang mendeteksi 404 via string-matching
  * msg.includes('tidak ditemukan'). Kini setiap error punya kode numerik eksplisit.

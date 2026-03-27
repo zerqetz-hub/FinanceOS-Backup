@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * server.js — FinanceOS v5.5 entry point.
+ * server.js — KepingUang v5.5 entry point.
  *
  * Perubahan v5.4:
  *   - Tambah helmet untuk security headers
@@ -102,7 +102,7 @@ async function start() {
     await db.initSchema();
     console.log('✅  Database schema siap.');
     app.listen(PORT, () => {
-      console.log(`\n🚀  FinanceOS v5.5 berjalan di http://localhost:${PORT}`);
+      console.log(`\n🚀  KepingUang v5.5 berjalan di http://localhost:${PORT}`);
       console.log(`🗄️   Database  : PostgreSQL (${process.env.DATABASE_URL ? 'Railway' : 'lokal'})`);
       console.log(`🔐  Auth      : Multi-user (email + password)`);
       console.log(`🛡️   Helmet   : aktif (security headers)`);

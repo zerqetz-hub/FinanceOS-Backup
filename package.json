@@ -1,7 +1,7 @@
 {
-  "name": "financeos",
+  "name": "kepinguang",
   "version": "5.5.0",
-  "description": "FinanceOS v5.5 — Personal Finance System (NUMERIC precision, split render, test suite)",
+  "description": "KepingUang v5.5 — Personal Finance System (NUMERIC precision, split render, test suite)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

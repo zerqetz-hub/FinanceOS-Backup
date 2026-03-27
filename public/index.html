@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>FinanceOS — Personal Finance System</title>
+<title>KepingUang — Personal Finance System</title>
 <meta name="theme-color" content="#1a6b4a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -376,7 +376,7 @@
 }
 </style>
   <nav class="landing-nav">
-    <div class="landing-nav-logo"><span>F</span> FinanceOS</div>
+    <div class="landing-nav-logo"><span>K</span> KepingUang</div>
     <div class="landing-nav-actions">
       <button class="btn-landing-login" onclick="showLandingAuth('login')">Masuk</button>
       <button class="btn-landing-register" onclick="showLandingAuth('register')">Daftar Gratis</button>
@@ -639,7 +639,7 @@
   </section>
 
   <footer class="landing-footer">
-    <span>© 2026 FinanceOS</span>
+    <span>© 2026 KepingUang</span>
     <span>Sistem Informasi Keuangan Pribadi</span>
   </footer>
 </div>
@@ -659,7 +659,7 @@
     <!-- REGISTER SCREEN -->
     <div id="authRegisterScreen" style="display:none">
       <div class="auth-title">Buat Akun</div>
-      <div class="auth-sub">Selamat datang di FinanceOS!<br>Daftar untuk mulai mencatat keuangan Anda.</div>
+      <div class="auth-sub">Selamat datang di KepingUang!<br>Daftar untuk mulai mencatat keuangan Anda.</div>
       <form onsubmit="authRegister(event)">
         <div class="auth-field">
           <label>Email</label>
@@ -720,7 +720,7 @@
     <button class="mob-menu-btn" onclick="toggleMobileMenu()" id="mobMenuBtn" aria-label="Menu">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     </button>
-    <span>F</span> FinanceOS
+    <span>K</span> KepingUang
   </div>
   <div class="nav-right">
     <span class="save-badge" id="saveBadge">✓ Tersimpan</span>
@@ -1081,10 +1081,10 @@
   // Hanya aktif jika meta tag sentry-dsn ada (diisi server-side jika perlu)
   // Untuk sekarang: tangkap unhandled JS errors dan kirim ke console
   window.addEventListener('unhandledrejection', function(event) {
-    console.error('[FinanceOS] Unhandled Promise rejection:', event.reason);
+    console.error('[KepingUang] Unhandled Promise rejection:', event.reason);
   });
   window.addEventListener('error', function(event) {
-    console.error('[FinanceOS] JS Error:', event.message, 'at', event.filename + ':' + event.lineno);
+    console.error('[KepingUang] JS Error:', event.message, 'at', event.filename + ':' + event.lineno);
   });
 </script>
 <script src="js/api.js"></script>

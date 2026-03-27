@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * validators.js — Input validation untuk FinanceOS.
+ * validators.js — Input validation untuk KepingUang.
  *
  * v5.5: validatePassword DIHAPUS dari sini — satu-satunya sumber kebenaran
  * ada di auth.js (validatePasswordRules). Import dari sana jika perlu.

@@ -120,7 +120,7 @@ router.put('/avatar', async (req, res) => {
 router.get('/export', routeHandler(async (req, res) => {
   const data = await db.getState(req.userId);
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Content-Disposition', 'attachment; filename="financeos-data.json"');
+  res.setHeader('Content-Disposition', 'attachment; filename="kepinguang-data.json"');
   res.send(JSON.stringify(data, null, 2));
 }));
 

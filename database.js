@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * database.js — PostgreSQL data layer for FinanceOS v5.5.
+ * database.js — PostgreSQL data layer for KepingUang v5.5.
  *
  * Perubahan v5.5:
  *   - REAL → NUMERIC(20,4) untuk semua kolom finansial

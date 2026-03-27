@@ -116,7 +116,7 @@ function showPage(id, btn) {
   _renderCurrentPage();
   if (id === 'dashboard') renderAlerts();
   // Persist halaman aktif agar tidak balik ke dashboard saat refresh (#14)
-  try { sessionStorage.setItem('fos_page', id); } catch {}
+  try { sessionStorage.setItem('ku_page', id); } catch {}
   setTimeout(() => {
     if (id==='dashboard')  renderDashCharts();
     if (id==='cashflow')   renderCfChart();
@@ -156,7 +156,7 @@ function toggleTheme() {
   const dark = document.body.dataset.theme === 'dark';
   document.body.dataset.theme = dark ? 'light' : 'dark';
   document.getElementById('themeBtn').textContent = dark ? '🌙 Dark' : '☀️ Light';
-  localStorage.setItem('financeOS_theme', dark ? 'light' : 'dark');
+  localStorage.setItem('ku_theme', dark ? 'light' : 'dark');
   setTimeout(() => {
     Object.keys(CI).forEach(k => { CI[k].destroy(); delete CI[k]; });
     renderAll();

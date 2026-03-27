@@ -238,7 +238,7 @@ async function submitRename() {
 function downloadData() {
   const a = document.createElement('a');
   a.href     = '/api/auth/export';
-  a.download = 'financeos-data.json';
+  a.download = 'kepinguang-data.json';
   a.click();
   showToast('Mengunduh data...', 'success');
 }

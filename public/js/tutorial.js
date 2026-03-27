@@ -110,7 +110,7 @@ const TUT = {
 
 const _t = { pageId: null, steps: [], step: 0, key: null, offKey: null, tx: null };
 const TUT_VER = 'v5.5';
-const TUT_KEY = id => 'fos_tut_' + id;
+const TUT_KEY = id => 'ku_tut_' + id;
 
 function startTutorial(pageId) {
   const def = TUT[pageId];
@@ -125,9 +125,9 @@ function startTutorial(pageId) {
 
 function checkTutorial(pageId) {
   try {
-    if (localStorage.getItem('fos_tut_ver') !== TUT_VER) {
-      Object.keys(localStorage).filter(k => k.startsWith('fos_tut_')).forEach(k => localStorage.removeItem(k));
-      localStorage.setItem('fos_tut_ver', TUT_VER);
+    if (localStorage.getItem('ku_tut_ver') !== TUT_VER) {
+      Object.keys(localStorage).filter(k => k.startsWith('ku_tut_')).forEach(k => localStorage.removeItem(k));
+      localStorage.setItem('ku_tut_ver', TUT_VER);
     }
     if (localStorage.getItem(TUT_KEY(pageId))) return;
   } catch {}

@@ -1,4 +1,4 @@
-# FinanceOS v4.0 — Multi-user Edition
+# KepingUang v4.0 — Multi-user Edition
 
 Sistem informasi keuangan pribadi berbasis web, siap dijalankan secara publik.
 
@@ -13,13 +13,13 @@ Butuh PostgreSQL terinstall di laptop, lalu:
 
 ```bash
 npm install
-DATABASE_URL=postgresql://localhost/financeos node server.js
+DATABASE_URL=postgresql://localhost/kepinguang node server.js
 ```
 
 ## Struktur File
 
 ```
-FinanceOS/
+KepingUang/
 ├── server.js          # Express server + semua API route
 ├── database.js        # PostgreSQL data layer (multi-user)
 ├── auth.js            # Autentikasi: hash password, cookie, middleware
