@@ -421,7 +421,7 @@
   transform: translateY(0) !important;
 }
 
-/* ── Per-word green box on hover ── */
+/* ── Per-word green box on hover / auto-cycle ── */
 #landingPage .lp-word {
   display: inline-block;
   vertical-align: baseline;
@@ -429,19 +429,24 @@
   cursor: default;
 }
 @keyframes lpWordPulse {
-  0%        { outline-offset: 4px; }   /* mulai besar — langsung terlihat */
-  50%       { outline-offset: 1px; }   /* mengempis */
-  100%      { outline-offset: 4px; }   /* kembali mengembang */
+  0%, 100% { box-shadow: 0 0 0 2px #1a6b4a, 0 0 0 5px rgba(26,107,74,.18); }
+  50%       { box-shadow: 0 0 0 2px #1a6b4a, 0 0 0 1px rgba(26,107,74,.04); }
 }
-#landingPage .lp-word:hover {
-  background: rgba(26,107,74,.09);
-  outline: 2px solid #1a6b4a;
-  outline-offset: 4px;
+@keyframes lpWordPulseDk {
+  0%, 100% { box-shadow: 0 0 0 2px #3adb8e, 0 0 0 5px rgba(58,219,142,.18); }
+  50%       { box-shadow: 0 0 0 2px #3adb8e, 0 0 0 1px rgba(58,219,142,.04); }
+}
+#landingPage .lp-word:hover,
+#landingPage .lp-word.lp-word-active {
+  color: #1a1915;
+  background: rgba(26,107,74,.08);
   animation: lpWordPulse 1.5s ease-in-out infinite;
 }
-[data-theme=dark] #landingPage .lp-word:hover {
-  background: rgba(58,219,142,.08);
-  outline-color: #3adb8e;
+[data-theme=dark] #landingPage .lp-word:hover,
+[data-theme=dark] #landingPage .lp-word.lp-word-active {
+  color: #f0ede4;
+  background: rgba(58,219,142,.07);
+  animation: lpWordPulseDk 1.5s ease-in-out infinite;
 }
 
 #landingPage .landing-cta-bottom p {
@@ -1669,7 +1674,38 @@ function hMakeLineChart(canvas,tooltipId,labels,datasets,ttIds,d1,d2){
       scene.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
     }
 
-    /* 3. Staggered feature card reveal */
+    /* 3. Word box auto-cycle on headings */
+    ['.landing-title', '.landing-features-heading h2', '.landing-cta-bottom h2'].forEach(function(sel) {
+      var heading = lp.querySelector(sel);
+      if (!heading) return;
+      var words = Array.from(heading.querySelectorAll('.lp-word'));
+      if (!words.length) return;
+      var idx = 0, timer = null, frozen = false;
+
+      function setActive(word) {
+        words.forEach(function(w) { w.classList.remove('lp-word-active'); });
+        if (word) word.classList.add('lp-word-active');
+      }
+
+      /* Start cycling immediately */
+      setActive(words[0]);
+      idx = 1;
+      timer = setInterval(function() {
+        if (!frozen) { setActive(words[idx]); idx = (idx + 1) % words.length; }
+      }, 800);
+
+      words.forEach(function(word) {
+        /* On hover: stop cycle, let CSS :hover handle the box */
+        word.addEventListener('mouseenter', function() {
+          if (!frozen) { frozen = true; clearInterval(timer); }
+          setActive(null); /* CSS :hover takes over */
+        });
+        /* On mouse leave word: lock box to this word */
+        word.addEventListener('mouseleave', function() { setActive(word); });
+      });
+    });
+
+    /* 4. Staggered feature card reveal */
     var cards = lp.querySelectorAll('.landing-feature-card');
     if (cards.length) {
       var cardIO = new IntersectionObserver(function(entries) {
