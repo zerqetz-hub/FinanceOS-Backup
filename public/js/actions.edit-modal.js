@@ -62,9 +62,11 @@ function openEditModal(type, id) {
     content = `<div class="form-grid">
       <div class="form-group full"><label>Nama Hutang</label><input type="text" id="ef_dname" value="${esc(d.name)}"></div>
       <div class="form-group"><label>Jenis</label><select id="ef_dtype">
-        <option ${d.type==='Long-term'?'selected':''}>Long-term</option>
-        <option ${d.type==='Short-term'?'selected':''}>Short-term</option>
-        <option ${d.type==='Installment'?'selected':''}>Installment</option>
+        <option value="Long-term" ${d.type==='Long-term'?'selected':''}>Long-term (jangka panjang)</option>
+        <option value="Short-term" ${d.type==='Short-term'?'selected':''}>Short-term (jangka pendek)</option>
+        <option value="Installment" ${d.type==='Installment'?'selected':''}>Installment (cicilan)</option>
+        <option value="Credit" ${d.type==='Credit'?'selected':''}>Credit Card</option>
+        <option value="Other" ${d.type==='Other'?'selected':''}>Lainnya</option>
       </select></div>
       <div class="form-group"><label>Bunga (%/tahun)</label><input type="number" id="ef_dbunga" value="${d.bunga}" step="0.1" min="0"></div>
       <div class="form-group"><label>Total Hutang (Rp)</label><input type="number" id="ef_dtotal" value="${d.total}" min="0"></div>

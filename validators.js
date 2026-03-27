@@ -39,8 +39,14 @@ function validateCashflow(body) {
       if (val > MAX_AMOUNT)        return err(`expenses["${cat}"] melebihi batas maksimum`);
     }
   }
-  if (body.incomeBreakdown !== undefined && !isObj(body.incomeBreakdown))
-    return err('incomeBreakdown harus berupa object');
+  if (body.incomeBreakdown !== undefined) {
+    if (!isObj(body.incomeBreakdown)) return err('incomeBreakdown harus berupa object');
+    for (const [src, val] of Object.entries(body.incomeBreakdown)) {
+      if (typeof src !== 'string' || src.length > 50) return err('nama sumber incomeBreakdown tidak valid');
+      if (!isNum(val) || val < 0)  return err(`incomeBreakdown["${src}"] harus angka ≥ 0`);
+      if (val > MAX_AMOUNT)        return err(`incomeBreakdown["${src}"] melebihi batas maksimum`);
+    }
+  }
   return ok;
 }
 

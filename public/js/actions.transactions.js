@@ -39,7 +39,7 @@ async function addTx() {
     const dateAdded = v('f_tdate') || new Date().toISOString().slice(0,10);
     const dateStr   = isoToDisplay(dateAdded + 'T00:00:00');
     const id = uid();
-    const newT = {id, cat:emoji, name, date:dateStr, amount:isIn?amt:-amt, catColor, catName:catSel, dateAdded};
+    const newT = {id, cat:emoji, name, date:dateStr, amount:isIn?amt:-amt, catColor, catName:catSel, notes:v('f_tnotes')||'', dateAdded};
     S.transactions.unshift(newT); closeModal(); renderAll();
     try {
       const _r = await API.post('/api/transactions', newT);

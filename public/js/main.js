@@ -17,7 +17,7 @@ function _computeAlerts() {
       const budget = S.budgets?.[cat];
       const spent  = cf.expenses?.[cat] || 0;
       if (budget && spent > budget)
-        alerts.push({ type:'danger', msg:'Budget ' + cat + ' terlampaui: ' + fmtS(spent) + ' dari ' + fmtS(budget) + '.' });
+        alerts.push({ type:'danger', msg:'Budget ' + esc(cat) + ' terlampaui: ' + fmtS(spent) + ' dari ' + fmtS(budget) + '.' });
     });
   }
   const dti = latestCF() && latestCF().income > 0 ? totalCicilan() / latestCF().income : 0;
@@ -175,20 +175,6 @@ async function bootApp() {
 }
 
 // Tutorial system moved to tutorial.js — _checkPageTutorial() is defined there
-
-// ─── AVATAR MENU ─────────────────────────────────────────────────────────────
-function toggleAvatarMenu() {
-  const menu = document.getElementById('avatarMenu');
-  if (!menu) return;
-  menu.classList.toggle('open');
-  if (menu.classList.contains('open'))
-    setTimeout(() => document.addEventListener('click', _closeAvatarOnOutside, { once:true }), 0);
-}
-function closeAvatarMenu() { document.getElementById('avatarMenu')?.classList.remove('open'); }
-function _closeAvatarOnOutside(e) {
-  const wrap = document.getElementById('avatarWrap');
-  if (wrap && !wrap.contains(e.target)) closeAvatarMenu();
-}
 
 // ─── ENTRY POINT ─────────────────────────────────────────────────────────────
 (async () => {

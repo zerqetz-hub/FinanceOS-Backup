@@ -4,10 +4,10 @@
 const router = require('express').Router();
 const db     = require('../database');
 
-const e500 = (res, e) => res.status(500).json({ error: e.message });
+const e500 = (res, e) => res.status(e.status || 500).json({ error: e.message });
 
 // ─── SINGLE CHECKPOINT ────────────────────────────────────────────────────────
-router.post('/save',    async (req, res) => { try { const savedAt = await db.saveCheckpoint(req.userId); res.json({ ok: true, savedAt }); } catch (e) { e500(res, e); } });
+router.post('/save',    async (req, res) => { try { const cp = await db.saveCheckpoint(req.userId); res.json({ ok: true, savedAt: cp.savedAt }); } catch (e) { e500(res, e); } });
 router.get ('/info',    async (req, res) => { try { res.json(await db.checkpointInfo(req.userId)); } catch (e) { e500(res, e); } });
 router.post('/restore', async (req, res) => { try { await db.restoreCheckpoint(req.userId); res.json({ ok: true }); } catch (e) { res.status(404).json({ error: e.message }); } });
 

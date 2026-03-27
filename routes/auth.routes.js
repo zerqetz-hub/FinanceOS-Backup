@@ -5,6 +5,7 @@ const router = require('express').Router();
 const db     = require('../database');
 const auth   = require('../auth');
 const { validate, validateRegister } = require('../validators');
+const { routeHandler } = require('../errors');
 
 router.get('/status', async (req, res) => {
   const token = auth.getTokenFromRequest(req);
@@ -80,20 +81,7 @@ router.put('/username', async (req, res) => {
   if (!username || !username.trim()) return res.status(400).json({ error: 'Username wajib diisi.' });
   const trimmed = username.trim().slice(0, 40);
   try {
-    const { rows } = await db.q
-      ? { rows: [] }
-      : { rows: [] };
-    // Direct SQL via the pool that database.js already exposes via ping
-    // We re-use the internal pool by importing and calling a dedicated helper
-    await db.updatePassword; // ensure db module is loaded
-    // Use a raw query through the existing pg pool
-    const { Pool } = require('pg');
-    const _pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-    });
-    await _pool.query('UPDATE users SET username=$1 WHERE id=$2', [trimmed, req.userId]);
-    await _pool.end();
+    await db.updateUsername(req.userId, trimmed);
     res.json({ ok: true, username: trimmed });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -127,6 +115,14 @@ router.put('/avatar', async (req, res) => {
   try { await db.updateAvatar(req.userId, avatar); res.json({ ok: true, avatar }); }
   catch (e) { res.status(500).json({ error: e.message }); }
 });
+
+// GET /api/auth/export — unduh semua data user sebagai JSON
+router.get('/export', routeHandler(async (req, res) => {
+  const data = await db.getState(req.userId);
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Disposition', 'attachment; filename="financeos-data.json"');
+  res.send(JSON.stringify(data, null, 2));
+}));
 
 router.delete('/account', async (req, res) => {
   const { password } = req.body;

@@ -6,8 +6,8 @@ async function addGoal() {
   await withSubmitLock(async () => {
     const name = v('f_gname').trim();
     if (!name) { showFormError('Nama goal wajib diisi.'); return; }
-    const id = uid(); const dateAdded = v('f_gdate') || new Date().toISOString().slice(0,10);
-    const newG = {id, name, target:vn('f_gtarget'), current:vn('f_gcurrent'), deadline:v('f_gdeadline')||'—', color:v('f_gcolor'), dateAdded};
+    const id = uid(); const dateAdded = new Date().toISOString().slice(0,10);
+    const newG = {id, name, target:vn('f_gtarget'), current:vn('f_gcurrent'), deadline:v('f_gdeadline')||'', color:v('f_gcolor'), dateAdded};
     S.goals.push(newG); closeModal(); renderAll();
     try {
       const _r = await API.post('/api/goals', newG);

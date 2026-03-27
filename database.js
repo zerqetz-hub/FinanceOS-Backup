@@ -267,7 +267,7 @@ async function getAssets(userId){
   const ids=rows.map(r=>r.id);
   const hist=await q(`SELECT asset_id,date,price FROM asset_price_history WHERE asset_id=ANY($1) ORDER BY date`,[ids]);
   const hM={};
-  hist.forEach(h=>{if(!hM[h.asset_id])hM[h.asset_id]=[];hM[h.asset_id].push({date:h.date,price:Number(h.price)});});
+  hist.forEach(h=>{if(!hM[h.asset_id])hM[h.asset_id]=[];hM[h.asset_id].push({date:h.date,value:Number(h.price)});});
   return rows.map(r=>({id:r.id,name:r.name,sub:r.sub,type:r.type,value:Number(r.value),cost:Number(r.cost),priceHistory:hM[r.id]||[],dateAdded:r.date_added}));
 }
 
@@ -485,7 +485,7 @@ async function _applySnapshot(userId,snapshot){
     Promise.all((s.transactions||[]).map(t=>addTransaction(userId,t))),
   ]);
   await setPaidDebts(userId,s.paidDebts||[]);
-  const{cashflows:_c,assets:_a,debts:_d,goals:_g,transactions:_t,paidDebts:_p,...sData}=s;
+  const{cashflows:_c,assets:_a,debts:_d,goals:_g,transactions:_t,paidDebts:_p,transactionsMeta:_tm,...sData}=s;
   if(Object.keys(sData).length) await updateSettings(userId,sData);
 }
 
