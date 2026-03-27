@@ -421,41 +421,30 @@
   transform: translateY(0) !important;
 }
 
-/* ── Heading shimmer sweep on hover ── */
-@keyframes lpTextShimmer {
-  from { background-position: 100% center; }
-  to   { background-position: 0%   center; }
+/* ── Per-word green box on hover ── */
+#landingPage .lp-word {
+  display: inline-block;
+  border-radius: 7px;
+  border: 2px solid transparent;
+  padding: 2px 6px;
+  margin: 0 1px;
+  cursor: default;
+  transition: border-color .22s ease, box-shadow .22s ease, background .22s ease;
 }
-/* hero h1 */
-#landingPage .landing-title {
-  background: linear-gradient(90deg,#1a1915 0%,#1a1915 30%,#1a6b4a 50%,#1a1915 70%,#1a1915 100%);
-  background-size: 400% 100%; background-position: 100% center;
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+#landingPage .lp-word:hover {
+  border-color: #1a6b4a;
+  background: rgba(26,107,74,.05);
+  box-shadow: 0 0 0 4px rgba(26,107,74,.09), 0 0 20px rgba(26,107,74,.12);
 }
-[data-theme=dark] #landingPage .landing-title {
-  background: linear-gradient(90deg,#f0ede4 0%,#f0ede4 30%,#3adb8e 50%,#f0ede4 70%,#f0ede4 100%);
-  background-size: 400% 100%; background-position: 100% center;
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+[data-theme=dark] #landingPage .lp-word:hover {
+  border-color: #3adb8e;
+  background: rgba(58,219,142,.06);
+  box-shadow: 0 0 0 4px rgba(58,219,142,.10), 0 0 20px rgba(58,219,142,.14);
 }
-#landingPage .landing-title:hover { cursor: default; animation: lpTextShimmer .9s ease forwards; }
-/* features h2 + cta h2 */
+/* Remove margin offset from heading when words have padding */
+#landingPage .landing-title,
 #landingPage .landing-features-heading h2,
-#landingPage .landing-cta-bottom h2 {
-  background: linear-gradient(90deg,#1a1915 0%,#1a1915 30%,#1a6b4a 50%,#1a1915 70%,#1a1915 100%);
-  background-size: 400% 100%; background-position: 100% center;
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  transition: letter-spacing .35s ease; cursor: default;
-}
-[data-theme=dark] #landingPage .landing-features-heading h2,
-[data-theme=dark] #landingPage .landing-cta-bottom h2 {
-  background: linear-gradient(90deg,#f0ede4 0%,#f0ede4 30%,#3adb8e 50%,#f0ede4 70%,#f0ede4 100%);
-  background-size: 400% 100%; background-position: 100% center;
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
-#landingPage .landing-features-heading h2:hover,
-#landingPage .landing-cta-bottom h2:hover {
-  animation: lpTextShimmer .9s ease forwards; letter-spacing: .3px;
-}
+#landingPage .landing-cta-bottom h2 { margin-left: -6px; }
 
 #landingPage .landing-cta-bottom p {
   transition: color .3s ease;
@@ -666,7 +655,7 @@
     </div>
     <div class="landing-hero-content">
       <div class="landing-badge">✦ Gratis selamanya</div>
-      <h1 class="landing-title">Kelola Keuangan<br>Pribadi dengan Cerdas</h1>
+      <h1 class="landing-title"><span class="lp-word">Kelola</span> <span class="lp-word">Keuangan</span><br><span class="lp-word">Pribadi</span> <span class="lp-word">dengan</span> <span class="lp-word">Cerdas</span></h1>
       <p class="landing-sub">Dashboard lengkap untuk mencatat pemasukan, pengeluaran, aset, hutang, dan tujuan finansial Anda — semua dalam satu tempat.</p>
       <div class="landing-cta">
         <button class="btn-cta-primary" onclick="showLandingAuth('register')">Mulai Sekarang — Gratis</button>
@@ -901,29 +890,9 @@
     </div>
   </section>
 
-  <!-- Scrolling ticker -->
-  <div class="lp-ticker-section" aria-hidden="true">
-    <div class="lp-ticker-inner">
-      <span class="lp-ticker-item">📈 Saving Rate <span class="lp-ticker-badge up">+12%</span></span>
-      <span class="lp-ticker-item">💼 Aset Saham <span class="lp-ticker-badge up">+8.4%</span></span>
-      <span class="lp-ticker-item">🏠 KPR BCA <span class="lp-ticker-badge dn">−Rp 4,2jt/bln</span></span>
-      <span class="lp-ticker-item">🎯 Dana Pensiun <span class="lp-ticker-badge up">56% tercapai</span></span>
-      <span class="lp-ticker-item">💰 Cash Flow <span class="lp-ticker-badge up">+Rp 2,5jt</span></span>
-      <span class="lp-ticker-item">📊 Net Worth <span class="lp-ticker-badge up">+Rp 18jt ytd</span></span>
-      <span class="lp-ticker-item">🛡️ Dana Darurat <span class="lp-ticker-badge up">4,2 bln</span></span>
-      <span class="lp-ticker-item">📈 Saving Rate <span class="lp-ticker-badge up">+12%</span></span>
-      <span class="lp-ticker-item">💼 Aset Saham <span class="lp-ticker-badge up">+8.4%</span></span>
-      <span class="lp-ticker-item">🏠 KPR BCA <span class="lp-ticker-badge dn">−Rp 4,2jt/bln</span></span>
-      <span class="lp-ticker-item">🎯 Dana Pensiun <span class="lp-ticker-badge up">56% tercapai</span></span>
-      <span class="lp-ticker-item">💰 Cash Flow <span class="lp-ticker-badge up">+Rp 2,5jt</span></span>
-      <span class="lp-ticker-item">📊 Net Worth <span class="lp-ticker-badge up">+Rp 18jt ytd</span></span>
-      <span class="lp-ticker-item">🛡️ Dana Darurat <span class="lp-ticker-badge up">4,2 bln</span></span>
-    </div>
-  </div>
-
   <section class="landing-features">
     <div class="landing-features-heading">
-      <h2>Semua yang Anda Butuhkan</h2>
+      <h2><span class="lp-word">Semua</span> <span class="lp-word">yang</span> <span class="lp-word">Anda</span> <span class="lp-word">Butuhkan</span></h2>
       <p>Fitur lengkap untuk mengelola keuangan pribadi dari A sampai Z</p>
     </div>
     <div class="landing-features-grid">
@@ -937,7 +906,7 @@
   </section>
 
   <section class="landing-cta-bottom">
-    <h2 class="ku-scroll-hidden">Mulai gratis hari ini</h2>
+    <h2 class="ku-scroll-hidden"><span class="lp-word">Mulai</span> <span class="lp-word">gratis</span> <span class="lp-word">hari</span> <span class="lp-word">ini</span></h2>
     <p class="ku-scroll-hidden" style="transition-delay:.13s">Tidak perlu kartu kredit. Daftar dalam 30 detik.</p>
     <button class="btn-cta-primary ku-scroll-hidden" style="transition-delay:.26s" onclick="showLandingAuth('register')">Buat Akun Gratis</button>
   </section>
