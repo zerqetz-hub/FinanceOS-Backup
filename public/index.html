@@ -435,6 +435,192 @@
 }
 #landingPage .landing-cta-bottom p:hover { color:#3d3c38; }
 [data-theme=dark] #landingPage .landing-cta-bottom p:hover { color:#d0ccc0; }
+
+/* ── Navbar glass on scroll ── */
+#landingPage .landing-nav { transition: box-shadow .3s, background .3s; }
+#landingPage .landing-nav.lp-scrolled {
+  background: rgba(245,244,240,.9) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 24px rgba(0,0,0,.1);
+}
+[data-theme=dark] #landingPage .landing-nav.lp-scrolled { background: rgba(15,15,13,.9) !important; }
+
+/* ── Hero background blobs ── */
+#landingPage .lp-hero-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
+#landingPage .lp-blob {
+  position:absolute; border-radius:50%; filter:blur(72px); pointer-events:none;
+}
+#landingPage .lp-blob-1 {
+  width:480px; height:480px; background:#c8e8d8; top:-140px; left:-100px; opacity:.5;
+  animation: lpBlobFloat 12s ease-in-out infinite alternate;
+}
+#landingPage .lp-blob-2 {
+  width:340px; height:340px; background:#dce8fa; top:60px; right:-60px; opacity:.45;
+  animation: lpBlobFloat 16s ease-in-out 3s infinite alternate-reverse;
+}
+#landingPage .lp-blob-3 {
+  width:220px; height:220px; background:#f5e8c8; bottom:20px; left:30%; opacity:.35;
+  animation: lpBlobFloat 10s ease-in-out 1.5s infinite alternate;
+}
+[data-theme=dark] #landingPage .lp-blob-1 { background:#0d3a24; opacity:.55; }
+[data-theme=dark] #landingPage .lp-blob-2 { background:#0d1f3a; opacity:.45; }
+[data-theme=dark] #landingPage .lp-blob-3 { background:#2a1e0d; opacity:.3; }
+@keyframes lpBlobFloat {
+  from { transform: translateY(0) scale(1); }
+  to   { transform: translateY(-28px) scale(1.07); }
+}
+#landingPage .landing-hero { position:relative; overflow:hidden; }
+#landingPage .landing-hero-content,
+#landingPage .landing-hero-visual { position:relative; z-index:1; }
+
+/* ── Parallax wrapper ── */
+#landingPage .lp-parallax-wrap {
+  transition: transform .08s linear;
+  will-change: transform;
+}
+
+/* ── CTA button shine + lift ── */
+#landingPage .btn-cta-primary {
+  position:relative; overflow:hidden;
+  transition: transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s, opacity .15s !important;
+}
+#landingPage .btn-cta-primary:hover {
+  opacity: 1 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(26,107,74,.38);
+}
+#landingPage .btn-cta-primary::after {
+  content:'';
+  position:absolute; top:0; left:-80%; width:50%; height:100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+  transform: skewX(-15deg);
+  transition: none;
+}
+#landingPage .btn-cta-primary:hover::after {
+  animation: lpShine .55s ease forwards;
+}
+@keyframes lpShine {
+  0%   { left:-80%; }
+  100% { left:160%; }
+}
+#landingPage .btn-cta-secondary {
+  transition: all .2s !important;
+}
+#landingPage .btn-cta-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,.1);
+}
+
+/* ── Ticker ── */
+#landingPage .lp-ticker-section {
+  border-top:1px solid rgba(0,0,0,.07);
+  border-bottom:1px solid rgba(0,0,0,.07);
+  background: rgba(0,0,0,.018);
+  overflow:hidden;
+  padding:9px 0;
+  user-select:none;
+}
+[data-theme=dark] #landingPage .lp-ticker-section {
+  background: rgba(255,255,255,.025);
+  border-color: rgba(255,255,255,.07);
+}
+#landingPage .lp-ticker-inner {
+  display:flex; gap:40px; white-space:nowrap;
+  animation: lpTicker 28s linear infinite;
+}
+#landingPage .lp-ticker-section:hover .lp-ticker-inner { animation-play-state:paused; }
+@keyframes lpTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+#landingPage .lp-ticker-item {
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:12px; color:#6b6960; flex-shrink:0;
+}
+[data-theme=dark] #landingPage .lp-ticker-item { color:#9b9a93; }
+#landingPage .lp-ticker-badge {
+  font-weight:600; padding:2px 8px; border-radius:20px; font-size:11px; flex-shrink:0;
+}
+#landingPage .lp-ticker-badge.up { background:#e8f5ef; color:#1a6b4a; }
+#landingPage .lp-ticker-badge.dn { background:#fde8e8; color:#c23b3b; }
+[data-theme=dark] #landingPage .lp-ticker-badge.up { background:#0d2a1e; color:#3adb8e; }
+[data-theme=dark] #landingPage .lp-ticker-badge.dn { background:#2a0d0d; color:#f07070; }
+
+/* ── Stats bar ── */
+#landingPage .lp-stats-section {
+  background:#fff;
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+[data-theme=dark] #landingPage .lp-stats-section { background:#111110; border-color:rgba(255,255,255,.08); }
+#landingPage .lp-stats {
+  display:flex; max-width:1100px; margin:0 auto; padding:0 40px;
+}
+#landingPage .lp-stat {
+  flex:1; text-align:center; padding:32px 16px;
+  border-right:1px solid rgba(0,0,0,.07);
+  opacity:0; transform:translateY(18px);
+  transition:opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1);
+}
+[data-theme=dark] #landingPage .lp-stat { border-color:rgba(255,255,255,.07); }
+#landingPage .lp-stat:last-child { border-right:none; }
+#landingPage .lp-stat.lp-stat-visible { opacity:1; transform:none; }
+#landingPage .lp-stat-num {
+  display:block; font-size:34px; font-weight:700; color:#1a6b4a;
+  letter-spacing:-1px; line-height:1;
+}
+[data-theme=dark] #landingPage .lp-stat-num { color:#3adb8e; }
+#landingPage .lp-stat-label {
+  display:block; font-size:13px; color:#6b6960; margin-top:7px;
+}
+[data-theme=dark] #landingPage .lp-stat-label { color:#9b9a93; }
+
+/* ── Features section heading ── */
+#landingPage .landing-features-heading {
+  text-align:center; padding-bottom:36px; max-width:520px; margin:0 auto;
+}
+#landingPage .landing-features-heading h2 {
+  font-size:28px; font-weight:700; color:#1a1915; margin:0 0 10px; letter-spacing:-.3px;
+}
+[data-theme=dark] #landingPage .landing-features-heading h2 { color:#f0ede4; }
+#landingPage .landing-features-heading p { font-size:14px; color:#6b6960; margin:0; line-height:1.7; }
+
+/* ── Navbar glass on scroll ── */
+#landingPage .landing-nav.lp-scrolled {
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  background: rgba(245,244,240,.72) !important;
+  border-bottom-color: rgba(0,0,0,.1);
+  box-shadow: 0 2px 16px rgba(0,0,0,.08);
+}
+[data-theme=dark] #landingPage .landing-nav.lp-scrolled {
+  background: rgba(15,15,13,.72) !important;
+}
+
+/* ── Feature cards: scroll-reveal + richer hover + icon animation ── */
+#landingPage .landing-feature-card {
+  opacity:0; transform:translateY(24px);
+  transition: opacity .5s cubic-bezier(.22,.61,.36,1), transform .5s cubic-bezier(.22,.61,.36,1),
+              border-color .2s, box-shadow .3s;
+}
+#landingPage .landing-feature-card.lp-card-visible {
+  opacity:1; transform:none;
+}
+#landingPage .landing-feature-card.lp-card-visible:hover {
+  border-color:#1a6b4a;
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(26,107,74,.13);
+}
+#landingPage .feature-icon {
+  display:inline-block;
+  transition: transform .3s cubic-bezier(.22,1,.36,1);
+}
+#landingPage .landing-feature-card:hover .feature-icon {
+  transform: scale(1.3) rotate(-10deg);
+}
+
+@media (max-width:860px) {
+  #landingPage .lp-stats { padding:0 16px; flex-wrap:wrap; }
+  #landingPage .lp-stat { flex:1 1 45%; border-right:none; border-bottom:1px solid rgba(0,0,0,.07); padding:20px 12px; }
+  [data-theme=dark] #landingPage .lp-stat { border-color:rgba(255,255,255,.07); }
+}
 </style>
   <nav class="landing-nav">
     <div class="landing-nav-logo"><span>K</span> KepingUang</div>
@@ -445,6 +631,11 @@
   </nav>
 
   <section class="landing-hero">
+    <div class="lp-hero-bg" aria-hidden="true">
+      <div class="lp-blob lp-blob-1"></div>
+      <div class="lp-blob lp-blob-2"></div>
+      <div class="lp-blob lp-blob-3"></div>
+    </div>
     <div class="landing-hero-content">
       <div class="landing-badge">✦ Gratis selamanya</div>
       <h1 class="landing-title">Kelola Keuangan<br>Pribadi dengan Cerdas</h1>
@@ -455,7 +646,7 @@
       </div>
     </div>
 
-    <div class="landing-hero-visual">
+    <div class="landing-hero-visual lp-parallax-wrap">
       <div class="hs-scene" id="hsScene">
         <div class="hs-stack" id="hsStack">
         <!-- CARD: Cash Flow -->
@@ -682,7 +873,53 @@
     </div>
   </section>
 
+  <!-- Scrolling ticker -->
+  <div class="lp-ticker-section" aria-hidden="true">
+    <div class="lp-ticker-inner">
+      <span class="lp-ticker-item">📈 Saving Rate <span class="lp-ticker-badge up">+12%</span></span>
+      <span class="lp-ticker-item">💼 Aset Saham <span class="lp-ticker-badge up">+8.4%</span></span>
+      <span class="lp-ticker-item">🏠 KPR BCA <span class="lp-ticker-badge dn">−Rp 4,2jt/bln</span></span>
+      <span class="lp-ticker-item">🎯 Dana Pensiun <span class="lp-ticker-badge up">56% tercapai</span></span>
+      <span class="lp-ticker-item">💰 Cash Flow <span class="lp-ticker-badge up">+Rp 2,5jt</span></span>
+      <span class="lp-ticker-item">📊 Net Worth <span class="lp-ticker-badge up">+Rp 18jt ytd</span></span>
+      <span class="lp-ticker-item">🛡️ Dana Darurat <span class="lp-ticker-badge up">4,2 bln</span></span>
+      <span class="lp-ticker-item">📈 Saving Rate <span class="lp-ticker-badge up">+12%</span></span>
+      <span class="lp-ticker-item">💼 Aset Saham <span class="lp-ticker-badge up">+8.4%</span></span>
+      <span class="lp-ticker-item">🏠 KPR BCA <span class="lp-ticker-badge dn">−Rp 4,2jt/bln</span></span>
+      <span class="lp-ticker-item">🎯 Dana Pensiun <span class="lp-ticker-badge up">56% tercapai</span></span>
+      <span class="lp-ticker-item">💰 Cash Flow <span class="lp-ticker-badge up">+Rp 2,5jt</span></span>
+      <span class="lp-ticker-item">📊 Net Worth <span class="lp-ticker-badge up">+Rp 18jt ytd</span></span>
+      <span class="lp-ticker-item">🛡️ Dana Darurat <span class="lp-ticker-badge up">4,2 bln</span></span>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="lp-stats-section">
+    <div class="lp-stats">
+      <div class="lp-stat">
+        <div class="lp-stat-num" data-target="2400" data-suffix="+">&nbsp;</div>
+        <div class="lp-stat-label">Pengguna aktif</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-num" data-target="98" data-suffix="%">&nbsp;</div>
+        <div class="lp-stat-label">Kepuasan pengguna</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-num" data-target="0" data-prefix="Rp" data-suffix=" biaya">&nbsp;</div>
+        <div class="lp-stat-label">Selamanya gratis</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-num" data-target="30" data-suffix=" detik">&nbsp;</div>
+        <div class="lp-stat-label">Waktu daftar</div>
+      </div>
+    </div>
+  </div>
+
   <section class="landing-features">
+    <div class="landing-features-heading">
+      <h2>Semua yang Anda Butuhkan</h2>
+      <p>Fitur lengkap untuk mengelola keuangan pribadi dari A sampai Z</p>
+    </div>
     <div class="landing-features-grid">
       <div class="landing-feature-card"><div class="feature-icon">📊</div><h3>Dashboard Komprehensif</h3><p>Lihat ringkasan keuangan bulan ini, tren saving rate, dan peringatan budget dalam satu layar.</p></div>
       <div class="landing-feature-card"><div class="feature-icon">💼</div><h3>Manajemen Aset</h3><p>Pantau saham, reksa dana, crypto, properti, dan emas. Hitung return investasi secara otomatis.</p></div>
@@ -1424,6 +1661,113 @@ function hMakeLineChart(canvas,tooltipId,labels,datasets,ttIds,d1,d2){
   if (lp.style.display !== 'none') { setupIO(); return; }
   var mo = new MutationObserver(function() {
     if (lp.style.display !== 'none') { mo.disconnect(); setTimeout(setupIO, 0); }
+  });
+  mo.observe(lp, { attributes: true, attributeFilter: ['style'] });
+})();
+</script>
+<script>
+/* ── Landing page interactive enhancements ── */
+(function() {
+  var lp = document.getElementById('landingPage');
+  if (!lp) return;
+
+  function init() {
+    if (lp.style.display === 'none') return;
+
+    /* 1. Navbar glass on scroll */
+    var nav = lp.querySelector('.landing-nav');
+    if (nav) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 20) nav.classList.add('lp-scrolled');
+        else nav.classList.remove('lp-scrolled');
+      }, { passive: true });
+    }
+
+    /* 2. Auto-advance card carousel every 4 s */
+    var ORDER = ['cf','asset','inv','goals'];
+    var autoTimer = setInterval(function() {
+      if (typeof HS_ACTIVE === 'undefined') return;
+      var next = (HS_ACTIVE + 1) % ORDER.length;
+      if (typeof hsClick === 'function') hsClick(ORDER[next]);
+    }, 4000);
+    /* Pause auto-advance on hover */
+    var scene = document.getElementById('hsScene');
+    if (scene) {
+      scene.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
+    }
+
+    /* 3. Mouse parallax on hero visual */
+    var hero = lp.querySelector('.landing-hero');
+    var parallaxEl = lp.querySelector('.lp-parallax-wrap');
+    if (hero && parallaxEl) {
+      hero.addEventListener('mousemove', function(e) {
+        var r = hero.getBoundingClientRect();
+        var xPct = (e.clientX - r.left) / r.width  - 0.5;
+        var yPct = (e.clientY - r.top)  / r.height - 0.5;
+        requestAnimationFrame(function() {
+          parallaxEl.style.transform = 'translate(' + (xPct * 12) + 'px,' + (yPct * 8) + 'px)';
+        });
+      });
+      hero.addEventListener('mouseleave', function() {
+        requestAnimationFrame(function() {
+          parallaxEl.style.transform = '';
+        });
+      });
+    }
+
+    /* 4. Counter animation for stats + fade-in */
+    var statNums = lp.querySelectorAll('.lp-stat-num[data-target]');
+    if (statNums.length) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          io.unobserve(entry.target);
+          var el = entry.target;
+          /* fade in the parent stat card */
+          var statCard = el.closest('.lp-stat');
+          if (statCard) statCard.classList.add('lp-stat-visible');
+          var target = parseInt(el.getAttribute('data-target'), 10);
+          var prefix = el.getAttribute('data-prefix') || '';
+          var suffix = el.getAttribute('data-suffix') || '';
+          if (target === 0) { el.textContent = prefix + '0' + suffix; return; }
+          var start = 0;
+          var duration = 1200;
+          var startTime = null;
+          function step(ts) {
+            if (!startTime) startTime = ts;
+            var progress = Math.min((ts - startTime) / duration, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            var current = Math.round(start + (target - start) * eased);
+            el.textContent = prefix + current.toLocaleString('id-ID') + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }, { threshold: 0.5 });
+      statNums.forEach(function(el) { io.observe(el); });
+    }
+
+    /* 5. Staggered feature card reveal */
+    var cards = lp.querySelectorAll('.landing-feature-card');
+    if (cards.length) {
+      var cardIO = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('lp-card-visible');
+            cardIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      cards.forEach(function(card, i) {
+        card.style.transitionDelay = (i * 0.07) + 's';
+        cardIO.observe(card);
+      });
+    }
+  }
+
+  if (lp.style.display !== 'none') { init(); return; }
+  var mo = new MutationObserver(function() {
+    if (lp.style.display !== 'none') { mo.disconnect(); setTimeout(init, 80); }
   });
   mo.observe(lp, { attributes: true, attributeFilter: ['style'] });
 })();
