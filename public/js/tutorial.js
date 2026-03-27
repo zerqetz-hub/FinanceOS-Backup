@@ -322,8 +322,7 @@ function _highlightAndPosition(selector) {
     ring.style.width  = (tRight - tLeft) + 'px';
     ring.style.height = (tBot - tTop)   + 'px';
     ring.className = 'on';
-    // Overlay panels surrounding target
-    _updateOverlays(tTop, tBot, tLeft, tRight);
+    _removeOverlays();
 
     // Try 4 positions: below-right, below-left, above-right, above-left
     const candidates = [
