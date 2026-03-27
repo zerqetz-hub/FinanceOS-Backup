@@ -421,13 +421,41 @@
   transform: translateY(0) !important;
 }
 
-/* ── CTA bottom: text hover effects ── */
-#landingPage .landing-cta-bottom h2 {
-  transition: color .35s ease, letter-spacing .35s ease;
-  cursor: default;
+/* ── Heading shimmer sweep on hover ── */
+@keyframes lpTextShimmer {
+  from { background-position: 100% center; }
+  to   { background-position: 0%   center; }
 }
-#landingPage .landing-cta-bottom h2:hover { color:#1a6b4a; letter-spacing:.2px; }
-[data-theme=dark] #landingPage .landing-cta-bottom h2:hover { color:#3adb8e; }
+/* hero h1 */
+#landingPage .landing-title {
+  background: linear-gradient(90deg,#1a1915 0%,#1a1915 30%,#1a6b4a 50%,#1a1915 70%,#1a1915 100%);
+  background-size: 400% 100%; background-position: 100% center;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+[data-theme=dark] #landingPage .landing-title {
+  background: linear-gradient(90deg,#f0ede4 0%,#f0ede4 30%,#3adb8e 50%,#f0ede4 70%,#f0ede4 100%);
+  background-size: 400% 100%; background-position: 100% center;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+#landingPage .landing-title:hover { cursor: default; animation: lpTextShimmer .9s ease forwards; }
+/* features h2 + cta h2 */
+#landingPage .landing-features-heading h2,
+#landingPage .landing-cta-bottom h2 {
+  background: linear-gradient(90deg,#1a1915 0%,#1a1915 30%,#1a6b4a 50%,#1a1915 70%,#1a1915 100%);
+  background-size: 400% 100%; background-position: 100% center;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  transition: letter-spacing .35s ease; cursor: default;
+}
+[data-theme=dark] #landingPage .landing-features-heading h2,
+[data-theme=dark] #landingPage .landing-cta-bottom h2 {
+  background: linear-gradient(90deg,#f0ede4 0%,#f0ede4 30%,#3adb8e 50%,#f0ede4 70%,#f0ede4 100%);
+  background-size: 400% 100%; background-position: 100% center;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+#landingPage .landing-features-heading h2:hover,
+#landingPage .landing-cta-bottom h2:hover {
+  animation: lpTextShimmer .9s ease forwards; letter-spacing: .3px;
+}
 
 #landingPage .landing-cta-bottom p {
   transition: color .3s ease;
@@ -452,15 +480,15 @@
   position:absolute; border-radius:50%; filter:blur(72px); pointer-events:none;
 }
 #landingPage .lp-blob-1 {
-  width:480px; height:480px; background:#c8e8d8; top:-140px; left:-100px; opacity:.5;
+  width:420px; height:420px; background:#d4e9df; top:-140px; left:-100px; opacity:.22;
   animation: lpBlobFloat 12s ease-in-out infinite alternate;
 }
 #landingPage .lp-blob-2 {
-  width:340px; height:340px; background:#dce8fa; top:60px; right:-60px; opacity:.45;
+  width:280px; height:280px; background:#e2ecf7; top:60px; right:-60px; opacity:.28;
   animation: lpBlobFloat 16s ease-in-out 3s infinite alternate-reverse;
 }
 #landingPage .lp-blob-3 {
-  width:220px; height:220px; background:#f5e8c8; bottom:20px; left:30%; opacity:.35;
+  width:190px; height:190px; background:#f5edd8; bottom:20px; left:30%; opacity:.22;
   animation: lpBlobFloat 10s ease-in-out 1.5s infinite alternate;
 }
 [data-theme=dark] #landingPage .lp-blob-1 { background:#0d3a24; opacity:.55; }
@@ -646,7 +674,7 @@
       </div>
     </div>
 
-    <div class="landing-hero-visual lp-parallax-wrap">
+    <div class="landing-hero-visual">
       <div class="hs-scene" id="hsScene">
         <div class="hs-stack" id="hsStack">
         <!-- CARD: Cash Flow -->
@@ -890,28 +918,6 @@
       <span class="lp-ticker-item">💰 Cash Flow <span class="lp-ticker-badge up">+Rp 2,5jt</span></span>
       <span class="lp-ticker-item">📊 Net Worth <span class="lp-ticker-badge up">+Rp 18jt ytd</span></span>
       <span class="lp-ticker-item">🛡️ Dana Darurat <span class="lp-ticker-badge up">4,2 bln</span></span>
-    </div>
-  </div>
-
-  <!-- Stats bar -->
-  <div class="lp-stats-section">
-    <div class="lp-stats">
-      <div class="lp-stat">
-        <div class="lp-stat-num" data-target="2400" data-suffix="+">&nbsp;</div>
-        <div class="lp-stat-label">Pengguna aktif</div>
-      </div>
-      <div class="lp-stat">
-        <div class="lp-stat-num" data-target="98" data-suffix="%">&nbsp;</div>
-        <div class="lp-stat-label">Kepuasan pengguna</div>
-      </div>
-      <div class="lp-stat">
-        <div class="lp-stat-num" data-target="0" data-prefix="Rp" data-suffix=" biaya">&nbsp;</div>
-        <div class="lp-stat-label">Selamanya gratis</div>
-      </div>
-      <div class="lp-stat">
-        <div class="lp-stat-num" data-target="30" data-suffix=" detik">&nbsp;</div>
-        <div class="lp-stat-label">Waktu daftar</div>
-      </div>
     </div>
   </div>
 
@@ -1696,58 +1702,7 @@ function hMakeLineChart(canvas,tooltipId,labels,datasets,ttIds,d1,d2){
       scene.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
     }
 
-    /* 3. Mouse parallax on hero visual */
-    var hero = lp.querySelector('.landing-hero');
-    var parallaxEl = lp.querySelector('.lp-parallax-wrap');
-    if (hero && parallaxEl) {
-      hero.addEventListener('mousemove', function(e) {
-        var r = hero.getBoundingClientRect();
-        var xPct = (e.clientX - r.left) / r.width  - 0.5;
-        var yPct = (e.clientY - r.top)  / r.height - 0.5;
-        requestAnimationFrame(function() {
-          parallaxEl.style.transform = 'translate(' + (xPct * 12) + 'px,' + (yPct * 8) + 'px)';
-        });
-      });
-      hero.addEventListener('mouseleave', function() {
-        requestAnimationFrame(function() {
-          parallaxEl.style.transform = '';
-        });
-      });
-    }
-
-    /* 4. Counter animation for stats + fade-in */
-    var statNums = lp.querySelectorAll('.lp-stat-num[data-target]');
-    if (statNums.length) {
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (!entry.isIntersecting) return;
-          io.unobserve(entry.target);
-          var el = entry.target;
-          /* fade in the parent stat card */
-          var statCard = el.closest('.lp-stat');
-          if (statCard) statCard.classList.add('lp-stat-visible');
-          var target = parseInt(el.getAttribute('data-target'), 10);
-          var prefix = el.getAttribute('data-prefix') || '';
-          var suffix = el.getAttribute('data-suffix') || '';
-          if (target === 0) { el.textContent = prefix + '0' + suffix; return; }
-          var start = 0;
-          var duration = 1200;
-          var startTime = null;
-          function step(ts) {
-            if (!startTime) startTime = ts;
-            var progress = Math.min((ts - startTime) / duration, 1);
-            var eased = 1 - Math.pow(1 - progress, 3);
-            var current = Math.round(start + (target - start) * eased);
-            el.textContent = prefix + current.toLocaleString('id-ID') + suffix;
-            if (progress < 1) requestAnimationFrame(step);
-          }
-          requestAnimationFrame(step);
-        });
-      }, { threshold: 0.5 });
-      statNums.forEach(function(el) { io.observe(el); });
-    }
-
-    /* 5. Staggered feature card reveal */
+    /* 3. Staggered feature card reveal */
     var cards = lp.querySelectorAll('.landing-feature-card');
     if (cards.length) {
       var cardIO = new IntersectionObserver(function(entries) {
