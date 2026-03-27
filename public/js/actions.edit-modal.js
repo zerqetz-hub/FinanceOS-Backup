@@ -116,6 +116,7 @@ function openEditModal(type, id) {
       <div class="form-group full"><label>Kategori</label><select id="ef_tcat">
         ${allCats.map(c => `<option value="${esc(c)}" ${c===catName?'selected':''}>${esc(c)}</option>`).join('')}
       </select></div>
+      <div class="form-group full"><label>Catatan</label><input type="text" id="ef_tnotes" value="${esc(t.notes||'')}"></div>
     </div>
     <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end">
       <button class="btn btn-ghost" onclick="closeModal()">Batal</button>

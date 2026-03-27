@@ -129,17 +129,3 @@ async function updateCashflow(id) {
   } catch(e) { Object.assign(cf, _prev); renderAll(); showToast((e?.message||'Gagal menyimpan ke server'),'error'); }
 }
 
-// Month navigator untuk cashflow page
-let _cfMonth = null;
-function _initCFMonth() {
-  if (!_cfMonth) _cfMonth = latestCF()?.month || new Date().toISOString().slice(0,7);
-}
-function setCFMonth(val) { _cfMonth = val; renderCashflowPage(); }
-function shiftCFMonth(dir) {
-  _initCFMonth();
-  const [y, m] = _cfMonth.split('-').map(Number);
-  const d = new Date(y, m - 1 + dir, 1);
-  _cfMonth = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
-  renderCashflowPage();
-}
-function currentCFMonth() { _initCFMonth(); return _cfMonth; }

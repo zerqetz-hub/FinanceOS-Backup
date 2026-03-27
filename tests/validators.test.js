@@ -115,10 +115,12 @@ describe('validateTransaction', () => {
   test('valid negative amount (expense)', () => ok(validateTransaction({ amount: -50_000 })));
   test('invalid amount non-number', () => bad(validateTransaction({ amount: 'lima' }), 'amount'));
 
-  test('valid date YYYY-MM-DD', () => ok(validateTransaction({ date: '2025-03-15' })));
+  test('display date string passes (date is a display field)', () => ok(validateTransaction({ date: '15 Mar 2025' })));
   test('empty date valid (optional)', () => ok(validateTransaction({ date: '' })));
-  test('invalid date format', () => bad(validateTransaction({ date: '15-03-2025' }), 'date'));
-  test('invalid date — month 13', () => bad(validateTransaction({ date: '2025-13-01' }), 'date'));
+  test('valid dateAdded YYYY-MM-DD', () => ok(validateTransaction({ dateAdded: '2025-03-15' })));
+  test('empty dateAdded valid (optional)', () => ok(validateTransaction({ dateAdded: '' })));
+  test('invalid dateAdded format', () => bad(validateTransaction({ dateAdded: '15-03-2025' }), 'dateAdded'));
+  test('invalid dateAdded — month 13', () => bad(validateTransaction({ dateAdded: '2025-13-01' }), 'dateAdded'));
 
   test('catName too long', () => bad(validateTransaction({ catName: 'X'.repeat(51) }), 'catName'));
   test('catName 50 chars valid', () => ok(validateTransaction({ catName: 'X'.repeat(50) })));

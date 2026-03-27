@@ -120,9 +120,23 @@ function validateAvatarMime(dataUri) {
   return ALLOWED.some(prefix => dataUri.startsWith(prefix));
 }
 
+/**
+ * Validasi avatar data URI: cek MIME dan ukuran.
+ * Returns null jika valid, atau string pesan error jika tidak valid.
+ */
+function validateAvatar(dataUri) {
+  if (!dataUri || typeof dataUri !== 'string' || dataUri.length === 0)
+    return 'Data avatar wajib diisi.';
+  if (!validateAvatarMime(dataUri))
+    return 'Format avatar tidak didukung. Gunakan JPEG, PNG, atau WebP.';
+  if (dataUri.length > 270000)
+    return 'Ukuran foto terlalu besar. Maksimal ~200KB.';
+  return null;
+}
+
 module.exports = {
   hashPassword, verifyPassword,
   buildSetCookie, buildClearCookie, getTokenFromRequest,
   canAttempt, recordFailure, clearAttempts, lockoutSeconds,
-  requireAuth, validatePasswordRules, validateAvatarMime,
+  requireAuth, validatePasswordRules, validateAvatarMime, validateAvatar,
 };

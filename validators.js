@@ -119,10 +119,10 @@ function validateTransaction(body) {
     if (!isNum(body.amount))                return err('amount harus angka');
     if (Math.abs(body.amount) > MAX_AMOUNT) return err('amount melebihi batas maksimum');
   }
-  if (body.date !== undefined && body.date !== '') {
-    if (typeof body.date !== 'string' ||
-        !/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(body.date))
-      return err('date harus format YYYY-MM-DD (contoh: 2025-03-15)');
+  if (body.dateAdded !== undefined && body.dateAdded !== '') {
+    if (typeof body.dateAdded !== 'string' ||
+        !/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(body.dateAdded))
+      return err('dateAdded harus format YYYY-MM-DD (contoh: 2025-03-15)');
   }
   if (body.catName !== undefined && typeof body.catName === 'string' && body.catName.length > 50)
     return err('catName terlalu panjang');

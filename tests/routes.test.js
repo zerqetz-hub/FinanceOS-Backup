@@ -254,10 +254,16 @@ describe('POST /api/transactions', () => {
     expect(res.status).toBe(200);
   });
 
-  test('400 for invalid date', async () => {
-    const res = await request.post('/api/transactions').send({ name: 'X', amount: 1000, date: '15/03/2025' });
+  test('display-format date passes (date is a display string)', async () => {
+    mockDb.addTransaction.mockResolvedValue();
+    const res = await request.post('/api/transactions').send({ name: 'X', amount: 1000, date: '15 Mar 2025' });
+    expect(res.status).toBe(200);
+  });
+
+  test('400 for invalid dateAdded format', async () => {
+    const res = await request.post('/api/transactions').send({ name: 'X', amount: 1000, dateAdded: '15/03/2025' });
     expect(res.status).toBe(400);
-    expect(res.body.error).toContain('date');
+    expect(res.body.error).toContain('dateAdded');
   });
 });
 
