@@ -3,12 +3,20 @@
 const crypto = require('crypto');
 const db     = require('./database');
 
-const SESSION_TTL_MS  = 8 * 60 * 60 * 1000;
+const SESSION_TTL_MS  = 2 * 60 * 60 * 1000;
 const COOKIE_NAME     = 'fos_session';
 const TOKEN_RE        = /^[a-f0-9]{64}$/;
 const _attempts       = new Map();
 const MAX_ATTEMPTS    = 5;
 const LOCKOUT_MS      = 15 * 60 * 1000;
+
+// Bersihkan entri kadaluarsa setiap 5 menit agar _attempts Map tidak tumbuh tanpa batas
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, rec] of _attempts) {
+    if (now > rec.resetAt) _attempts.delete(ip);
+  }
+}, 5 * 60 * 1000).unref();
 
 function _pbkdf2(password, salt) {
   return new Promise((resolve, reject) =>
