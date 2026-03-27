@@ -325,19 +325,13 @@ function _highlightAndPosition(selector) {
     // Overlay panels surrounding target
     _updateOverlays(tTop, tBot, tLeft, tRight);
 
-    // Target rect (with PAD)
-    const tTop    = r.top    - PAD;
-    const tBottom = r.bottom + PAD;
-    const tLeft   = r.left   - PAD;
-    const tRight  = r.right  + PAD;
-
     // Try 4 positions: below-right, below-left, above-right, above-left
     const candidates = [
       // Below target, right-aligned area (most common)
-      { t: tBottom + GAP, l: Math.min(tLeft, vw - PW - GAP) },
+      { t: tBot + GAP, l: Math.min(tLeft, vw - PW - GAP) },
       // Below target, left edge
-      { t: tBottom + GAP, l: GAP },
-      // Above target, right-aligned  
+      { t: tBot + GAP, l: GAP },
+      // Above target, right-aligned
       { t: tTop - PH - GAP, l: Math.min(tLeft, vw - PW - GAP) },
       // Above target, left edge
       { t: tTop - PH - GAP, l: GAP },
@@ -354,7 +348,7 @@ function _highlightAndPosition(selector) {
     // Score each candidate by: 1) fits in viewport, 2) doesn't overlap target
     function overlaps(t, l) {
       const pRight = l + PW, pBottom = t + PH;
-      return !(pRight < tLeft || l > tRight || pBottom < tTop || t > tBottom);
+      return !(pRight < tLeft || l > tRight || pBottom < tTop || t > tBot);
     }
     function fitsViewport(t, l) {
       return t >= 0 && l >= 0 && (l + PW) <= vw && (t + PH) <= vh;
