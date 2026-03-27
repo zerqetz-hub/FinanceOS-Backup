@@ -374,6 +374,67 @@
   #landingPage .landing-cta-bottom { padding:40px 16px; }
   #landingPage .landing-footer { padding:16px;flex-direction:column;gap:4px; }
 }
+
+/* ── Keyframe: fade-up entrance ── */
+@keyframes ku-fadeUp {
+  from { opacity:0; transform:translateY(26px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── Hero: load animations (staggered) ── */
+#landingPage .landing-badge {
+  animation: ku-fadeUp .55s cubic-bezier(.22,.61,.36,1) .05s both;
+}
+#landingPage .landing-title {
+  animation: ku-fadeUp .65s cubic-bezier(.22,.61,.36,1) .15s both;
+}
+#landingPage .landing-sub {
+  animation: ku-fadeUp .65s cubic-bezier(.22,.61,.36,1) .28s both;
+}
+#landingPage .landing-cta {
+  animation: ku-fadeUp .65s cubic-bezier(.22,.61,.36,1) .42s both;
+}
+
+/* ── Hero: text hover effects ── */
+#landingPage .landing-title {
+  transition: color .35s ease, letter-spacing .35s ease;
+  cursor: default;
+}
+#landingPage .landing-title:hover { color:#1a6b4a; letter-spacing:-.3px; }
+[data-theme=dark] #landingPage .landing-title:hover { color:#3adb8e; }
+
+#landingPage .landing-sub {
+  transition: color .3s ease;
+  cursor: default;
+}
+#landingPage .landing-sub:hover { color:#3d3c38; }
+[data-theme=dark] #landingPage .landing-sub:hover { color:#d0ccc0; }
+
+/* ── Scroll-reveal: fade-up for off-screen sections ── */
+#landingPage .ku-scroll-hidden {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1);
+}
+#landingPage .ku-scroll-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* ── CTA bottom: text hover effects ── */
+#landingPage .landing-cta-bottom h2 {
+  transition: color .35s ease, letter-spacing .35s ease;
+  cursor: default;
+}
+#landingPage .landing-cta-bottom h2:hover { color:#1a6b4a; letter-spacing:.2px; }
+[data-theme=dark] #landingPage .landing-cta-bottom h2:hover { color:#3adb8e; }
+
+#landingPage .landing-cta-bottom p {
+  transition: color .3s ease;
+  cursor: default;
+}
+#landingPage .landing-cta-bottom p:hover { color:#3d3c38; }
+[data-theme=dark] #landingPage .landing-cta-bottom p:hover { color:#d0ccc0; }
 </style>
   <nav class="landing-nav">
     <div class="landing-nav-logo"><span>K</span> KepingUang</div>
@@ -633,9 +694,9 @@
   </section>
 
   <section class="landing-cta-bottom">
-    <h2>Mulai gratis hari ini</h2>
-    <p>Tidak perlu kartu kredit. Daftar dalam 30 detik.</p>
-    <button class="btn-cta-primary" onclick="showLandingAuth('register')">Buat Akun Gratis</button>
+    <h2 class="ku-scroll-hidden">Mulai gratis hari ini</h2>
+    <p class="ku-scroll-hidden" style="transition-delay:.13s">Tidak perlu kartu kredit. Daftar dalam 30 detik.</p>
+    <button class="btn-cta-primary ku-scroll-hidden" style="transition-delay:.26s" onclick="showLandingAuth('register')">Buat Akun Gratis</button>
   </section>
 
   <footer class="landing-footer">
@@ -1343,6 +1404,28 @@ function hMakeLineChart(canvas,tooltipId,labels,datasets,ttIds,d1,d2){
   }
   new MutationObserver(init).observe(document.body,{attributes:true,subtree:true,attributeFilter:['style']});
   window.addEventListener('load',init);
+})();
+</script>
+<script>
+/* ── Landing scroll-reveal: animate .ku-scroll-hidden when entering viewport ── */
+(function() {
+  var lp = document.getElementById('landingPage');
+  if (!lp) return;
+  function setupIO() {
+    var els = lp.querySelectorAll('.ku-scroll-hidden');
+    if (!els.length) return;
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('ku-scroll-visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function(el) { io.observe(el); });
+  }
+  if (lp.style.display !== 'none') { setupIO(); return; }
+  var mo = new MutationObserver(function() {
+    if (lp.style.display !== 'none') { mo.disconnect(); setTimeout(setupIO, 0); }
+  });
+  mo.observe(lp, { attributes: true, attributeFilter: ['style'] });
 })();
 </script>
 </body>
