@@ -103,6 +103,9 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 .action-menu button:hover{background:var(--surface2)}
 .action-menu button.danger{color:var(--red)}
 .action-menu button.danger:hover{background:var(--red-light)}
+/* ─── CASHFLOW BREAKDOWN ROW ──────────────────────────────────────────────── */
+.breakdown-row{display:grid;grid-template-columns:120px 1fr 90px 80px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.breakdown-pct{text-align:right}
 .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
 .confirm-box{background:var(--surface);border-radius:var(--radius);padding:24px;width:360px;max-width:90vw;border:1px solid var(--border)}
 .confirm-icon{width:40px;height:40px;border-radius:50%;background:var(--red-light);display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:18px}
@@ -163,6 +166,60 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
   .metric-value{font-size:18px}
   /* NW callout value */
   .nw-callout .val{font-size:28px}
+  /* Action menu touch target lebih besar */
+  .btn-action-menu{padding:6px 10px}
+  /* Cashflow breakdown: sembunyikan kolom % di 600px */
+  .breakdown-row{grid-template-columns:90px 1fr 70px;gap:6px}
+  .breakdown-pct{display:none}
+  /* Debt meta wrap agar tidak overflow horizontal */
+  .debt-meta{gap:6px}
+  /* Filter bar full width */
+  .filter-bar{gap:6px}
+  .filter-btn{font-size:11px;padding:4px 10px}
+}
+/* ─── MOBILE PHONES (≤ 480px) ────────────────────────────────────────────── */
+@media(max-width:480px){
+  /* Padding lebih ketat */
+  .main{padding:12px}
+  .card{padding:12px}
+  .card-sm{padding:10px}
+  /* Teks lebih kecil */
+  .page-title{font-size:15px}
+  .metric-value{font-size:15px}
+  .nw-callout .val{font-size:20px}
+  /* Modal full-width dengan padding minimal */
+  .modal-box{max-width:98vw;padding:14px;border-radius:10px}
+  /* Breakdown row sangat kompak */
+  .breakdown-row{grid-template-columns:70px 1fr 58px;gap:4px}
+  /* Cegah action-menu overflow viewport */
+  .action-menu{max-width:calc(100vw - 40px)}
+  /* Sembunyikan timestamp checkpoint di nav */
+  #checkpointMeta{display:none}
+  /* Tour tip tidak melebihi lebar layar */
+  #tourTip{width:calc(100vw - 24px)}
+  /* Page header gap lebih kecil */
+  .page-header{gap:8px;margin-bottom:12px}
+  /* Section title lebih kecil */
+  .section-title{font-size:12px}
+  /* Debt meta lebih padat */
+  .debt-meta{gap:4px}
+  /* Goal item */
+  .goal-item{padding:10px 0}
+  /* Debt item */
+  .debt-item{padding:10px 0}
+  /* Table padding lebih kecil */
+  td,th{padding:7px 8px}
+  /* Badge lebih kecil */
+  .badge{font-size:10px;padding:2px 6px}
+  /* Form group lebih rapat */
+  .form-group{margin-bottom:10px}
+  .form-group label{font-size:11px}
+  /* Btn-primary lebih kecil */
+  .btn{font-size:12px;padding:7px 14px}
+  .btn-sm{font-size:11px;padding:5px 10px}
+  /* Empty state lebih ringkas */
+  .empty-state{padding:24px 12px}
+  .empty-state .icon{font-size:28px}
 }
 .mob-menu-btn{display:none;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 9px;cursor:pointer;color:var(--text2);transition:all .15s;flex-shrink:0}
 .mob-menu-btn:hover{background:var(--border)}
@@ -815,4 +872,21 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
   .landing-features { padding: 48px 20px; }
   .landing-cta-bottom { padding: 48px 20px; }
   .landing-footer { padding: 16px 20px; flex-direction: column; gap: 4px; }
+}
+@media (max-width: 480px) {
+  .landing-nav { padding: 0 12px; }
+  .landing-nav-actions { gap: 6px; }
+  .btn-landing-login,.btn-landing-register { padding: 6px 12px; font-size: 13px; }
+  .landing-hero { padding: 28px 16px 36px; gap: 24px; }
+  .landing-title { font-size: 26px; letter-spacing: -.3px; }
+  .landing-sub { font-size: 14px; margin-bottom: 24px; }
+  .landing-badge { font-size: 11px; }
+  .landing-cta { flex-direction: column; gap: 8px; }
+  .btn-cta-primary,.btn-cta-secondary { width: 100%; text-align: center; padding: 11px 20px; font-size: 14px; }
+  .landing-features { padding: 32px 16px; gap: 12px; }
+  .landing-features-grid { grid-template-columns: 1fr !important; }
+  .landing-cta-bottom { padding: 32px 16px; }
+  .landing-cta-bottom h2 { font-size: 22px; }
+  .landing-cta-bottom p { font-size: 13px; }
+  .landing-footer { padding: 14px 16px; }
 }

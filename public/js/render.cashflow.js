@@ -70,11 +70,11 @@ function renderCashflow() {
         const pct = totalInc > 0 ? (amt/totalInc*100) : 0;
         const ci = incCats.indexOf(cat);
         const color = INC_COLORS[ci >= 0 ? ci % INC_COLORS.length : 6];
-        return `<div style="display:grid;grid-template-columns:120px 1fr 90px 80px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+        return `<div class="breakdown-row">
           <div style="font-size:13px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>${esc(cat)}</div>
           <div><div class="progress-wrap" style="margin-top:0"><div class="progress-bar" style="width:${pct.toFixed(1)}%;background:${color}"></div></div></div>
           <div style="font-size:12px;color:var(--text3);text-align:right">${fmtS(amt)}</div>
-          <div style="text-align:right"><span style="font-size:12px;font-weight:500;color:${color}">${pct.toFixed(1)}%</span></div>
+          <div class="breakdown-pct"><span style="font-size:12px;font-weight:500;color:${color}">${pct.toFixed(1)}%</span></div>
         </div>`;
       }).join('') +
       `<div style="display:flex;justify-content:space-between;padding:10px 0;font-weight:600;font-size:13px;border-top:1px solid var(--border);margin-top:4px">
@@ -101,13 +101,13 @@ function renderCashflow() {
           const pct   = (amt / totalExp * 100);
           const ci    = expCats.indexOf(cat);
           const color = EXP_COLORS2[ci >= 0 ? ci % EXP_COLORS2.length : 6];
-          return `<div style="display:grid;grid-template-columns:120px 1fr 90px 80px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+          return `<div class="breakdown-row">
             <div style="font-size:13px;display:flex;align-items:center;gap:6px">
               <span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>${esc(cat)}
             </div>
             <div><div class="progress-wrap" style="margin-top:0"><div class="progress-bar" style="width:${pct.toFixed(1)}%;background:${color}"></div></div></div>
             <div style="font-size:12px;color:var(--text3);text-align:right">${fmtS(amt)}</div>
-            <div style="text-align:right"><span style="font-size:12px;font-weight:500;color:${color}">${pct.toFixed(1)}%</span></div>
+            <div class="breakdown-pct"><span style="font-size:12px;font-weight:500;color:${color}">${pct.toFixed(1)}%</span></div>
           </div>`;
         }).join('') +
         `<div style="display:flex;justify-content:space-between;padding:10px 0;font-weight:600;font-size:13px;border-top:1px solid var(--border);margin-top:4px">
