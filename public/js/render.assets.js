@@ -32,7 +32,7 @@ function renderAssets() {
             <div style="font-size:11px;color:${a.value>=a.cost?'var(--accent)':'var(--red)'}">${a.value>=a.cost?'+':''}${pctChg(a.cost,a.value)}</div>
           </div>
           <div class="action-menu-wrap">
-            <button class="btn-action-menu" onclick="toggleActionMenu('a-${a.id}',event)" title="Opsi">···</button>
+            <button class="btn-action-menu" onclick="toggleActionMenu('a-${a.id}',event)" title="Opsi">⋯</button>
             <div class="action-menu" id="am-a-${a.id}">
               <button onclick="closeActionMenu();openTopUpModal('${a.id}')">💰 Tambah Modal</button>
               <button onclick="closeActionMenu();openPriceUpdateModal('${a.id}')">📈 Update Nilai</button>

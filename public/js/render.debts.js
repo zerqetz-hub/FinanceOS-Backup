@@ -111,7 +111,7 @@ function renderDebts() {
           <div style="display:flex;align-items:center;gap:8px">
             <span class="badge ${DTYPE_C[d.type]||'badge-blue'}">${d.type}</span>
             <div class="action-menu-wrap">
-              <button class="btn-action-menu" onclick="toggleActionMenu('d-${d.id}',event)" title="Opsi">···</button>
+              <button class="btn-action-menu" onclick="toggleActionMenu('d-${d.id}',event)" title="Opsi">⋯</button>
               <div class="action-menu" id="am-d-${d.id}">
                 <button onclick="closeActionMenu();markDebtLunas('${d.id}')">✅ Tandai Lunas</button>
                 <button onclick="closeActionMenu();openBalanceUpdateModal('${d.id}')">📉 Update Saldo</button>

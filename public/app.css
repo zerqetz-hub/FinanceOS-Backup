@@ -94,7 +94,7 @@ textarea{resize:vertical;min-height:70px}
 .btn-delete:hover{background:var(--red-light);color:var(--red)}
 .row-actions{display:flex;align-items:center;gap:4px;opacity:0;transition:opacity .15s}
 tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-actions,.tx-item:hover .row-actions{opacity:1}
-.btn-action-menu{background:none;border:none;cursor:pointer;color:var(--text3);padding:3px 6px;border-radius:6px;font-size:13px;font-weight:500;line-height:1;transition:all .15s;display:inline-flex;align-items:center;letter-spacing:2px}
+.btn-action-menu{background:none;border:none;cursor:pointer;color:var(--text2);padding:3px 7px;border-radius:6px;font-size:16px;font-weight:400;line-height:1;transition:all .15s;display:inline-flex;align-items:center;letter-spacing:0}
 .btn-action-menu:hover{background:var(--surface2);color:var(--text)}
 .action-menu-wrap{position:relative;display:inline-block}
 .action-menu{display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:200;min-width:160px;padding:3px}
