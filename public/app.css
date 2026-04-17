@@ -993,7 +993,9 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 @media (max-width: 900px) {
   .bottom-nav { display: flex; }
   .main { padding-bottom: calc(68px + env(safe-area-inset-bottom, 8px)); }
-  .toast { bottom: calc(78px + env(safe-area-inset-bottom, 0px)); }
+  /* Toast: needs larger translateY to fully clear the bottom nav */
+  .toast { bottom: calc(78px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(160px); }
+  .toast.show { transform: translateX(-50%) translateY(0); }
   .modal-box { padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
   .mob-menu-btn { display: none !important; }
   .row-actions { opacity: 1 !important; }
@@ -1074,4 +1076,26 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 
   /* Avatar */
   .avatar-btn { width: 34px; height: 34px; }
+}
+
+/* ─── LANDSCAPE MODE (≤ 900px, landscape) ────────────────────────────────── */
+@media (max-width: 900px) and (orientation: landscape) {
+  /* Compact top nav */
+  .nav { height: 48px; }
+  .layout { height: calc(100vh - 48px); }
+  .sidebar { height: calc(100vh - 48px); top: 48px; }
+
+  /* Compact bottom nav — shorter items so content area isn't eaten */
+  .bottom-nav { padding: 2px 0 env(safe-area-inset-bottom, 2px); }
+  .bottom-nav-item { padding: 4px 6px; gap: 1px; font-size: 9px; }
+  .bottom-nav-item svg { width: 18px; height: 18px; }
+
+  /* Less bottom clearance to match slimmer nav */
+  .main { padding-bottom: calc(50px + env(safe-area-inset-bottom, 4px)); }
+  .toast { bottom: calc(58px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(120px); }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* More drawer: cap height so it doesn't fill the whole screen */
+  .more-drawer { max-height: 75vh; overflow-y: auto; }
+  .more-drawer-grid { grid-template-columns: repeat(5, 1fr); }
 }
