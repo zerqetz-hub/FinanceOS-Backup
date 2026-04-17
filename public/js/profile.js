@@ -90,12 +90,15 @@ async function renderProfile() {
         <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px">📂 Data Keuangan</div>
         <div style="display:flex;flex-direction:column;gap:14px">
           <!-- Download -->
-          <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
             <div>
               <div style="font-size:14px;color:var(--text2)">Unduh Data</div>
-              <div style="font-size:12px;color:var(--text3)">Ekspor semua data ke file JSON</div>
+              <div style="font-size:12px;color:var(--text3)">Ekspor semua data ke file Excel atau JSON</div>
             </div>
-            <button class="btn btn-ghost" onclick="downloadData()" style="font-size:13px">⬇️ Unduh JSON</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-ghost" onclick="downloadExcel()" style="font-size:13px">📊 Unduh Excel</button>
+              <button class="btn btn-ghost" onclick="downloadData()" style="font-size:13px">⬇️ Unduh JSON</button>
+            </div>
           </div>
           <!-- Reset -->
           <div style="border-top:1px solid var(--border);padding-top:14px;display:flex;align-items:center;justify-content:space-between">
@@ -240,7 +243,15 @@ function downloadData() {
   a.href     = '/api/auth/export';
   a.download = 'kepinguang-data.json';
   a.click();
-  showToast('Mengunduh data...', 'success');
+  showToast('Mengunduh data JSON...', 'success');
+}
+
+function downloadExcel() {
+  const a = document.createElement('a');
+  a.href     = '/api/auth/export-excel';
+  a.download = `kepinguang-${new Date().toISOString().slice(0,10)}.xlsx`;
+  a.click();
+  showToast('Mengunduh Excel... mungkin butuh beberapa detik.', 'success');
 }
 
 async function confirmResetData() {

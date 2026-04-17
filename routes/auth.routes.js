@@ -6,6 +6,7 @@ const db     = require('../database');
 const auth   = require('../auth');
 const { validate, validateRegister } = require('../validators');
 const { routeHandler } = require('../errors');
+const { generateExcel } = require('../lib/excel.export');
 
 router.get('/status', async (req, res) => {
   const token = auth.getTokenFromRequest(req);
@@ -126,6 +127,21 @@ router.get('/export', routeHandler(async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', 'attachment; filename="kepinguang-data.json"');
   res.send(JSON.stringify(data, null, 2));
+}));
+
+// GET /api/auth/export-excel — unduh semua data user sebagai Excel (.xlsx)
+router.get('/export-excel', routeHandler(async (req, res) => {
+  const [base, txAll] = await Promise.all([
+    db.getState(req.userId),
+    db.getTransactions(req.userId, { page: 1, limit: 100_000 }),
+  ]);
+  const data = { ...base, transactions: txAll.items };
+  const wb = await generateExcel(data);
+  const filename = `kepinguang-${new Date().toISOString().slice(0,10)}.xlsx`;
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  await wb.xlsx.write(res);
+  res.end();
 }));
 
 router.delete('/account', async (req, res) => {
