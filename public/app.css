@@ -67,6 +67,12 @@ label{font-size:12px;font-weight:500;color:var(--text2)}
 input,select,textarea{padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:var(--font);font-size:13px;outline:none;transition:border-color .15s}
 input:focus,select:focus{border-color:var(--accent)}
 textarea{resize:vertical;min-height:70px}
+/* Remove spinner arrows from number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type="number"]{-moz-appearance:textfield}
+/* Table scroll hint — shown on touch devices */
+.table-scroll-hint{display:none;font-size:11px;color:var(--text3);text-align:center;padding:2px 0 8px;letter-spacing:.2px}
 .btn{padding:8px 16px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-family:var(--font);font-size:13px;font-weight:500;transition:all .15s}
 .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{opacity:.9}
 .btn-ghost{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--border)}
@@ -996,10 +1002,16 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
   /* Toast: needs larger translateY to fully clear the bottom nav */
   .toast { bottom: calc(78px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(160px); }
   .toast.show { transform: translateX(-50%) translateY(0); }
-  .modal-box { padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+  /* Modal: cap height + scroll for tall forms (debt has 8 fields, cashflow edit even more) */
+  .modal-box { max-height: 90vh; overflow-y: auto; padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
   .mob-menu-btn { display: none !important; }
   .row-actions { opacity: 1 !important; }
   .action-menu { right: 0; left: auto; max-width: calc(100vw - 32px); }
+  /* iOS Safari auto-zoom prevention: inputs < 16px trigger viewport zoom on focus */
+  input, select, textarea { font-size: 16px; }
+  .auth-field input { font-size: 16px; }
+  /* Show table scroll hint on touch devices */
+  .table-scroll-hint { display: block; }
 }
 
 /* ─── TABLET OVERRIDES (601px – 900px) ───────────────────────────────────── */
@@ -1076,6 +1088,9 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 
   /* Avatar */
   .avatar-btn { width: 34px; height: 34px; }
+
+  /* Cashflow table: hide date column on phone to fix misaligned headers */
+  .cf-date-col { display: none !important; }
 }
 
 /* ─── LANDSCAPE MODE (≤ 900px, landscape) ────────────────────────────────── */

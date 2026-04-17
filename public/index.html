@@ -918,7 +918,7 @@
 
 <!-- LOADING OVERLAY -->
 <div id="loadingOverlay">
-  <div class="logo">F</div>
+  <div class="logo">K</div>
   <div class="spinner"></div>
   <div class="msg">Memuat data...</div>
 </div>
@@ -926,7 +926,7 @@
 <!-- AUTH OVERLAY — shown before app when session missing -->
 <div id="authOverlay">
   <div class="auth-card">
-    <div class="auth-logo">F</div>
+    <div class="auth-logo">K</div>
 
     <!-- REGISTER SCREEN -->
     <div id="authRegisterScreen" style="display:none">
@@ -1034,10 +1034,10 @@
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Cash Flow
       </button>
       <button class="nav-item" onclick="showPage('assets',this)">
-        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Assets
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Aset
       </button>
       <button class="nav-item" onclick="showPage('debts',this)">
-        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.5"/></svg>Debts
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.5"/></svg>Hutang
       </button>
       <button class="nav-item" onclick="showPage('networth',this)">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 12L6 8l3 3 5-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Net Worth
@@ -1140,7 +1140,7 @@
         <div class="section-title">Histori Cash Flow Bulanan</div>
         <div class="chart-wrap" style="height:220px;margin-bottom:16px"><canvas id="cashflowHistChart"></canvas></div>
         <div class="table-scroll-hint">← Geser untuk melihat selengkapnya →</div><div class="table-wrap">
-          <table><thead><tr><th>Bulan</th><th class="text-right">Income</th><th class="text-right">Expense</th><th class="text-right">Saldo</th><th class="text-right">Saving Rate</th><th></th></tr></thead>
+          <table><thead><tr><th>Bulan</th><th class="cf-date-col" style="color:var(--text3);font-weight:600;font-size:11px">Tanggal</th><th class="text-right">Income</th><th class="text-right">Expense</th><th class="text-right">Saldo</th><th class="text-right">Saving Rate</th><th></th></tr></thead>
           <tbody id="cashflowTable"></tbody></table>
         </div>
       </div>
@@ -1280,7 +1280,7 @@
   </main>
 </div>
 
-<!-- ── BOTTOM NAVIGATION (mobile ≤600px only) ───────────────────────────── -->
+<!-- ── BOTTOM NAVIGATION (mobile & tablet ≤900px) ───────────────────────── -->
 <nav class="bottom-nav" id="bottomNav" aria-label="Navigasi utama">
   <button class="bottom-nav-item active" data-page="dashboard" onclick="bottomNavGo('dashboard')">
     <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity=".4"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity=".4"/></svg>

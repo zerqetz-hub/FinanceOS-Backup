@@ -213,7 +213,7 @@ function openModal(type) {
     income: `
       <div class="form-grid">
         <div class="form-group"><label>Bulan</label><input type="month" id="f_inc_month" value="${curMonth}"></div>
-        <div class="form-group"><label>Jumlah (Rp)</label><input type="number" id="f_inc_amount" placeholder="0" min="0" autofocus></div>
+        <div class="form-group"><label>Jumlah (Rp)</label><input type="number" id="f_inc_amount" placeholder="0" min="0" inputmode="decimal" autofocus></div>
         <div class="form-group full">
           <label style="display:flex;align-items:center;justify-content:space-between">
             <span>Kategori Pemasukan</span>
@@ -237,7 +237,7 @@ function openModal(type) {
     expense: `
       <div class="form-grid">
         <div class="form-group"><label>Bulan</label><input type="month" id="f_exp_month" value="${curMonth}"></div>
-        <div class="form-group"><label>Jumlah (Rp)</label><input type="number" id="f_exp_amount" placeholder="0" min="0" autofocus></div>
+        <div class="form-group"><label>Jumlah (Rp)</label><input type="number" id="f_exp_amount" placeholder="0" min="0" inputmode="decimal" autofocus></div>
         <div class="form-group full">
           <label style="display:flex;align-items:center;justify-content:space-between">
             <span>Kategori Pengeluaran</span>
@@ -269,8 +269,8 @@ function openModal(type) {
           <option value="Cash">Kas / Tabungan</option><option value="Other">Lainnya</option>
         </select></div>
         <div class="form-group"><label>Tanggal Pembelian</label><input type="date" id="f_adate" value="${today}"></div>
-        <div class="form-group"><label>Modal Awal (Rp)</label><input type="number" id="f_acost" placeholder="0" min="0"></div>
-        <div class="form-group"><label>Nilai Sekarang (Rp)</label><input type="number" id="f_aval" placeholder="0" min="0"></div>
+        <div class="form-group"><label>Modal Awal (Rp)</label><input type="number" id="f_acost" placeholder="0" min="0" inputmode="decimal"></div>
+        <div class="form-group"><label>Nilai Sekarang (Rp)</label><input type="number" id="f_aval" placeholder="0" min="0" inputmode="decimal"></div>
       </div>
       <div id="formErr" class="form-err"></div>
       <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
@@ -289,9 +289,9 @@ function openModal(type) {
           <option value="Other">Lainnya</option>
         </select></div>
         <div class="form-group"><label>Bunga (%/tahun)</label><input type="number" id="f_dbunga" placeholder="0" step="0.1" min="0"></div>
-        <div class="form-group"><label>Total Hutang Awal (Rp)</label><input type="number" id="f_dtotal" placeholder="0" min="0"></div>
-        <div class="form-group"><label>Sisa Hutang Saat Ini (Rp)</label><input type="number" id="f_dsisa" placeholder="0" min="0"></div>
-        <div class="form-group"><label>Cicilan/Bulan (Rp)</label><input type="number" id="f_dcicilan" placeholder="0" min="0"></div>
+        <div class="form-group"><label>Total Hutang Awal (Rp)</label><input type="number" id="f_dtotal" placeholder="0" min="0" inputmode="decimal"></div>
+        <div class="form-group"><label>Sisa Hutang Saat Ini (Rp)</label><input type="number" id="f_dsisa" placeholder="0" min="0" inputmode="decimal"></div>
+        <div class="form-group"><label>Cicilan/Bulan (Rp)</label><input type="number" id="f_dcicilan" placeholder="0" min="0" inputmode="decimal"></div>
         <div class="form-group"><label>Tanggal Jatuh Tempo</label><input type="date" id="f_djatuh"></div>
         <div class="form-group"><label>Tanggal Input</label><input type="date" id="f_ddate" value="${today}"></div>
       </div>
@@ -304,8 +304,8 @@ function openModal(type) {
     goal: `
       <div class="form-grid">
         <div class="form-group full"><label>Nama Goal</label><input type="text" id="f_gname" placeholder="e.g. Dana Pensiun, Liburan Eropa" autofocus></div>
-        <div class="form-group"><label>Target (Rp)</label><input type="number" id="f_gtarget" placeholder="0" min="0"></div>
-        <div class="form-group"><label>Sudah Terkumpul (Rp)</label><input type="number" id="f_gcurrent" placeholder="0" min="0"></div>
+        <div class="form-group"><label>Target (Rp)</label><input type="number" id="f_gtarget" placeholder="0" min="0" inputmode="decimal"></div>
+        <div class="form-group"><label>Sudah Terkumpul (Rp)</label><input type="number" id="f_gcurrent" placeholder="0" min="0" inputmode="decimal"></div>
         <div class="form-group"><label>Target Waktu</label><input type="month" id="f_gdeadline"></div>
         <div class="form-group"><label>Warna Progress</label><select id="f_gcolor">
           <option value="#1a6b4a">Hijau</option><option value="#1a5ba6">Biru</option>
@@ -322,7 +322,7 @@ function openModal(type) {
     tx: `
       <div class="form-grid">
         <div class="form-group full"><label>Nama Transaksi</label><input type="text" id="f_tname" placeholder="e.g. Makan siang, Gaji, Belanja bulanan" autofocus></div>
-        <div class="form-group"><label>Jumlah (Rp)</label><input type="number" id="f_tamt" placeholder="0" min="0"></div>
+        <div class="form-group"><label>Jumlah (Rp)</label><input type="number" id="f_tamt" placeholder="0" min="0" inputmode="decimal"></div>
         <div class="form-group"><label>Jenis</label><select id="f_ttype" onchange="updateTxCat(this.value)"><option value="out">Pengeluaran (−)</option><option value="in">Pemasukan (+)</option></select></div>
         <div class="form-group"><label>Tanggal Transaksi</label><input type="date" id="f_tdate" value="${today}"></div>
         <div class="form-group full"><label>Kategori</label><select id="f_tcat">

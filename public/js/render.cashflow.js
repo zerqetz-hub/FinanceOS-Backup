@@ -127,7 +127,7 @@ function renderCashflow() {
     const dAdded = c.dateAdded ? isoToDisplay(c.dateAdded) : '—';
     return `<tr>
       <td>${mLabel(c.month)}</td>
-      <td style="font-size:11px;color:var(--text3)">${dAdded}</td>
+      <td class="cf-date-col" style="font-size:11px;color:var(--text3)">${dAdded}</td>
       <td class="text-right c-green">${fmt(c.income)}</td>
       <td class="text-right c-red">${fmt(e)}</td>
       <td class="text-right ${s>=0?'c-green':'c-red'}">${fmt(s)}</td>
