@@ -97,7 +97,12 @@ function renderDebts() {
   if (!S.debts.length) { document.getElementById('debtList').innerHTML='<div class="empty-state"><div class="icon">✅</div>Tidak ada hutang aktif. Bebas hutang!</div>'; }
   else {
     document.getElementById('debtList').innerHTML = S.debts.map(d => {
-      const paidPct = d.total > 0 ? Math.max(0, Math.round((1-d.sisa/d.total)*100)) : 0;
+      const projSisa = getProjectedSisa(d);
+      const hasInterest = +d.bunga > 0 && Math.abs(projSisa - +d.sisa) >= 1;
+      const paidPct = d.total > 0 ? Math.max(0, Math.round((1 - projSisa / d.total) * 100)) : 0;
+      const sisaHtml = hasInterest
+        ? `<strong class="c-red">${fmtS(projSisa)}</strong><span style="font-size:10px;color:var(--text3);margin-left:3px">(+bunga)</span>`
+        : `<strong class="c-red">${fmtS(d.sisa)}</strong>`;
       return `<div class="debt-item">
         <div class="debt-header">
           <div><div class="debt-name">${esc(d.name)}</div>
@@ -105,17 +110,20 @@ function renderDebts() {
           </div>
           <div style="display:flex;align-items:center;gap:8px">
             <span class="badge ${DTYPE_C[d.type]||'badge-blue'}">${d.type}</span>
-            <div class="row-actions">
-              <button class="btn-edit" onclick="markDebtLunas('${d.id}')" title="Tandai Lunas" style="color:var(--accent)">✅</button>
-              <button class="btn-edit" onclick="openBalanceUpdateModal('${d.id}')" title="Update Saldo" style="color:var(--red)">📉</button>
-              <button class="btn-edit" onclick="openEditModal('debt','${d.id}')" title="Edit">✏️</button>
-              <button class="btn-delete" onclick="del('debt','${d.id}','${esc(d.name)}')">🗑</button>
+            <div class="action-menu-wrap">
+              <button class="btn-action-menu" onclick="toggleActionMenu('d-${d.id}',event)" title="Opsi">···</button>
+              <div class="action-menu" id="am-d-${d.id}">
+                <button onclick="closeActionMenu();markDebtLunas('${d.id}')">✅ Tandai Lunas</button>
+                <button onclick="closeActionMenu();openBalanceUpdateModal('${d.id}')">📉 Update Saldo</button>
+                <button onclick="closeActionMenu();openEditModal('debt','${d.id}')">✏️ Edit</button>
+                <button class="danger" onclick="closeActionMenu();del('debt','${d.id}','${esc(d.name)}')">🗑 Hapus</button>
+              </div>
             </div>
           </div>
         </div>
         <div style="display:flex;gap:20px;font-size:12px;color:var(--text3);margin-top:4px;flex-wrap:wrap">
           <span>Total: <strong style="color:var(--text)">${fmtS(d.total)}</strong></span>
-          <span>Sisa: <strong class="c-red">${fmtS(d.sisa)}</strong></span>
+          <span>Sisa: ${sisaHtml}</span>
           <span>Terbayar: <strong class="c-green">${paidPct}%</strong></span>
         </div>
         <div class="progress-wrap"><div class="progress-bar bar-green" style="width:${paidPct}%"></div></div>

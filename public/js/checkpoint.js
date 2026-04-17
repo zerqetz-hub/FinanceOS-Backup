@@ -138,13 +138,20 @@ async function _loadCPList() {
 
 /** Create a new named snapshot from the label input, then refresh the list. */
 async function doCreateCP() {
-  const label = document.getElementById('cpLabelInput').value.trim();
+  const inp = document.getElementById('cpLabelInput');
+  const label = inp ? inp.value.trim() : '';
+  if (!label) {
+    if (inp) { inp.style.borderColor = 'var(--red)'; inp.focus(); }
+    showToast('⚠️ Nama snapshot wajib diisi.', 'error');
+    return;
+  }
+  if (inp) inp.style.borderColor = '';
   try {
     await syncPaidDebts();
     const res = await API.post('/api/checkpoints', { label });
     if (res.ok) {
-      document.getElementById('cpLabelInput').value = '';
-      showToast(`💾 Snapshot "${label || 'Tanpa nama'}" tersimpan`, 'success');
+      inp.value = '';
+      showToast(`💾 Snapshot "${label}" tersimpan`, 'success');
       _updateCheckpointUI(true, res.checkpoint.savedAt);
       _loadCPList();
     }

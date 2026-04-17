@@ -31,12 +31,15 @@ function renderAssets() {
             <div style="font-size:13px;font-weight:500">${fmtS(a.value)}</div>
             <div style="font-size:11px;color:${a.value>=a.cost?'var(--accent)':'var(--red)'}">${a.value>=a.cost?'+':''}${pctChg(a.cost,a.value)}</div>
           </div>
-          <div class="row-actions">
-            <button class="btn-edit" onclick="openTopUpModal('${a.id}')" title="Tambah Modal">💰</button>
-            <button class="btn-edit" onclick="openPriceUpdateModal('${a.id}')" title="Update Nilai Pasar">📈</button>
-            <button class="btn-edit" onclick="openTransferModal('${a.id}')" title="Transfer Dana">🔄</button>
-            <button class="btn-edit" onclick="openEditModal('asset','${a.id}')" title="Edit">✏️</button>
-            <button class="btn-delete" onclick="del('asset','${a.id}','${esc(a.name)}')">🗑</button>
+          <div class="action-menu-wrap">
+            <button class="btn-action-menu" onclick="toggleActionMenu('a-${a.id}',event)" title="Opsi">···</button>
+            <div class="action-menu" id="am-a-${a.id}">
+              <button onclick="closeActionMenu();openTopUpModal('${a.id}')">💰 Tambah Modal</button>
+              <button onclick="closeActionMenu();openPriceUpdateModal('${a.id}')">📈 Update Nilai</button>
+              <button onclick="closeActionMenu();openTransferModal('${a.id}')">🔄 Transfer Dana</button>
+              <button onclick="closeActionMenu();openEditModal('asset','${a.id}')">✏️ Edit</button>
+              <button class="danger" onclick="closeActionMenu();del('asset','${a.id}','${esc(a.name)}')">🗑 Hapus</button>
+            </div>
           </div>
         </div>
       </div>`).join('')}

@@ -422,3 +422,17 @@ function _closeAvatarOnOutside(e) {
   const wrap = document.getElementById('avatarWrap');
   if (wrap && !wrap.contains(e.target)) closeAvatarMenu();
 }
+
+// ─── ACTION MENU (asset / debt option cards) ──────────────────────────────────
+function toggleActionMenu(id, e) {
+  e.stopPropagation();
+  const menu = document.getElementById('am-' + id);
+  if (!menu) return;
+  const wasOpen = menu.classList.contains('open');
+  closeActionMenu();
+  if (!wasOpen) menu.classList.add('open');
+}
+function closeActionMenu() {
+  document.querySelectorAll('.action-menu.open').forEach(m => m.classList.remove('open'));
+}
+document.addEventListener('click', closeActionMenu);

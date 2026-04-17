@@ -1290,8 +1290,8 @@
     <div style="padding-bottom:12px">
       <div style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5">Snapshot menyimpan semua data kamu saat ini. Kamu bisa restore ke snapshot mana pun kapan saja.</div>
       <div style="display:flex;gap:8px;margin-bottom:16px">
-        <input id="cpLabelInput" type="text" placeholder="Nama snapshot (opsional)" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:13px;outline:none">
-        <button onclick="saveCheckpoint()" class="btn btn-primary" style="white-space:nowrap">+ Simpan Sekarang</button>
+        <input id="cpLabelInput" type="text" placeholder="Nama snapshot (wajib diisi)" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:13px;outline:none">
+        <button onclick="doCreateCP()" class="btn btn-primary" style="white-space:nowrap">+ Simpan Sekarang</button>
       </div>
       <div id="cpList"></div>
     </div>

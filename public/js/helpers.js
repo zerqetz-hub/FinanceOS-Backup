@@ -71,7 +71,7 @@ const latestCF     = () => { const s = sortedCF(); return s.length ? s[s.length 
 const cfExp        = cf => cf ? Object.values(cf.expenses || {}).reduce((a, b) => a + b, 0) : 0;
 const cfSaldo      = cf => cf ? (cf.income - cfExp(cf)) : 0;
 const totalAssets  = () => S.assets.reduce((s, a) => s + a.value, 0);
-const totalDebts   = () => S.debts.reduce((s, d) => s + d.sisa, 0);
+const totalDebts   = () => S.debts.reduce((s, d) => s + getProjectedSisa(d), 0);
 const netWorth     = () => totalAssets() - totalDebts();
 const avgMonthExp  = () => !S.cashflows.length ? 0 : S.cashflows.reduce((s, cf) => s + cfExp(cf), 0) / S.cashflows.length;
 const efTarget     = () => avgMonthExp() * 6;
@@ -96,6 +96,18 @@ const v  = id => { const el = document.getElementById(id); return el ? el.value 
 const vn = id => parseFloat(v(id)) || 0;
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const isoToDisplay = iso => iso ? new Date(iso + 'T00:00:00').toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' }) : '';
+
+function getProjectedSisa(debt) {
+  if (!debt.bunga || +debt.bunga === 0 || !debt.sisa) return +debt.sisa || 0;
+  const history = (debt.balanceHistory || []).slice().sort((a, b) => a.date.localeCompare(b.date));
+  const last = history.length ? history[history.length - 1] : null;
+  if (!last) return +debt.sisa || 0;
+  const lastDate = new Date(last.date + 'T00:00:00');
+  const today = new Date();
+  const months = (today.getFullYear() - lastDate.getFullYear()) * 12 + (today.getMonth() - lastDate.getMonth());
+  if (months <= 0) return +last.sisa || 0;
+  return +last.sisa * Math.pow(1 + (+debt.bunga / 100 / 12), months);
+}
 
 async function withSubmitLock(fn) {
   const btn = document.querySelector('#modalContent button.btn-primary, #modalContent button.income-btn');
