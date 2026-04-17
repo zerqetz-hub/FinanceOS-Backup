@@ -83,6 +83,8 @@ function validateDebt(body) {
   }
   if (body.bunga !== undefined && body.bunga > 100)
     return err('bunga tidak boleh lebih dari 100%');
+  if (body.total !== undefined && body.sisa !== undefined && body.sisa > body.total)
+    return err('sisa hutang tidak boleh melebihi total hutang');
   if (body.balanceHistory !== undefined && !isArr(body.balanceHistory))
     return err('balanceHistory harus array');
   return ok;

@@ -73,6 +73,7 @@ async function addExpenseEntry() {
           async () => { Object.assign(S.cashflows.find(c=>c.id===existing.id)||{},_prev); await API.put('/api/cashflows/'+existing.id,_prev); },
           async () => { Object.assign(S.cashflows.find(c=>c.id===existing.id)||{},_next); await API.put('/api/cashflows/'+existing.id,_next); }
         );
+        showToast('Pengeluaran ' + cat + ' ditambahkan ke ' + month, 'success');
       } catch(e) { Object.assign(existing, _prev); renderAll(); showToast((e?.message||'Gagal menyimpan ke server'),'error'); }
     } else {
       const id = uid(); const expenses = {}; getCats().forEach(c => expenses[c] = 0); expenses[cat] = amount;
@@ -87,9 +88,9 @@ async function addExpenseEntry() {
           async () => { S.cashflows = S.cashflows.filter(c=>c.id!==id); await API.del('/api/cashflows/'+id); },
           async () => { S.cashflows.push(newCF); await API.post('/api/cashflows', newCF); }
         );
+        showToast('Pengeluaran ' + cat + ' ditambahkan ke ' + month, 'success');
       } catch(e) { S.cashflows = S.cashflows.filter(c=>c.id!==id); renderAll(); showToast((e?.message||'Gagal menyimpan ke server'),'error'); }
     }
-    showToast('Pengeluaran ' + cat + ' ditambahkan ke ' + month, 'success');
   });
 }
 

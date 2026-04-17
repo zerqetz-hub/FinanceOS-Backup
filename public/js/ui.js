@@ -390,6 +390,16 @@ async function removeCategoryInline(type, cat) {
     affected.forEach(cf => { delete cf.expenses[cat]; });
     await Promise.all(affected.map(cf => API.put('/api/cashflows/' + cf.id, cf).catch(() => {})));
   }
+  if (type === 'income') {
+    // Remove category from incomeBreakdown + recalculate income total
+    const affected = S.cashflows.filter(cf => cf.incomeBreakdown && cat in cf.incomeBreakdown);
+    affected.forEach(cf => {
+      delete cf.incomeBreakdown[cat];
+      if (cf.incomeNotes) delete cf.incomeNotes[cat];
+      cf.income = Object.values(cf.incomeBreakdown).reduce((a, b) => a + b, 0);
+    });
+    await Promise.all(affected.map(cf => API.put('/api/cashflows/' + cf.id, cf).catch(() => {})));
+  }
   await syncSettings();
   showToast('Kategori "' + cat + '" dihapus', 'success');
 }

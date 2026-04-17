@@ -38,7 +38,7 @@ async function loadMoreTransactions() {
       _txTotal = res.total;
     }
     // Re-render hanya bagian transaksi
-    renderTransactions();
+    renderRecentTransactions();
   } catch (e) {
     showToast('Gagal memuat transaksi: ' + e.message, 'error');
     _txPage--;

@@ -3,7 +3,7 @@
 const crypto = require('crypto');
 const db     = require('./database');
 
-const SESSION_TTL_MS  = 2 * 60 * 60 * 1000;
+const SESSION_TTL_MS  = 7 * 24 * 60 * 60 * 1000;
 const COOKIE_NAME     = 'ku_session';
 const TOKEN_RE        = /^[a-f0-9]{64}$/;
 const _attempts       = new Map();

@@ -72,7 +72,7 @@ function renderNWSimulator() {
     const mo = ((lm-1+i) % 12) + 1;
     const yr = ly + Math.floor((lm-1+i)/12);
     labels.push(mLabel(yr + '-' + String(mo).padStart(2,'0')));
-    const monthlySaving = Math.max(0, (avgSaving + slope*i)*mult);
+    const monthlySaving = (avgSaving + slope * i) * mult;
     const assetGrowth = curAssets * assetMonthlyReturn * mult;
     curAssets += assetGrowth;
     curNW = curNW + monthlySaving + assetGrowth;

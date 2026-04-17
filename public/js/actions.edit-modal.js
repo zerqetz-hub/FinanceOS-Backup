@@ -15,11 +15,17 @@ function openEditModal(type, id) {
     // Income breakdown fields — same style as expense
     const incCats = getIncomeCats();
     const incFields = incCats.map(c =>
-      `<div class="form-group"><label>${esc(c)} (Rp)</label><input type="number" id="ef_inc_${esc(c)}" value="${(cf.incomeBreakdown&&cf.incomeBreakdown[c])||0}" min="0"></div>`
+      `<div class="form-group"><label>${esc(c)} (Rp)</label>
+       <input type="number" id="ef_inc_${esc(c)}" value="${(cf.incomeBreakdown&&cf.incomeBreakdown[c])||0}" min="0">
+       <input type="text" id="ef_inc_note_${esc(c)}" value="${esc((cf.incomeNotes&&cf.incomeNotes[c])||'')}" placeholder="Catatan..." style="margin-top:4px;font-size:12px;color:var(--text2)">
+       </div>`
     ).join('');
     // Expense breakdown fields
     const expFields = getCats().map(c =>
-      `<div class="form-group"><label>${esc(c)} (Rp)</label><input type="number" id="ef_exp_${esc(c)}" value="${cf.expenses[c]||0}" min="0"></div>`
+      `<div class="form-group"><label>${esc(c)} (Rp)</label>
+       <input type="number" id="ef_exp_${esc(c)}" value="${cf.expenses[c]||0}" min="0">
+       <input type="text" id="ef_exp_note_${esc(c)}" value="${esc((cf.expenseNotes&&cf.expenseNotes[c])||'')}" placeholder="Catatan..." style="margin-top:4px;font-size:12px;color:var(--text2)">
+       </div>`
     ).join('');
     content = `<div class="form-grid">
       <div class="form-group"><label>Bulan</label><input type="month" id="ef_month" value="${cf.month}"></div>

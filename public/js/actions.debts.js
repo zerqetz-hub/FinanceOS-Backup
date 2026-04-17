@@ -8,6 +8,7 @@ async function addDebt() {
     if (!name) { showFormError('Nama hutang wajib diisi.'); return; }
     const id = uid(); const dateAdded = v('f_ddate') || new Date().toISOString().slice(0,10);
     const total = vn('f_dtotal'); const sisa = vn('f_dsisa');
+    if (total > 0 && sisa > total) { showFormError('Sisa hutang tidak boleh melebihi total hutang.'); return; }
     const today = new Date().toISOString().slice(0,10);
     // Seed balance history: start with total at dateAdded.
     // Avoid duplicate-date conflict when dateAdded === today.
