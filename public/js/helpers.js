@@ -90,7 +90,7 @@ const getIncomeCats = () => S.categories?.income  || ['Gaji','Freelance','Bisnis
 
 const EXP_COLORS   = ['#1a6b4a','#1a5ba6','#5a3fb5','#c45c1a','#b87614','#c23b3b','#888888'];
 const ASSET_COLORS = ['#1a5ba6','#c45c1a','#1a6b4a','#b87614','#5a3fb5','#c23b3b','#888888'];
-const TYPE_NAMES   = { Stock:'Saham', Crypto:'Kripto', Property:'Properti', Gold:'Emas', MutualFund:'Reksa Dana', Cash:'Kas & Tabungan', Bond:'Obligasi' };
+const TYPE_NAMES   = { Stock:'Saham', Crypto:'Kripto', Property:'Properti', Gold:'Emas', MutualFund:'Reksa Dana', Cash:'Kas & Tabungan', Bond:'Obligasi', Other:'Lainnya' };
 
 const v  = id => { const el = document.getElementById(id); return el ? el.value : ''; };
 const vn = id => parseFloat(v(id)) || 0;

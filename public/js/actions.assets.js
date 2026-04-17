@@ -140,6 +140,59 @@ async function deletePriceEntry(assetId, idx) {
   openPriceUpdateModal(assetId);
 }
 
+// ── TOP UP MODAL ──────────────────────────────────────────────────────────────
+// Menambah modal (investasi baru) ke aset yang sudah ada.
+// Cost naik = jumlah beli, value naik = jumlah beli, priceHistory terupdate.
+// Berbeda dari "Update Nilai" yang hanya update harga pasar tanpa menyentuh cost.
+
+function openTopUpModal(assetId) {
+  const a = S.assets.find(x => x.id === assetId); if (!a) return;
+  document.getElementById('modalOverlay').style.display = 'flex';
+  document.getElementById('modalTitle').textContent = '💰 Tambah Modal: ' + a.name;
+  document.getElementById('modalContent').innerHTML =
+    '<div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;margin-bottom:14px;font-size:13px">' +
+    '<strong>' + esc(a.name) + '</strong> &nbsp;·&nbsp; Modal saat ini: <strong>' + fmtS(a.cost) +
+    '</strong> &nbsp;·&nbsp; Nilai pasar: <strong>' + fmtS(a.value) + '</strong></div>' +
+    '<div class="form-grid">' +
+    '<div class="form-group"><label>Tanggal Pembelian</label><input type="date" id="tu_date" value="' + new Date().toISOString().slice(0,10) + '"></div>' +
+    '<div class="form-group"><label>Jumlah Modal Tambahan (Rp)</label><input type="number" id="tu_amount" placeholder="0" min="1" autofocus></div>' +
+    '</div>' +
+    '<div style="font-size:12px;color:var(--text3);margin-bottom:14px">Modal dan nilai pasar aset akan naik sejumlah ini. Gunakan <strong>Update Nilai</strong> untuk update harga pasar saja.</div>' +
+    '<div style="display:flex;gap:8px;justify-content:flex-end">' +
+    '<button class="btn btn-ghost" onclick="closeModal()">Batal</button>' +
+    '<button class="btn btn-primary" onclick="executeTopUp(\'' + assetId + '\')">💰 Tambah Modal</button>' +
+    '</div>';
+  setTimeout(() => {
+    const inp = document.getElementById('tu_amount');
+    if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); executeTopUp(assetId); } });
+  }, 0);
+}
+
+async function executeTopUp(assetId) {
+  const a = S.assets.find(x => x.id === assetId); if (!a) return;
+  const amount = vn('tu_amount');
+  const date   = v('tu_date') || new Date().toISOString().slice(0,10);
+  if (!amount || amount <= 0) { showFormError('Jumlah modal tambahan harus lebih dari 0.'); return; }
+  const _prev = JSON.parse(JSON.stringify(a));
+  a.cost  += amount;
+  a.value += amount;
+  if (!a.priceHistory) a.priceHistory = [];
+  a.priceHistory = a.priceHistory.filter(h => h.date !== date);
+  a.priceHistory.push({ date, value: a.value });
+  a.priceHistory.sort((x,y) => x.date.localeCompare(y.date));
+  const _next = JSON.parse(JSON.stringify(a));
+  closeModal(); renderAll();
+  try {
+    const _r = await API.put('/api/assets/' + assetId, a);
+    if (_r?.error) throw new Error(_r.error); flashSave();
+    pushCommand('Top up ' + a.name + ' ' + date,
+      async () => { Object.assign(S.assets.find(x=>x.id===assetId)||{},_prev); await API.put('/api/assets/'+assetId,_prev); renderAll(); },
+      async () => { Object.assign(S.assets.find(x=>x.id===assetId)||{},_next); await API.put('/api/assets/'+assetId,_next); renderAll(); }
+    );
+    showToast('Modal ' + a.name + ' ditambah ' + fmtS(amount), 'success');
+  } catch(e) { Object.assign(a,_prev); renderAll(); showToast((e?.message||'Gagal menyimpan ke server'),'error'); }
+}
+
 // ── TRANSFER DANA ─────────────────────────────────────────────────────────────
 // Memindahkan dana dari satu aset ke aset lain (atau aset baru).
 // Cost basis source dikurangi secara proporsional sehingga return tidak berubah.
@@ -231,7 +284,7 @@ async function executeTransfer(sourceId) {
 
   const _prevTarget = JSON.parse(JSON.stringify(target));
   target.value += amount;
-  target.cost  += amount; // dana masuk = cost basis baru
+  target.cost  += costReduction; // cost basis proporsional dari sumber ikut berpindah, bukan nilai pasar
   if (!target.priceHistory) target.priceHistory = [];
   target.priceHistory = target.priceHistory.filter(h => h.date !== today);
   target.priceHistory.push({ date: today, value: target.value });

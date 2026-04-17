@@ -243,7 +243,7 @@ function openModal(type) {
           <option value="Stock">Saham</option><option value="Crypto">Crypto</option>
           <option value="Property">Properti</option><option value="Gold">Emas / Silver</option>
           <option value="MutualFund">Reksa Dana</option><option value="Bond">Obligasi</option>
-          <option value="Cash">Kas / Tabungan</option>
+          <option value="Cash">Kas / Tabungan</option><option value="Other">Lainnya</option>
         </select></div>
         <div class="form-group"><label>Tanggal Pembelian</label><input type="date" id="f_adate" value="${today}"></div>
         <div class="form-group"><label>Modal Awal (Rp)</label><input type="number" id="f_acost" placeholder="0" min="0"></div>

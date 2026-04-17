@@ -52,6 +52,7 @@ function openEditModal(type, id) {
         <option value="MutualFund" ${a.type==='MutualFund'?'selected':''}>Reksa Dana</option>
         <option value="Bond" ${a.type==='Bond'?'selected':''}>Obligasi</option>
         <option value="Cash" ${a.type==='Cash'?'selected':''}>Kas / Tabungan</option>
+        <option value="Other" ${a.type==='Other'?'selected':''}>Lainnya</option>
       </select></div>
       <div class="form-group"><label>Tanggal Pembelian</label><input type="date" id="ef_adate" value="${a.dateAdded||''}"></div>
       <div class="form-group"><label>Modal Awal (Rp)</label><input type="number" id="ef_acost" value="${a.cost}" min="0"></div>
