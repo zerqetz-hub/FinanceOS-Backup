@@ -155,7 +155,7 @@ function setFilter(btn) {
 function toggleTheme() {
   const dark = document.body.dataset.theme === 'dark';
   document.body.dataset.theme = dark ? 'light' : 'dark';
-  document.getElementById('themeBtn').textContent = dark ? '🌙 Dark' : '☀️ Light';
+  document.getElementById('themeBtn').textContent = dark ? '🌙' : '☀️';
   localStorage.setItem('ku_theme', dark ? 'light' : 'dark');
   setTimeout(() => {
     Object.keys(CI).forEach(k => { CI[k].destroy(); delete CI[k]; });

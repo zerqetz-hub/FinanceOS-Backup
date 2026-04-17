@@ -14,17 +14,22 @@ async function loadCheckpointInfo() {
  * @param {boolean} exists
  * @param {string|null} savedAt - ISO timestamp. */
 function _updateCheckpointUI(exists, savedAt) {
-  const meta = document.getElementById('checkpointMeta');
-  const btn  = document.getElementById('restoreBtn');
+  const meta       = document.getElementById('checkpointMeta');
+  const btn        = document.getElementById('restoreBtn');
+  const cpBtn      = document.getElementById('checkpointBtn');
   if (exists && savedAt) {
-    const d     = new Date(savedAt);
-    const label = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
-                + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-    if (meta) meta.textContent = label;
-    if (btn)  btn.disabled = false;
+    const d         = new Date(savedAt);
+    const shortLabel = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+                     + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const fullLabel  = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+                     + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    if (meta)  meta.textContent = shortLabel;
+    if (cpBtn) cpBtn.title = 'Snapshot terakhir: ' + fullLabel;
+    if (btn)   btn.disabled = false;
   } else {
-    if (meta) meta.textContent = 'Belum ada save';
-    if (btn)  btn.disabled = true;
+    if (meta)  meta.textContent = '';
+    if (cpBtn) cpBtn.title = 'Kelola snapshot data';
+    if (btn)   btn.disabled = true;
   }
 }
 
@@ -34,7 +39,7 @@ async function saveCheckpoint() {
   const label = labelInput ? labelInput.value.trim() : '';
   const saveBtn = document.getElementById('cpSaveBtn');
   if (saveBtn) { saveBtn.textContent = '⏳...'; saveBtn.disabled = true; }
-  const btn = document.querySelector('.save-checkpoint-btn');
+  const btn = document.getElementById('checkpointBtn');
   if (btn) btn.disabled = true;
   try {
     await syncPaidDebts();
@@ -44,7 +49,7 @@ async function saveCheckpoint() {
   } catch (e) {
     showToast('⚠️ Gagal menyimpan checkpoint');
   } finally {
-    if (btn) { btn.textContent = '💾 Save'; btn.disabled = false; }
+    if (btn) btn.disabled = false;
   }
 }
 

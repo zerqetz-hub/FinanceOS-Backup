@@ -1000,9 +1000,9 @@
     <button id="undoBtn" style="display:none" onclick="historyUndo()"></button>
     <button id="redoBtn" style="display:none" onclick="historyRedo()"></button>
     <button class="currency-btn" onclick="toggleCurrency()" id="currencyBtn">🇮🇩 IDR</button>
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
-    <button class="save-checkpoint-btn" onclick="openCheckpointModal()" title="Kelola snapshot data">💾 Snapshots <span id="checkpointMeta" style="font-size:10px;opacity:.7;font-weight:400;margin-left:2px"></span></button>
-    <button class="restore-checkpoint-btn" id="restoreBtn" onclick="restoreCheckpoint()" title="Kembalikan ke save terakhir" disabled>↩ Restore</button>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <button class="save-checkpoint-btn" id="checkpointBtn" onclick="openCheckpointModal()" title="Kelola snapshot data">💾 <span id="checkpointMeta" style="font-size:10px;opacity:.7;font-weight:400;margin-left:2px"></span></button>
+    <button class="restore-checkpoint-btn" id="restoreBtn" onclick="restoreCheckpoint()" title="Kembalikan ke save terakhir" disabled>↩</button>
     <!-- Avatar dropdown -->
     <div class="avatar-wrap" id="avatarWrap">
       <button class="avatar-btn" id="avatarBtn" onclick="toggleAvatarMenu()" title="Akun">

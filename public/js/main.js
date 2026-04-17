@@ -185,7 +185,7 @@ async function bootApp() {
   if (savedTheme) {
     document.body.dataset.theme = savedTheme;
     const btn = document.getElementById('themeBtn');
-    if (btn) btn.textContent = savedTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
+    if (btn) btn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
   }
 
   let loggedIn = false;
