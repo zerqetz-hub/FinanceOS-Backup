@@ -112,6 +112,13 @@ function showPage(id, btn) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if (btn) btn.classList.add('active');
   _currentPage = id;
+  // Sync bottom nav active state
+  const bottomNavPages = ['dashboard','cashflow','assets','debts'];
+  document.querySelectorAll('.bottom-nav-item[data-page]').forEach(n => {
+    n.classList.toggle('active', n.dataset.page === id);
+  });
+  const moreBtn = document.getElementById('bottomNavMoreBtn');
+  if (moreBtn) moreBtn.classList.toggle('active', !bottomNavPages.includes(id));
   closeMobileMenu();
   _renderCurrentPage();
   if (id === 'dashboard') renderAlerts();
@@ -143,6 +150,22 @@ function toggleMobileMenu() {
 function closeMobileMenu() {
   document.querySelector('.sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// ─── BOTTOM NAV ───────────────────────────────────────────────────────────────
+function bottomNavGo(id) {
+  const sidebarBtn = document.querySelector(`.nav-item[onclick*="'${id}'"]`);
+  showPage(id, sidebarBtn || undefined);
+}
+
+function openMoreDrawer() {
+  document.getElementById('moreDrawer').classList.add('open');
+  document.getElementById('moreDrawerOverlay').classList.add('open');
+}
+
+function closeMoreDrawer() {
+  document.getElementById('moreDrawer').classList.remove('open');
+  document.getElementById('moreDrawerOverlay').classList.remove('open');
 }
 
 function setFilter(btn) {

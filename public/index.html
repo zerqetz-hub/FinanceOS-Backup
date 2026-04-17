@@ -1280,6 +1280,58 @@
   </main>
 </div>
 
+<!-- ── BOTTOM NAVIGATION (mobile ≤600px only) ───────────────────────────── -->
+<nav class="bottom-nav" id="bottomNav" aria-label="Navigasi utama">
+  <button class="bottom-nav-item active" data-page="dashboard" onclick="bottomNavGo('dashboard')">
+    <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor" opacity=".4"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity=".4"/></svg>
+    <span>Dashboard</span>
+  </button>
+  <button class="bottom-nav-item" data-page="cashflow" onclick="bottomNavGo('cashflow')">
+    <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span>Cash Flow</span>
+  </button>
+  <button class="bottom-nav-item" data-page="assets" onclick="bottomNavGo('assets')">
+    <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span>Aset</span>
+  </button>
+  <button class="bottom-nav-item" data-page="debts" onclick="bottomNavGo('debts')">
+    <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.5"/></svg>
+    <span>Hutang</span>
+  </button>
+  <button class="bottom-nav-item" id="bottomNavMoreBtn" onclick="openMoreDrawer()">
+    <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><circle cx="3.5" cy="8" r="1.5" fill="currentColor"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/><circle cx="12.5" cy="8" r="1.5" fill="currentColor"/></svg>
+    <span>Lainnya</span>
+  </button>
+</nav>
+
+<!-- ── MORE DRAWER ───────────────────────────────────────────────────────── -->
+<div class="more-drawer-overlay" id="moreDrawerOverlay" onclick="closeMoreDrawer()"></div>
+<div class="more-drawer" id="moreDrawer" role="dialog" aria-label="Menu lainnya">
+  <div class="more-drawer-handle"></div>
+  <div class="more-drawer-grid">
+    <button onclick="bottomNavGo('networth');closeMoreDrawer()">
+      <span class="more-drawer-icon">📊</span>
+      <span>Net Worth</span>
+    </button>
+    <button onclick="bottomNavGo('goals');closeMoreDrawer()">
+      <span class="more-drawer-icon">🎯</span>
+      <span>Goals</span>
+    </button>
+    <button onclick="bottomNavGo('emergency');closeMoreDrawer()">
+      <span class="more-drawer-icon">🛡️</span>
+      <span>Dana Darurat</span>
+    </button>
+    <button onclick="bottomNavGo('investment');closeMoreDrawer()">
+      <span class="more-drawer-icon">📈</span>
+      <span>Investasi</span>
+    </button>
+    <button onclick="bottomNavGo('profile');closeMoreDrawer()">
+      <span class="more-drawer-icon">⚙️</span>
+      <span>Profil</span>
+    </button>
+  </div>
+</div>
+
 <!-- CHECKPOINT MODAL -->
 <div class="modal-overlay" id="cpModal" style="display:none">
   <div class="modal-box" style="max-width:560px">

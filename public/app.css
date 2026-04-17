@@ -890,3 +890,170 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
   .landing-cta-bottom p { font-size: 13px; }
   .landing-footer { padding: 14px 16px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE-FIRST NAVIGATION — Bottom Nav Bar + More Drawer
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Bottom navigation bar ───────────────────────────────────────────────── */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 4px 0 env(safe-area-inset-bottom, 4px);
+  z-index: 900;
+  box-shadow: 0 -1px 0 var(--border), 0 -4px 16px rgba(0,0,0,.06);
+}
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text3);
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 500;
+  transition: color .15s, transform .1s;
+  min-width: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-nav-item:active { transform: scale(.92); }
+.bottom-nav-item.active { color: var(--accent); }
+.bottom-nav-item.active svg { filter: none; }
+
+/* ── More Drawer ─────────────────────────────────────────────────────────── */
+.more-drawer-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 950;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.more-drawer-overlay.open { display: block; }
+.more-drawer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  padding: 10px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 960;
+  transform: translateY(100%);
+  transition: transform .32s cubic-bezier(.22,1,.36,1);
+  box-shadow: 0 -4px 32px rgba(0,0,0,.14);
+}
+.more-drawer.open { transform: translateY(0); }
+.more-drawer-handle {
+  width: 36px; height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 18px;
+}
+.more-drawer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.more-drawer-grid button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  transition: all .15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.more-drawer-grid button:active {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: scale(.95);
+}
+.more-drawer-icon { font-size: 22px; line-height: 1; }
+
+/* ─── MOBILE-SPECIFIC OVERRIDES (≤ 600px) ───────────────────────────────── */
+@media (max-width: 600px) {
+  /* Show bottom nav */
+  .bottom-nav { display: flex; }
+
+  /* Pad main content so it clears the bottom nav */
+  .main { padding-bottom: calc(68px + env(safe-area-inset-bottom, 8px)); }
+
+  /* Toast floats above bottom nav */
+  .toast { bottom: calc(78px + env(safe-area-inset-bottom, 0px)); }
+
+  /* Modal safe area */
+  .modal-box { padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+
+  /* Bottom nav replaces hamburger on phones — hide it */
+  .mob-menu-btn { display: none !important; }
+
+  /* Declutter top nav bar: hide secondary controls */
+  .save-checkpoint-btn,
+  .restore-checkpoint-btn,
+  .currency-btn,
+  .save-badge { display: none !important; }
+
+  /* ── Row action buttons: always visible on touch ── */
+  /* Hover-only visibility breaks on mobile — show always */
+  .row-actions { opacity: 1 !important; }
+
+  /* Larger touch targets for action buttons */
+  .btn-action-menu {
+    min-width: 36px; min-height: 36px;
+    padding: 8px 10px;
+    font-size: 16px;
+  }
+  .btn-delete, .btn-edit {
+    min-width: 36px; min-height: 36px;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  /* ── Typography: don't over-shrink important figures ── */
+  /* Net Worth callout value — hero number, keep readable */
+  .nw-callout .val { font-size: 26px !important; letter-spacing: -.5px; }
+  /* Metric card values */
+  .metric-value { font-size: 17px !important; }
+  /* Page title */
+  .page-title { font-size: 16px !important; font-weight: 600; }
+
+  /* ── Prevent action menu clipping on small screens ── */
+  .action-menu { right: 0; left: auto; max-width: calc(100vw - 32px); }
+
+  /* ── Filter bar: allow wrapping without overflow ── */
+  .filter-bar { flex-wrap: wrap; gap: 6px; }
+  .filter-btn { font-size: 11px; padding: 5px 11px; }
+
+  /* ── Cards: comfortable padding on 375px phones ── */
+  .card { padding: 14px; }
+  .card-sm { padding: 12px; }
+
+  /* ── Theme button: keep visible but smaller ── */
+  .theme-btn { font-size: 11px; padding: 4px 9px; }
+
+  /* ── Breakdown row: remove % column ── */
+  .breakdown-row { grid-template-columns: 80px 1fr 68px; gap: 6px; }
+  .breakdown-pct { display: none; }
+
+  /* ── Avatar button: ensure consistent size ── */
+  .avatar-btn { width: 34px; height: 34px; }
+}
