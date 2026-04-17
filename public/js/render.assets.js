@@ -32,6 +32,7 @@ function renderAssets() {
           </div>
           <div class="row-actions">
             <button onclick="openPriceUpdateModal('${a.id}')" title="Perbarui Nilai" style="font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid var(--accent);color:var(--accent);background:var(--accent-light,rgba(26,107,74,.08));cursor:pointer;white-space:nowrap;font-family:var(--font)">📈 Perbarui</button>
+            <button onclick="openTransferModal('${a.id}')" title="Transfer Dana" style="font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid var(--blue,#1a5ba6);color:var(--blue,#1a5ba6);background:rgba(26,91,166,.08);cursor:pointer;white-space:nowrap;font-family:var(--font)">🔄 Transfer</button>
             <button class="btn-edit" onclick="openEditModal('asset','${a.id}')" title="Edit">✏️</button>
             <button class="btn-delete" onclick="del('asset','${a.id}','${esc(a.name)}')">🗑</button>
           </div>
