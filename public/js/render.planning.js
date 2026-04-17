@@ -90,10 +90,10 @@ function renderInvestment() {
   const ret = tc ? (tv-tc)/tc*100 : 0;
   const best = ia.length ? ia.slice().sort((a,b) => (b.value-b.cost)/Math.max(1,b.cost) - (a.value-a.cost)/Math.max(1,a.cost))[0] : null;
   document.getElementById('invest-metrics').innerHTML = `
-    <div class="card-sm"><div class="metric-label">Total Investasi</div><div class="metric-value">${fmtS(tv)}</div></div>
-    <div class="card-sm"><div class="metric-label">Return Total</div><div class="metric-value ${ret>=0?'c-green':'c-red'}">${ret>=0?'+':''}${ret.toFixed(1)}%</div></div>
-    <div class="card-sm"><div class="metric-label">Best Performer</div><div class="metric-value c-green" style="font-size:15px">${best?esc(best.name):'—'}</div><div class="metric-sub">${best&&best.cost?'+'+((best.value-best.cost)/best.cost*100).toFixed(1)+'%':''}</div></div>
-    <div class="card-sm"><div class="metric-label">Unrealized Gain</div><div class="metric-value ${tv-tc>=0?'c-green':'c-red'}">${tv-tc>=0?'+':''}${fmtS(Math.abs(tv-tc))}</div></div>`;
+    <div class="card-sm"><div class="metric-label">Total Modal</div><div class="metric-value">${fmtS(tc)}</div><div class="metric-sub">Cost basis</div></div>
+    <div class="card-sm"><div class="metric-label">Nilai Pasar</div><div class="metric-value">${fmtS(tv)}</div><div class="metric-sub">Market value</div></div>
+    <div class="card-sm"><div class="metric-label">Unrealized PnL</div><div class="metric-value ${tv-tc>=0?'c-green':'c-red'}">${tv-tc>=0?'+':''}${fmtS(Math.abs(tv-tc))}</div><div class="metric-sub" style="color:${tv-tc>=0?'var(--accent)':'var(--red)'}">${ret>=0?'+':''}${ret.toFixed(1)}% dari modal</div></div>
+    <div class="card-sm"><div class="metric-label">Best Performer</div><div class="metric-value c-green" style="font-size:15px">${best?esc(best.name):'—'}</div><div class="metric-sub">${best&&best.cost?'+'+((best.value-best.cost)/best.cost*100).toFixed(1)+'%':''}</div></div>`;
   if (!ia.length) { document.getElementById('investTable').innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:24px">Belum ada aset investasi</td></tr>'; renderPerfChart(); return; }
   document.getElementById('investTable').innerHTML = ia.map(a => {
     const r = a.cost ? (a.value-a.cost)/a.cost*100 : 0; const g = a.value-a.cost;
