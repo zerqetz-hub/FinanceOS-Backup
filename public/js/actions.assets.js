@@ -200,11 +200,12 @@ async function executeTransfer(sourceId) {
   const targetType = v('tr_target_type');
   const today = new Date().toISOString().slice(0,10);
 
-  // Kurangi cost basis source secara proporsional agar return tidak berubah
+  // Kurangi cost basis source secara proporsional agar return tidak berubah.
+  // Math.max(0, ...) mencegah nilai negatif akibat floating-point rounding.
   const costReduction = source.cost > 0 ? source.cost * (amount / source.value) : 0;
   const _prevSource = JSON.parse(JSON.stringify(source));
-  source.value -= amount;
-  source.cost  -= costReduction;
+  source.value = Math.max(0, source.value - amount);
+  source.cost  = Math.max(0, source.cost  - costReduction);
   if (!source.priceHistory) source.priceHistory = [];
   source.priceHistory = source.priceHistory.filter(h => h.date !== today);
   source.priceHistory.push({ date: today, value: source.value });

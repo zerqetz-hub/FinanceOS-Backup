@@ -109,12 +109,16 @@ async function updateCashflow(id) {
   // Recalculate total income from breakdown (allow zero — user may clear all)
   const bdownTotal = Object.values(cf.incomeBreakdown).reduce((a,b) => a+b, 0);
   cf.income = bdownTotal;
-  // Update expenses
+  // Update expenses — preserve existing notes if note input is not in this modal
   if (!cf.expenseNotes) cf.expenseNotes = {};
   getCats().forEach(c => {
     cf.expenses[c] = parseFloat(document.getElementById('ef_exp_' + c)?.value) || 0;
-    const note = document.getElementById('ef_exp_note_' + c)?.value || '';
-    if (note) cf.expenseNotes[c] = note; else delete cf.expenseNotes[c];
+    const noteEl = document.getElementById('ef_exp_note_' + c);
+    if (noteEl) {
+      const note = noteEl.value || '';
+      if (note) cf.expenseNotes[c] = note; else delete cf.expenseNotes[c];
+    }
+    // else: note input not present in this modal — keep existing note unchanged
   });
   const _next = JSON.parse(JSON.stringify(cf));
   closeModal(); renderAll();

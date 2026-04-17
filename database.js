@@ -481,18 +481,70 @@ async function deleteCheckpoint(userId,id){
 
 async function _applySnapshot(userId,snapshot){
   const s=typeof snapshot==='string'?JSON.parse(snapshot):snapshot;
-  await resetToDefault(userId);
-  // Paralel per-entitas — tidak ada cross-dependency antar entitas berbeda
-  await Promise.all([
-    Promise.all((s.cashflows||[]).map(cf=>addCashflow(userId,cf))),
-    Promise.all((s.assets||[]).map(a=>addAsset(userId,a))),
-    Promise.all((s.debts||[]).map(d=>addDebt(userId,d))),
-    Promise.all((s.goals||[]).map(g=>addGoal(userId,g))),
-    Promise.all((s.transactions||[]).map(t=>addTransaction(userId,t))),
-  ]);
-  await setPaidDebts(userId,s.paidDebts||[]);
-  const{cashflows:_c,assets:_a,debts:_d,goals:_g,transactions:_t,paidDebts:_p,transactionsMeta:_tm,...sData}=s;
-  if(Object.keys(sData).length) await updateSettings(userId,sData);
+  // Seluruh operasi dalam SATU transaksi — jika ada yang gagal, semua di-rollback
+  // dan data user tetap utuh (tidak ada data loss partial).
+  await tx(async(c)=>{
+    // Hapus semua data user (CASCADE tangani child tables)
+    for(const t of ['cashflows','assets','debts','goals','transactions','paid_debts','settings','checkpoints'])
+      await c.query(`DELETE FROM ${t} WHERE user_id=$1`,[userId]);
+
+    // Cashflows
+    for(const cf of (s.cashflows||[])){
+      await c.query(
+        `INSERT INTO cashflows(id,user_id,month,income,date_added) VALUES($1,$2,$3,$4,$5) ON CONFLICT DO NOTHING`,
+        [cf.id,userId,cf.month,cf.income||0,cf.dateAdded||new Date().toISOString().slice(0,10)]);
+      if(cf.expenses) for(const[k,v] of Object.entries(cf.expenses))
+        await c.query(`INSERT INTO cashflow_expenses(cashflow_id,category,amount,notes) VALUES($1,$2,$3,$4)`,
+          [cf.id,k,v,cf.expenseNotes?.[k]||'']);
+      if(cf.incomeBreakdown) for(const[k,v] of Object.entries(cf.incomeBreakdown))
+        await c.query(`INSERT INTO cashflow_income_bdown(cashflow_id,source,amount,notes) VALUES($1,$2,$3,$4)`,
+          [cf.id,k,v,cf.incomeNotes?.[k]||'']);
+    }
+
+    // Assets
+    for(const a of (s.assets||[])){
+      await c.query(
+        `INSERT INTO assets(id,user_id,name,sub,type,value,cost,date_added) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [a.id,userId,a.name,a.sub||'',a.type,a.value||0,a.cost||0,a.dateAdded||new Date().toISOString().slice(0,10)]);
+      if(a.priceHistory?.length) for(const ph of a.priceHistory)
+        await c.query(`INSERT INTO asset_price_history(asset_id,date,price) VALUES($1,$2,$3)`,
+          [a.id,ph.date,ph.price??ph.value??0]);
+    }
+
+    // Debts
+    for(const d of (s.debts||[])){
+      await c.query(
+        `INSERT INTO debts(id,user_id,name,type,total,sisa,bunga,cicilan,jatuh,date_added) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+        [d.id,userId,d.name,d.type,d.total||0,d.sisa||0,d.bunga||0,d.cicilan||0,d.jatuh||'',d.dateAdded||new Date().toISOString().slice(0,10)]);
+      if(d.balanceHistory?.length) for(const bh of d.balanceHistory)
+        await c.query(`INSERT INTO debt_balance_history(debt_id,date,sisa) VALUES($1,$2,$3)`,
+          [d.id,bh.date,bh.sisa]);
+    }
+
+    // Goals
+    for(const g of (s.goals||[]))
+      await c.query(
+        `INSERT INTO goals(id,user_id,name,target,current,deadline,color,date_added) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [g.id,userId,g.name,g.target||0,g.current||0,g.deadline||'',g.color||'#1a6b4a',g.dateAdded||new Date().toISOString().slice(0,10)]);
+
+    // Transactions
+    for(const t of (s.transactions||[]))
+      await c.query(
+        `INSERT INTO transactions(id,user_id,cat,name,date,amount,cat_color,cat_name,notes,date_added) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+        [t.id,userId,t.cat||'',t.name,t.date||'',t.amount||0,t.catColor||'#888888',t.catName||'',t.notes||'',t.dateAdded||new Date().toISOString().slice(0,10)]);
+
+    // Paid debts
+    for(const item of (s.paidDebts||[]))
+      await c.query(`INSERT INTO paid_debts(user_id,debt_id,data) VALUES($1,$2,$3)`,
+        [userId,item.id||item,JSON.stringify(item)]);
+
+    // Settings
+    const{cashflows:_c,assets:_a,debts:_d,goals:_g,transactions:_t,paidDebts:_p,transactionsMeta:_tm,...sData}=s;
+    for(const[k,v] of Object.entries(sData))
+      await c.query(`INSERT INTO settings(user_id,key,value) VALUES($1,$2,$3) ON CONFLICT(user_id,key) DO UPDATE SET value=$3`,
+        [userId,k,JSON.stringify(v)]);
+  });
+  _scDel(userId);
 }
 
 // Legacy aliases
@@ -535,11 +587,12 @@ async function createSession(userId,ttlMs=2*60*60*1000){
 }
 async function validateSession(token){
   if(!token||!/^[a-f0-9]{64}$/.test(token)) return null;
-  await q(`DELETE FROM sessions WHERE expires_at<NOW()`);
-  const rows=await q(`SELECT user_id FROM sessions WHERE token=$1`,[token]);
+  const rows=await q(`SELECT user_id FROM sessions WHERE token=$1 AND expires_at>NOW()`,[token]);
   if(!rows.length) return null;
   return rows[0].user_id;
 }
+// Bersihkan sesi kadaluarsa setiap 10 menit — bukan saat setiap auth request
+setInterval(()=>{ q(`DELETE FROM sessions WHERE expires_at<NOW()`).catch(()=>{}); }, 10*60*1000).unref();
 async function destroySession(token){await q(`DELETE FROM sessions WHERE token=$1`,[token]);}
 async function destroyAllSessionsForUser(userId){await q(`DELETE FROM sessions WHERE user_id=$1`,[userId]);}
 async function healthCheck(){await ping();}

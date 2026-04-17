@@ -116,9 +116,13 @@ router.put('/avatar', async (req, res) => {
   catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// GET /api/auth/export — unduh semua data user sebagai JSON
+// GET /api/auth/export — unduh semua data user sebagai JSON (semua transaksi)
 router.get('/export', routeHandler(async (req, res) => {
-  const data = await db.getState(req.userId);
+  const [base, txAll] = await Promise.all([
+    db.getState(req.userId),
+    db.getTransactions(req.userId, { page: 1, limit: 100_000 }),
+  ]);
+  const data = { ...base, transactions: txAll.items };
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', 'attachment; filename="kepinguang-data.json"');
   res.send(JSON.stringify(data, null, 2));

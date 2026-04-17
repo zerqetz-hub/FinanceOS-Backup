@@ -69,10 +69,9 @@ function renderCashflow() {
       incBreakEl.innerHTML = entries.map(([cat, amt]) => {
         const pct = totalInc > 0 ? (amt/totalInc*100) : 0;
         const ci = incCats.indexOf(cat);
-        const INC_COLORS2 = ['#1a6b4a','#1a5ba6','#5a3fb5','#c45c1a','#b87614','#c23b3b','#888888'];
-        const color = INC_COLORS2[ci >= 0 ? ci % INC_COLORS2.length : 6];
+        const color = INC_COLORS[ci >= 0 ? ci % INC_COLORS.length : 6];
         return `<div style="display:grid;grid-template-columns:120px 1fr 90px 80px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
-          <div style="font-size:13px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>${cat}</div>
+          <div style="font-size:13px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>${esc(cat)}</div>
           <div><div class="progress-wrap" style="margin-top:0"><div class="progress-bar" style="width:${pct.toFixed(1)}%;background:${color}"></div></div></div>
           <div style="font-size:12px;color:var(--text3);text-align:right">${fmtS(amt)}</div>
           <div style="text-align:right"><span style="font-size:12px;font-weight:500;color:${color}">${pct.toFixed(1)}%</span></div>
@@ -104,7 +103,7 @@ function renderCashflow() {
           const color = EXP_COLORS2[ci >= 0 ? ci % EXP_COLORS2.length : 6];
           return `<div style="display:grid;grid-template-columns:120px 1fr 90px 80px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
             <div style="font-size:13px;display:flex;align-items:center;gap:6px">
-              <span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>${cat}
+              <span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>${esc(cat)}
             </div>
             <div><div class="progress-wrap" style="margin-top:0"><div class="progress-bar" style="width:${pct.toFixed(1)}%;background:${color}"></div></div></div>
             <div style="font-size:12px;color:var(--text3);text-align:right">${fmtS(amt)}</div>
