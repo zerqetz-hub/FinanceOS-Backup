@@ -36,7 +36,8 @@ function renderNetWorth() {
 function renderGoals() {
   const active = S.goals.length;
   const onTrack = S.goals.filter(g => g.current/g.target >= 0.5).length;
-  const nearest = S.goals.slice().sort((a,b) => a.deadline.localeCompare(b.deadline))[0];
+  const withDeadline = S.goals.filter(g => g.deadline);
+  const nearest = withDeadline.length ? withDeadline.slice().sort((a,b) => a.deadline.localeCompare(b.deadline))[0] : null;
   document.getElementById('goal-metrics').innerHTML = `
     <div class="card-sm"><div class="metric-label">Goals Aktif</div><div class="metric-value">${active}</div></div>
     <div class="card-sm"><div class="metric-label">Goal Terdekat</div><div class="metric-value" style="font-size:16px">${nearest?esc(nearest.name):'—'}</div><div class="metric-sub">${nearest?nearest.deadline:'—'}</div></div>

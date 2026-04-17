@@ -12,7 +12,7 @@ function _computeAlerts() {
     // Fix #12: saldo bukan tabungan
     const saldo = cf.income - exp;
     const rate  = cf.income > 0 ? saldo / cf.income : 0;
-    if (rate < 0.1) alerts.push({ type:'warn', msg:'Saving rate bulan ini hanya ' + (rate*100).toFixed(0) + '% — target minimal 20%.' });
+    if (cf.income > 0 && rate < 0.1) alerts.push({ type:'warn', msg:'Saving rate bulan ini hanya ' + (rate*100).toFixed(0) + '% — target minimal 20%.' });
     getCats().forEach(cat => {
       const budget = S.budgets?.[cat];
       const spent  = cf.expenses?.[cat] || 0;

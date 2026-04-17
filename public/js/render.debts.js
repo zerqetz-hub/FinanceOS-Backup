@@ -97,7 +97,7 @@ function renderDebts() {
   if (!S.debts.length) { document.getElementById('debtList').innerHTML='<div class="empty-state"><div class="icon">✅</div>Tidak ada hutang aktif. Bebas hutang!</div>'; }
   else {
     document.getElementById('debtList').innerHTML = S.debts.map(d => {
-      const paidPct = d.total > 0 ? Math.round((1-d.sisa/d.total)*100) : 0;
+      const paidPct = d.total > 0 ? Math.max(0, Math.round((1-d.sisa/d.total)*100)) : 0;
       return `<div class="debt-item">
         <div class="debt-header">
           <div><div class="debt-name">${esc(d.name)}</div>

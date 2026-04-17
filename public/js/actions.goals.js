@@ -27,7 +27,7 @@ async function updateGoal(id) {
   g.name = v('ef_gname').trim() || g.name;
   g.target = vn('ef_gtarget');
   g.current = vn('ef_gcurrent');
-  g.deadline = v('ef_gdeadline') || g.deadline;
+  g.deadline = v('ef_gdeadline');
   g.color = v('ef_gcolor') || g.color;
   g.dateAdded = v('ef_gdate') || g.dateAdded;
   const _next = JSON.parse(JSON.stringify(g));

@@ -10,9 +10,19 @@ async function addAsset() {
     const dateAdded = v('f_adate') || new Date().toISOString().slice(0,10);
     const cost = vn('f_acost');
     const val  = vn('f_aval');
-    // Fix: gunakan key 'value' konsisten (bukan 'price') di frontend
+    const today = new Date().toISOString().slice(0,10);
+    // Seed price history: start with purchase price at dateAdded.
+    // If current value differs from cost and date is different, add today's entry.
+    // When dateAdded === today, avoid duplicate-date conflict in DB by updating
+    // the single entry's value to the current val instead.
     const priceHistory = [{ date: dateAdded, value: cost }];
-    if (val !== cost && val > 0) priceHistory.push({ date: new Date().toISOString().slice(0,10), value: val });
+    if (val !== cost && val > 0) {
+      if (today !== dateAdded) {
+        priceHistory.push({ date: today, value: val });
+      } else {
+        priceHistory[0].value = val; // same date: reflect current value
+      }
+    }
     const newA = {
       id, name,
       sub: v('f_asub').trim() || '—',
@@ -114,6 +124,8 @@ async function deletePriceEntry(assetId, idx) {
   if (a.priceHistory.length) {
     const sorted = [...a.priceHistory].sort((x,y) => x.date.localeCompare(y.date));
     a.value = sorted[sorted.length-1].value;
+  } else {
+    a.value = a.cost; // no history left — fall back to purchase price
   }
   const _next = JSON.parse(JSON.stringify(a));
   renderAll();

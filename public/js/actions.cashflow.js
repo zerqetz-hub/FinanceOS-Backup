@@ -106,9 +106,9 @@ async function updateCashflow(id) {
     if (amt > 0) { cf.incomeBreakdown[c] = amt; if (note) cf.incomeNotes[c] = note; }
     else { delete cf.incomeBreakdown[c]; delete cf.incomeNotes[c]; }
   });
-  // Recalculate total income from breakdown
+  // Recalculate total income from breakdown (allow zero — user may clear all)
   const bdownTotal = Object.values(cf.incomeBreakdown).reduce((a,b) => a+b, 0);
-  if (bdownTotal > 0) cf.income = bdownTotal;
+  cf.income = bdownTotal;
   // Update expenses
   if (!cf.expenseNotes) cf.expenseNotes = {};
   getCats().forEach(c => {

@@ -384,7 +384,11 @@ async function removeCategoryInline(type, cat) {
   _refreshInlinePills(type);
   _refreshInlineCatSelect(type);
   if (type === 'expense') {
-    S.cashflows.forEach(cf => { if (cf.expenses && cat in cf.expenses) delete cf.expenses[cat]; });
+    // Remove the category from each cashflow's expenses, then persist to server
+    // so the deleted-category amount doesn't resurface after page reload.
+    const affected = S.cashflows.filter(cf => cf.expenses && cat in cf.expenses);
+    affected.forEach(cf => { delete cf.expenses[cat]; });
+    await Promise.all(affected.map(cf => API.put('/api/cashflows/' + cf.id, cf).catch(() => {})));
   }
   await syncSettings();
   showToast('Kategori "' + cat + '" dihapus', 'success');

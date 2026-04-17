@@ -449,7 +449,13 @@ async function resetToDefault(userId){
 const MAX_CPS=10;
 
 async function createCheckpoint(userId,label){
-  const snap=await getState(userId);
+  // Fetch all transactions for a complete snapshot — getState() is limited to
+  // page 1 (20 items), so we override transactions with a full fetch here.
+  const [base, txAll] = await Promise.all([
+    getState(userId),
+    getTransactions(userId, {page:1, limit:100_000}),
+  ]);
+  const snap = {...base, transactions: txAll.items};
   const id='cp_'+Date.now();
   await tx(async(c)=>{
     const list=await c.query(`SELECT id FROM checkpoints WHERE user_id=$1 ORDER BY saved_at ASC`,[userId]);

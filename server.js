@@ -62,7 +62,7 @@ app.get('/health', async (_req, res) => {
     await db.ping();
     res.json({
       status:    'ok',
-      version:   process.env.npm_package_version || '5.4.0',
+      version:   process.env.npm_package_version || '5.5.0',
       timestamp: new Date().toISOString(),
       database:  'connected',
     });

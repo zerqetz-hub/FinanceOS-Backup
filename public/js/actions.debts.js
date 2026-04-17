@@ -8,8 +8,17 @@ async function addDebt() {
     if (!name) { showFormError('Nama hutang wajib diisi.'); return; }
     const id = uid(); const dateAdded = v('f_ddate') || new Date().toISOString().slice(0,10);
     const total = vn('f_dtotal'); const sisa = vn('f_dsisa');
+    const today = new Date().toISOString().slice(0,10);
+    // Seed balance history: start with total at dateAdded.
+    // Avoid duplicate-date conflict when dateAdded === today.
     const balanceHistory = [{date: dateAdded, sisa: total}];
-    if (sisa !== total) balanceHistory.push({date: new Date().toISOString().slice(0,10), sisa});
+    if (sisa !== total) {
+      if (today !== dateAdded) {
+        balanceHistory.push({date: today, sisa});
+      } else {
+        balanceHistory[0].sisa = sisa; // same date: reflect current balance
+      }
+    }
     const newD = {id, name, type:v('f_dtype'), total, sisa, bunga:vn('f_dbunga'), cicilan:vn('f_dcicilan'), jatuh:v('f_djatuh')||'—', dateAdded, balanceHistory};
     S.debts.push(newD); closeModal(); renderAll();
     try {
@@ -29,7 +38,7 @@ async function updateDebt(id) {
   const _prev = JSON.parse(JSON.stringify(d));
   d.name = v('ef_dname').trim() || d.name; d.type = v('ef_dtype') || d.type;
   d.bunga = vn('ef_dbunga'); d.total = vn('ef_dtotal');
-  d.cicilan = vn('ef_dcicilan'); d.jatuh = v('ef_djatuh') || d.jatuh;
+  d.cicilan = vn('ef_dcicilan'); d.jatuh = v('ef_djatuh') || '—';
   d.dateAdded = v('ef_ddate') || d.dateAdded;
   const _next = JSON.parse(JSON.stringify(d));
   closeModal(); renderAll();
@@ -109,6 +118,8 @@ async function deleteBalanceEntry(debtId, idx) {
   if (d.balanceHistory.length) {
     const sorted = [...d.balanceHistory].sort((x,y) => x.date.localeCompare(y.date));
     d.sisa = sorted[sorted.length-1].sisa;
+  } else {
+    d.sisa = d.total; // no history left — fall back to original total
   }
   const _next = JSON.parse(JSON.stringify(d));
   renderAll();
