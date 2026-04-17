@@ -989,71 +989,89 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 }
 .more-drawer-icon { font-size: 22px; line-height: 1; }
 
-/* ─── MOBILE-SPECIFIC OVERRIDES (≤ 600px) ───────────────────────────────── */
-@media (max-width: 600px) {
-  /* Show bottom nav */
+/* ─── ALL TOUCH DEVICES (≤ 900px) — bottom nav ON, hamburger OFF ────────── */
+@media (max-width: 900px) {
   .bottom-nav { display: flex; }
-
-  /* Pad main content so it clears the bottom nav */
   .main { padding-bottom: calc(68px + env(safe-area-inset-bottom, 8px)); }
-
-  /* Toast floats above bottom nav */
   .toast { bottom: calc(78px + env(safe-area-inset-bottom, 0px)); }
-
-  /* Modal safe area */
   .modal-box { padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
-
-  /* Bottom nav replaces hamburger on phones — hide it */
   .mob-menu-btn { display: none !important; }
+  .row-actions { opacity: 1 !important; }
+  .action-menu { right: 0; left: auto; max-width: calc(100vw - 32px); }
+}
 
-  /* Declutter top nav bar: hide secondary controls */
+/* ─── TABLET OVERRIDES (601px – 900px) ───────────────────────────────────── */
+@media (min-width: 601px) and (max-width: 900px) {
+  /* Roomier padding — bottom clears taller tab bar */
+  .main { padding: 20px 20px calc(76px + env(safe-area-inset-bottom, 8px)); }
+
+  /* Slightly larger bottom nav items for bigger fingers */
+  .bottom-nav-item { padding: 8px 6px; font-size: 11px; }
+
+  /* Cards breathe a bit more */
+  .card { padding: 18px; }
+  .card-sm { padding: 14px; }
+
+  /* Typography — between phone and desktop */
+  .page-title { font-size: 18px !important; }
+  .metric-value { font-size: 20px !important; }
+  .nw-callout .val { font-size: 30px !important; }
+
+  /* Tablet nav: keep checkpoint save + save badge (space permits) */
+  .save-checkpoint-btn { display: inline-flex !important; }
+  .save-badge { display: inline !important; }
+
+  /* Touch targets — tablet fingers are bigger than a cursor */
+  .btn-action-menu { min-width: 38px; min-height: 38px; padding: 8px 10px; font-size: 15px; }
+  .btn-delete, .btn-edit { min-width: 38px; min-height: 38px; padding: 8px; font-size: 14px; }
+
+  /* Filter bar — more room at tablet width */
+  .filter-bar { flex-wrap: wrap; gap: 8px; }
+  .filter-btn { font-size: 12px; padding: 5px 13px; }
+
+  /* Breakdown: restore % column (enough width on tablet) */
+  .breakdown-row { grid-template-columns: 100px 1fr 82px 72px; gap: 10px; }
+  .breakdown-pct { display: block; }
+
+  /* Avatar */
+  .avatar-btn { width: 36px; height: 36px; }
+}
+
+/* ─── PHONE OVERRIDES (≤ 600px) ─────────────────────────────────────────── */
+@media (max-width: 600px) {
+  /* Compact main padding */
+  .main { padding: 14px 14px calc(68px + env(safe-area-inset-bottom, 8px)); }
+
+  /* Declutter top nav — hide secondary controls */
   .save-checkpoint-btn,
   .restore-checkpoint-btn,
   .currency-btn,
   .save-badge { display: none !important; }
 
-  /* ── Row action buttons: always visible on touch ── */
-  /* Hover-only visibility breaks on mobile — show always */
-  .row-actions { opacity: 1 !important; }
+  /* Touch targets */
+  .btn-action-menu { min-width: 36px; min-height: 36px; padding: 8px 10px; font-size: 16px; }
+  .btn-delete, .btn-edit { min-width: 36px; min-height: 36px; padding: 8px; font-size: 14px; }
 
-  /* Larger touch targets for action buttons */
-  .btn-action-menu {
-    min-width: 36px; min-height: 36px;
-    padding: 8px 10px;
-    font-size: 16px;
-  }
-  .btn-delete, .btn-edit {
-    min-width: 36px; min-height: 36px;
-    padding: 8px;
-    font-size: 14px;
-  }
-
-  /* ── Typography: don't over-shrink important figures ── */
-  /* Net Worth callout value — hero number, keep readable */
+  /* Typography */
   .nw-callout .val { font-size: 26px !important; letter-spacing: -.5px; }
-  /* Metric card values */
   .metric-value { font-size: 17px !important; }
-  /* Page title */
   .page-title { font-size: 16px !important; font-weight: 600; }
 
-  /* ── Prevent action menu clipping on small screens ── */
-  .action-menu { right: 0; left: auto; max-width: calc(100vw - 32px); }
-
-  /* ── Filter bar: allow wrapping without overflow ── */
+  /* Filter bar */
   .filter-bar { flex-wrap: wrap; gap: 6px; }
   .filter-btn { font-size: 11px; padding: 5px 11px; }
 
-  /* ── Cards: comfortable padding on 375px phones ── */
+  /* Cards */
   .card { padding: 14px; }
   .card-sm { padding: 12px; }
 
-  /* ── Theme button: keep visible but smaller ── */
+  /* Theme button */
   .theme-btn { font-size: 11px; padding: 4px 9px; }
 
-  /* ── Breakdown row: remove % column ── */
+  /* Breakdown: drop % column */
   .breakdown-row { grid-template-columns: 80px 1fr 68px; gap: 6px; }
   .breakdown-pct { display: none; }
 
-  /* ── Avatar button: ensure consistent size ── */
+  /* Avatar */
   .avatar-btn { width: 34px; height: 34px; }
 }
