@@ -1051,86 +1051,32 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
   .avatar-btn { width: 36px; height: 36px; }
 }
 
-/* ─── PHONE OVERRIDES (≤ 600px) — Finku-inspired clean mobile UI ─────────── */
+/* ─── PHONE (≤ 600px) ────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  /* ── Layout ── */
   .main { padding: 12px 14px calc(68px + env(safe-area-inset-bottom, 8px)); }
 
-  /* ── Top nav: hide secondary controls ── */
+  /* Hide noise */
+  .page-sub, .tutorial-btn { display: none !important; }
   .save-checkpoint-btn, .restore-checkpoint-btn,
   .currency-btn, .save-badge { display: none !important; }
-  .theme-btn { font-size: 11px; padding: 4px 9px; }
-  .avatar-btn { width: 34px; height: 34px; }
 
-  /* ── Remove noise: page subtitles & tutorial buttons ── */
-  .page-sub { display: none; }
-  .tutorial-btn { display: none !important; }
-  .page-header { margin-bottom: 12px; }
-  .page-title { font-size: 17px !important; font-weight: 700; }
+  /* Typography */
+  .page-title { font-size: 17px !important; }
+  .nw-callout .val { font-size: 28px !important; }
+  .metric-value { font-size: 20px !important; }
 
-  /* ── NW Callout: hero element — big, bold, clean ── */
-  .nw-callout { border-radius: 18px; padding: 20px 16px; margin-bottom: 14px; }
-  .nw-callout .lbl { font-size: 10px; letter-spacing: .9px; margin-bottom: 4px; }
-  .nw-callout .val { font-size: 30px !important; font-weight: 700; letter-spacing: -1px; }
-  .nw-callout .sub { font-size: 11px; margin-top: 3px; }
-  .nw-callout .nw-row { gap: 16px; margin-top: 14px; }
-  .nw-row-item .v { font-size: 14px; }
+  /* Cards */
+  .card { padding: 14px; }
+  .card-sm { padding: 12px; }
 
-  /* ── Metric cards: large numbers, clean labels ── */
-  .card-sm { padding: 14px; }
-  .metric-label { font-size: 10px; letter-spacing: .7px; margin-bottom: 6px; }
-  .metric-value { font-size: 22px !important; font-weight: 700; letter-spacing: -.5px; }
-  .metric-sub { font-size: 11px; }
-
-  /* ── Grids: 2 columns for metric tiles (not 1 col) ── */
-  .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px; }
-  .grid-3 { gap: 10px; margin-bottom: 12px; }
-  .grid-2 { margin-bottom: 12px; }
-
-  /* ── Section titles: minimal uppercase label ── */
-  .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
-    color: var(--text3); font-weight: 600; margin-bottom: 10px; }
-
-  /* ── Cards ── */
-  .card { padding: 14px; margin-bottom: 10px; }
-
-  /* ── Progress bars: thin & clean ── */
-  .progress-wrap { height: 3px; border-radius: 2px; margin-top: 6px; }
-
-  /* ── Charts: shorter on phone to save vertical space ── */
-  #page-dashboard .chart-wrap { height: 160px !important; }
-  #page-cashflow .chart-wrap { height: 150px !important; }
-  #page-assets .chart-wrap { height: 150px !important; }
-  #page-debts .chart-wrap { height: 150px !important; }
-
-  /* ── Cashflow: hide table on phone (breakdown cards are cleaner) ── */
+  /* Hide cashflow table — breakdown sudah cukup */
   #page-cashflow .table-wrap,
   #page-cashflow .table-scroll-hint { display: none !important; }
   .cf-date-col { display: none !important; }
 
-  /* ── Alert items: compact ── */
-  .alert-item { padding: 8px 10px; font-size: 12px; border-radius: 8px; }
-
-  /* ── Filter bar ── */
-  .filter-bar { flex-wrap: wrap; gap: 6px; }
-  .filter-btn { font-size: 12px; padding: 6px 12px; border-radius: 16px; }
-
-  /* ── Transaction list ── */
-  .tx-item { padding: 9px 0; }
-  .tx-info { margin: 0 10px; }
-
-  /* ── Breakdown rows ── */
-  .breakdown-row { grid-template-columns: 80px 1fr 68px; gap: 6px; padding: 6px 0; }
-  .breakdown-pct { display: none; }
-
-  /* ── Debt & goal items ── */
-  .debt-meta { font-size: 10px; gap: 6px; }
-  .debt-item { padding: 10px 0; }
-  .goal-item { padding: 10px 0; }
-
-  /* ── Touch targets ── */
-  .btn-action-menu { min-width: 36px; min-height: 36px; padding: 8px 10px; font-size: 16px; }
-  .btn-delete, .btn-edit { min-width: 36px; min-height: 36px; padding: 8px; font-size: 14px; }
+  /* Touch targets */
+  .btn-action-menu { min-width: 36px; min-height: 36px; }
+  .btn-delete, .btn-edit { min-width: 36px; min-height: 36px; }
   .action-menu { right: 0; left: auto; max-width: calc(100vw - 32px); }
 }
 
