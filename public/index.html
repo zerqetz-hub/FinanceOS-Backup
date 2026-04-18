@@ -364,15 +364,80 @@
 #landingPage .landing-cta-bottom p { font-size:15px;color:#6b6960;margin:0 0 24px; }
 #landingPage .landing-footer { display:flex;justify-content:space-between;padding:18px 40px;border-top:1px solid rgba(0,0,0,.08);font-size:12px;color:#9b9a93; }
 
-/* ── Responsive ── */
+/* ── Responsive: Tablet (≤860px) ── */
 @media (max-width:860px) {
-  #landingPage .landing-hero { flex-direction:column;padding:40px 20px 48px;gap:32px; }
-  #landingPage .landing-hero-content { flex:none;width:100%; }
+  #landingPage .landing-hero { flex-direction:column; padding:40px 20px 48px; gap:28px; }
+  #landingPage .landing-hero-content { flex:none; width:100%; }
   #landingPage .landing-title { font-size:30px; }
   #landingPage .landing-nav { padding:0 16px; }
   #landingPage .landing-features { padding:40px 16px; }
   #landingPage .landing-cta-bottom { padding:40px 16px; }
-  #landingPage .landing-footer { padding:16px;flex-direction:column;gap:4px; }
+  #landingPage .landing-footer { padding:16px; flex-direction:column; gap:4px; }
+
+  /* Card stack: still works at tablet width, just tweak height */
+  #landingPage .hs-stack { height: 440px; }
+  #landingPage .hs-card { height: 440px; }
+  #landingPage .hs-card-body { height: 440px; }
+
+  /* Stats: 2x2 wrap */
+  #landingPage .lp-stats { flex-wrap: wrap; padding: 0 16px; }
+  #landingPage .lp-stat { flex: 1 1 50%; border-right: none; padding: 20px 12px;
+    border-bottom: 1px solid rgba(0,0,0,.07); }
+  [data-theme=dark] #landingPage .lp-stat { border-color: rgba(255,255,255,.07); }
+  #landingPage .lp-stat:nth-child(odd) { border-right: 1px solid rgba(0,0,0,.07); }
+  [data-theme=dark] #landingPage .lp-stat:nth-child(odd) { border-right-color: rgba(255,255,255,.07); }
+  #landingPage .lp-stat-num { font-size:26px; }
+}
+
+/* ── Responsive: Phone (≤600px) ── */
+@media (max-width:600px) {
+  /* Nav */
+  #landingPage .landing-nav { padding: 0 16px; height: 52px; }
+  #landingPage .btn-landing-login { display: none; }
+
+  /* Hero */
+  #landingPage .landing-hero { padding: 28px 16px 36px; gap: 24px; }
+  #landingPage .landing-title { font-size: 26px; letter-spacing: -.3px; }
+  #landingPage .landing-sub { font-size: 14px; margin-bottom: 20px; }
+  #landingPage .landing-cta { flex-direction: column; gap: 10px; }
+  #landingPage .btn-cta-primary,
+  #landingPage .btn-cta-secondary { width: 100%; text-align: center; padding: 14px 20px; }
+
+  /* Card stack: 1 kartu penuh, tanpa silhouette kiri/kanan */
+  #landingPage .hs-stack { height: 360px; overflow: hidden; }
+  #landingPage .hs-card { width: 100% !important; height: 360px; border-radius: 14px; }
+  #landingPage .hs-card-body { height: 360px; }
+  #landingPage .hs-card.hs-active { left: 0 !important; }
+  #landingPage .hs-card.hs-prev {
+    left: -100% !important; opacity: 0 !important; transform: none !important;
+  }
+  #landingPage .hs-card.hs-next {
+    left: 100% !important; opacity: 0 !important; transform: none !important;
+  }
+  #landingPage .hs-card.hs-hidden { left: 0 !important; }
+  #landingPage .hs-peek-strip { display: none !important; }
+
+  /* Animasi slide untuk mobile */
+  @keyframes hsFromRight { from{left:100%;opacity:.4;transform:none} to{left:0%;opacity:1;transform:none} }
+  @keyframes hsFromLeft  { from{left:-100%;opacity:.4;transform:none} to{left:0%;opacity:1;transform:none} }
+
+  /* Stats: 2x2 */
+  #landingPage .lp-stats { flex-wrap: wrap; padding: 0 16px; }
+  #landingPage .lp-stat { flex: 1 1 50%; border-right: none; padding: 18px 10px; }
+  #landingPage .lp-stat:nth-child(odd) { border-right: 1px solid rgba(0,0,0,.07); }
+  [data-theme=dark] #landingPage .lp-stat:nth-child(odd) { border-right-color: rgba(255,255,255,.07); }
+  #landingPage .lp-stat-num { font-size: 24px; }
+
+  /* Features */
+  #landingPage .landing-features-heading h2 { font-size: 22px; }
+  #landingPage .landing-feature-card { padding: 18px; }
+
+  /* CTA bottom */
+  #landingPage .landing-cta-bottom h2 { font-size: 22px; }
+  #landingPage .landing-cta-bottom p { font-size: 13px; }
+
+  /* Blobs: disable on phone to save paint */
+  #landingPage .lp-blob { display: none; }
 }
 
 /* ── Keyframe: fade-up entrance ── */
