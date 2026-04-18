@@ -39,7 +39,7 @@ function renderAlerts() {
 function renderNWSimulator() {
   const canvas = document.getElementById('nwSimChart');
   if (!canvas) return;
-  if (S.cashflows.length < 2) {
+  if (allCFRows().length < 2) {
     canvas.parentElement.innerHTML = '<div class="empty-state"><div class="icon">📈</div>Butuh minimal 2 bulan data untuk simulasi</div>';
     return;
   }
@@ -47,7 +47,7 @@ function renderNWSimulator() {
   const scenarioEl = document.getElementById('nwSimScenario');
   const months     = parseInt(horizonEl?.value || '12', 10);
   const scenario   = scenarioEl?.value || 'base';
-  const cfs = sortedCF();
+  const cfs = allCFRows();
   // Fix #10: saldo = income - expenses
   const savings = cfs.map(c => c.income - Object.values(c.expenses || {}).reduce((a,b) => a+b, 0));
   const avgSaving = savings.reduce((a,b) => a+b, 0) / savings.length;

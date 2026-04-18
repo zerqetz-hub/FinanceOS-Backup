@@ -77,7 +77,7 @@ function renderEmergency() {
       <div style="font-size:13px;color:var(--text3)">Mencukupi <strong style="color:var(--text)">${covered} bulan</strong> pengeluaran • Sisa: <strong style="color:var(--text)">${fmtS(Math.max(0,target-saved))}</strong></div>
     </div>`;
   document.getElementById('ef-metrics').innerHTML = `
-    <div class="card-sm"><div class="metric-label">Pengeluaran Rata-rata</div><div class="metric-value">${fmtS(avg)}</div><div class="metric-sub">${S.cashflows.length} bulan data</div></div>
+    <div class="card-sm"><div class="metric-label">Pengeluaran Rata-rata</div><div class="metric-value">${fmtS(avg)}</div><div class="metric-sub">${allCFRows().length} bulan data</div></div>
     <div class="card-sm"><div class="metric-label">Target (6 bulan)</div><div class="metric-value c-blue">${fmtS(target)}</div></div>
     <div class="card-sm"><div class="metric-label">Dana Tersimpan</div><div class="metric-value c-green">${fmtS(saved)}</div><div class="metric-sub">Dari aset tipe Cash</div></div>`;
   renderEfChart();

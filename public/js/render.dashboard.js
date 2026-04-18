@@ -4,7 +4,7 @@
 // ---- DASHBOARD ----
 // Aggregates cashflows by quarter or year for dashboard metrics
 function _aggregateCFs() {
-  const cfs = sortedCF();
+  const cfs = allCFRows();
   if (_dashFilter === 'Bulanan') return { slices: cfs.slice(-6), cf: cfs[cfs.length-1] };
 
   if (_dashFilter === 'Kuartal') {

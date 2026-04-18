@@ -66,14 +66,45 @@ async function toggleCurrency() {
 }
 
 // Computed helpers
-const sortedCF     = () => [...S.cashflows].sort((a, b) => a.month.localeCompare(b.month));
-const latestCF     = () => { const s = sortedCF(); return s.length ? s[s.length - 1] : null; };
-const cfExp        = cf => cf ? Object.values(cf.expenses || {}).reduce((a, b) => a + b, 0) : 0;
-const cfSaldo      = cf => cf ? (cf.income - cfExp(cf)) : 0;
+const sortedCF = () => [...S.cashflows].sort((a, b) => a.month.localeCompare(b.month));
+const cfExp    = cf => cf ? Object.values(cf.expenses || {}).reduce((a, b) => a + b, 0) : 0;
+const cfSaldo  = cf => cf ? (cf.income - cfExp(cf)) : 0;
+
+// Hitung income/expense dari transaksi harian untuk satu bulan (YYYY-MM)
+function txMonthData(month) {
+  const txs = (S.transactions || []).filter(t => (t.dateAdded || '').slice(0, 7) === month);
+  if (!txs.length) return null;
+  let income = 0;
+  const expenses = {}, incomeBreakdown = {};
+  txs.forEach(t => {
+    if (t.amount > 0) {
+      income += t.amount;
+      const src = t.catName || 'Lainnya';
+      incomeBreakdown[src] = (incomeBreakdown[src] || 0) + t.amount;
+    } else {
+      const cat = t.catName || 'Lainnya';
+      expenses[cat] = (expenses[cat] || 0) + Math.abs(t.amount);
+    }
+  });
+  return { month, income, expenses, incomeBreakdown, incomeNotes: {}, expenseNotes: {}, fromTx: true };
+}
+
+// Semua bulan yang punya data: transaksi menggantikan CF manual bila keduanya ada
+function allCFRows() {
+  const manualMap = {};
+  S.cashflows.forEach(c => { manualMap[c.month] = c; });
+  const txMonths = [...new Set(
+    (S.transactions || []).map(t => (t.dateAdded || '').slice(0, 7)).filter(m => /^\d{4}-\d{2}$/.test(m))
+  )];
+  const allMonths = [...new Set([...Object.keys(manualMap), ...txMonths])].sort();
+  return allMonths.map(month => txMonthData(month) || manualMap[month]);
+}
+
+const latestCF    = () => { const r = allCFRows(); return r.length ? r[r.length - 1] : null; };
 const totalAssets  = () => S.assets.reduce((s, a) => s + a.value, 0);
 const totalDebts   = () => S.debts.reduce((s, d) => s + getProjectedSisa(d), 0);
 const netWorth     = () => totalAssets() - totalDebts();
-const avgMonthExp  = () => !S.cashflows.length ? 0 : S.cashflows.reduce((s, cf) => s + cfExp(cf), 0) / S.cashflows.length;
+const avgMonthExp  = () => { const r = allCFRows(); return r.length ? r.reduce((s, c) => s + cfExp(c), 0) / r.length : 0; };
 const efTarget     = () => avgMonthExp() * 6;
 const efSaved      = () => S.assets.filter(a => a.type === 'Cash').reduce((s, a) => s + a.value, 0);
 const totalCicilan = () => S.debts.reduce((s, d) => s + d.cicilan, 0);

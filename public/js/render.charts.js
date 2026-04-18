@@ -64,7 +64,7 @@ function renderDashCharts(slices, cf) {
 
 /** Render the cashflow trend line chart. */
 function renderCfChart() {
-  const {grid,text} = gc(); const cfs = sortedCF().slice(-12);
+  const {grid,text} = gc(); const cfs = allCFRows().slice(-12);
   dc('cashflowHistChart');
   const el = document.getElementById('cashflowHistChart');
   if (!el || !cfs.length) return;
@@ -83,7 +83,7 @@ function renderCfChart() {
 
 /** Render the net-worth history area chart. */
 function renderNWChart() {
-  const {grid,text} = gc(); const cfs = sortedCF().slice(-12);
+  const {grid,text} = gc(); const cfs = allCFRows().slice(-12);
   const nwNow = netWorth(); let data = [nwNow];
   for (let i = cfs.length-1; i >= 1; i--) {
     const s = cfs[i].income - cfExp(cfs[i]); data.unshift(data[0] - s);
@@ -104,7 +104,7 @@ function renderNWChart() {
 
 /** Render the emergency-fund gauge/progress chart. */
 function renderEfChart() {
-  const {grid,text} = gc(); const cfs = sortedCF().slice(-6);
+  const {grid,text} = gc(); const cfs = allCFRows().slice(-6);
   const target = efTarget(); const saved = efSaved();
   const data = cfs.map((_,i,arr) => Math.min(target, saved*(i+1)/arr.length));
   const maxDataVal = Math.max(...data, target > 0 ? 0 : 1, 1);
