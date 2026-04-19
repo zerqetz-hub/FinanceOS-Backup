@@ -1053,8 +1053,8 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 
 /* ─── PHONE (≤ 600px) ────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  /* Nav: match landing page height & padding */
-  .nav { padding-left: 16px; padding-right: 16px; height: calc(52px + env(safe-area-inset-top, 0px)); min-height: calc(52px + env(safe-area-inset-top, 0px)); }
+  /* Nav: match landing page — same height, padding, and background */
+  .nav { padding-left: 16px; padding-right: 16px; height: calc(52px + env(safe-area-inset-top, 0px)); min-height: calc(52px + env(safe-area-inset-top, 0px)); background: var(--bg); border-bottom-color: transparent; }
   .layout { height: calc(100vh - 52px - env(safe-area-inset-top, 0px)); }
   .sidebar { height: calc(100vh - 52px - env(safe-area-inset-top, 0px)); top: calc(52px + env(safe-area-inset-top, 0px)); }
 
