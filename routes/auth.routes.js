@@ -72,7 +72,7 @@ router.get('/me', async (req, res) => {
     const user   = await db.findUserById(req.userId);
     if (!user) return res.status(404).json({ error: 'User tidak ditemukan.' });
     const avatar = await db.getAvatar(req.userId);
-    res.json({ id: user.id, email: user.email, username: user.username, avatar });
+    res.json({ id: user.id, email: user.email, username: user.username, avatar, createdAt: user.created_at });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
