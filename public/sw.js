@@ -1,6 +1,6 @@
 'use strict';
 // KepingUang Service Worker — cache app shell, network-first for API
-const CACHE = 'kepinguang-v5';
+const CACHE = 'kepinguang-v6';
 
 // Hanya cache static assets — jangan cache '/' karena bisa simpan versi lama
 const STATIC_ASSETS = [
