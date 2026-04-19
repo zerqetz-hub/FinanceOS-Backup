@@ -1053,12 +1053,17 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 
 /* ─── PHONE (≤ 600px) ────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
+  /* Nav: match landing page height & padding */
+  .nav { padding-left: 16px; padding-right: 16px; height: calc(52px + env(safe-area-inset-top, 0px)); min-height: calc(52px + env(safe-area-inset-top, 0px)); }
+  .layout { height: calc(100vh - 52px - env(safe-area-inset-top, 0px)); }
+  .sidebar { height: calc(100vh - 52px - env(safe-area-inset-top, 0px)); top: calc(52px + env(safe-area-inset-top, 0px)); }
+
   .main { padding: 12px 14px calc(68px + env(safe-area-inset-bottom, 8px)); }
 
   /* Hide noise */
   .page-sub, .tutorial-btn { display: none !important; }
   .save-checkpoint-btn, .restore-checkpoint-btn,
-  .currency-btn, .save-badge { display: none !important; }
+  .currency-btn, .save-badge, .theme-btn { display: none !important; }
 
   /* Typography */
   .page-title { font-size: 17px !important; }
