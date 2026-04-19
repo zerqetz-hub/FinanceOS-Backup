@@ -6,8 +6,10 @@ async function addGoal() {
   await withSubmitLock(async () => {
     const name = v('f_gname').trim();
     if (!name) { showFormError('Nama goal wajib diisi.'); return; }
+    const target = vn('f_gtarget');
+    if (!target || target <= 0) { showFormError('Target goal wajib diisi dan harus lebih dari 0.'); return; }
     const id = uid(); const dateAdded = new Date().toISOString().slice(0,10);
-    const newG = {id, name, target:vn('f_gtarget'), current:vn('f_gcurrent'), deadline:v('f_gdeadline')||'', color:v('f_gcolor'), dateAdded};
+    const newG = {id, name, target, current:vn('f_gcurrent'), deadline:v('f_gdeadline')||'', color:v('f_gcolor'), dateAdded};
     S.goals.push(newG); closeModal(); renderAll();
     try {
       const _r = await API.post('/api/goals', newG);

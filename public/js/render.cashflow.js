@@ -49,9 +49,16 @@ function renderCashflow() {
     ? (S.transactions || []).filter(t => (t.dateAdded || '').slice(0, 7) === cf.month).length
     : 0;
 
+  // Toggle manual add buttons vs "lihat transaksi" link
+  const manualBtns = document.getElementById('cfManualAddBtns');
+  const txLink = document.getElementById('cfTxLink');
+  if (manualBtns) manualBtns.style.display = cf?.fromTx ? 'none' : 'inline-flex';
+  if (txLink) txLink.style.display = cf?.fromTx ? 'inline-flex' : 'none';
+
+  const savRNum = +savR;
   document.getElementById('cf-metrics').innerHTML = `
-    ${cf?.fromTx ? `<div class="card" style="grid-column:1/-1;padding:10px 14px;background:var(--accent-light);border:1px solid var(--accent);border-radius:10px;font-size:13px;color:var(--accent)">📊 Data dihitung otomatis dari <strong>${txCount} catatan harian</strong>. Edit transaksi untuk mengubah data ini.</div>` : ''}
-    <div class="card-sm"><div class="metric-label">Saving Rate</div><div class="metric-value c-green">${savR}%</div><div class="metric-sub">bulan ini</div><div class="progress-wrap"><div class="progress-bar bar-green" style="width:${Math.min(100,+savR)}%"></div></div></div>
+    ${cf?.fromTx ? `<div class="card" style="grid-column:1/-1;padding:10px 14px;background:var(--accent-light);border:1px solid var(--accent);border-radius:10px;font-size:13px;color:var(--accent)">📊 Data dihitung otomatis dari <strong>${txCount} catatan harian</strong>. <button onclick="showPage('transactions')" style="background:none;border:none;color:var(--accent);font-weight:600;cursor:pointer;padding:0;font-size:13px">→ Edit Transaksi</button></div>` : ''}
+    <div class="card-sm"><div class="metric-label">Saving Rate</div><div class="metric-value ${savRNum>=0?'c-green':'c-red'}">${savR}%</div><div class="metric-sub">bulan ini</div><div class="progress-wrap"><div class="progress-bar bar-green" style="width:${Math.max(0,Math.min(100,savRNum))}%"></div></div></div>
     <div class="card-sm"><div class="metric-label">Saldo Bulanan</div><div class="metric-value ${sav>=0?'c-green':'c-red'}">${fmtS(sav)}</div><div class="metric-sub">bulan ini</div></div>
     <div class="card-sm"><div class="metric-label">Rata-rata Pengeluaran</div><div class="metric-value">${fmtS(avgExp)}</div><div class="metric-sub">${cfs.length} bulan data</div></div>`;
 
@@ -85,7 +92,10 @@ function renderCashflow() {
       </div>`;
     } else {
       if (incMonthEl) incMonthEl.textContent = cf ? mLabel(cf.month) : '';
-      incBreakEl.innerHTML = `<div class="empty-state"><div class="icon">💰</div>Gunakan + Tambah Income untuk mencatat breakdown per kategori</div>`;
+      const emptyMsg = cf?.fromTx
+        ? 'Tidak ada transaksi pemasukan bulan ini'
+        : 'Gunakan + Tambah Pemasukan untuk mencatat breakdown per kategori';
+      incBreakEl.innerHTML = `<div class="empty-state"><div class="icon">💰</div>${emptyMsg}</div>`;
     }
   }
 

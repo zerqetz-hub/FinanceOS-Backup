@@ -1182,8 +1182,11 @@
           <select id="cfMonthSelect" onchange="setCFMonth(this.value)" style="padding:5px 10px;border:1px solid var(--border);border-radius:20px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:12px;cursor:pointer;outline:none"></select>
           <button class="history-btn" onclick="shiftCFMonth(1)" id="cfMonthNext" title="Bulan berikutnya">›</button>
           <!-- Kategori dikelola langsung dari form tambah income/expense -->
-          <button class="income-btn" onclick="openModal('income')"><span>+ Tambah Income</span></button>
-          <button class="btn btn-primary" onclick="openModal('expense')"><span>+ Tambah Expense</span></button>
+          <span id="cfManualAddBtns" style="display:inline-flex;gap:8px">
+            <button class="income-btn" onclick="openModal('income')"><span>+ Tambah Pemasukan</span></button>
+            <button class="btn btn-primary" onclick="openModal('expense')"><span>+ Tambah Pengeluaran</span></button>
+          </span>
+          <button id="cfTxLink" style="display:none" class="btn btn-ghost" onclick="showPage('transactions')" title="Buka catatan harian">→ Lihat Transaksi</button>
         </div>
       </div>
       <div class="grid-3" id="cf-metrics"></div>
