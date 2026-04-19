@@ -2,43 +2,18 @@
 // KepingUang Service Worker — cache app shell, network-first for API
 const CACHE = 'kepinguang-v1';
 
-const APP_SHELL = [
-  '/',
+// Hanya cache static assets — jangan cache '/' karena bisa simpan versi lama
+const STATIC_ASSETS = [
   '/app.css',
   '/manifest.json',
   '/icons/icon.svg',
-  '/js/api.js',
-  '/js/helpers.js',
-  '/js/state.js',
-  '/js/ui.js',
-  '/js/auth.js',
-  '/js/main.js',
-  '/js/render.core.js',
-  '/js/render.dashboard.js',
-  '/js/render.cashflow.js',
-  '/js/render.assets.js',
-  '/js/render.debts.js',
-  '/js/render.planning.js',
-  '/js/render.transactions.js',
-  '/js/render.charts.js',
-  '/js/actions.cashflow.js',
-  '/js/actions.assets.js',
-  '/js/actions.debts.js',
-  '/js/actions.goals.js',
-  '/js/actions.transactions.js',
-  '/js/actions.edit-modal.js',
-  '/js/actions.export.js',
-  '/js/transactions.js',
-  '/js/checkpoint.js',
-  '/js/profile.js',
-  '/js/tutorial.js',
 ];
 
-// Install: cache app shell
+// Install: cache minimal assets, jangan block activation
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
-      .then(cache => cache.addAll(APP_SHELL))
+      .then(cache => cache.addAll(STATIC_ASSETS).catch(() => {}))
       .then(() => self.skipWaiting())
   );
 });
@@ -70,20 +45,24 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Cache-first untuk app shell dan static assets
+  // Network-first untuk dokumen HTML (selalu fresh)
+  if (e.request.destination === 'document') {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match('/app.css').then(() => fetch(e.request)))
+    );
+    return;
+  }
+
+  // Cache-first untuk static assets (CSS, icons, manifest)
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
       return fetch(e.request).then(res => {
-        // Cache response baru untuk same-origin assets
         if (res.ok && url.origin === location.origin) {
           const clone = res.clone();
           caches.open(CACHE).then(cache => cache.put(e.request, clone));
         }
         return res;
-      }).catch(() => {
-        // Offline fallback: kembalikan halaman utama
-        if (e.request.destination === 'document') return caches.match('/');
       });
     })
   );

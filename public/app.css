@@ -291,9 +291,9 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 .form-err{font-size:12px;color:var(--red);margin-top:8px;padding:8px 12px;background:var(--red-light);border-radius:6px;border-left:3px solid var(--red);display:none;line-height:1.5}
 .form-err.show{display:block}
 /* Loading overlay */
-#loadingOverlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:12px}
-#loadingOverlay .logo{width:48px;height:48px;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:700}
-#loadingOverlay .msg{font-size:13px;color:var(--text3)}
+#loadingOverlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:12px;padding:20px;text-align:center}
+#loadingOverlay .logo{width:56px;height:56px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;font-weight:700;box-shadow:0 4px 20px rgba(26,107,74,.25)}
+#loadingOverlay .msg{font-size:13px;color:var(--text3);line-height:1.6;max-width:200px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
 /* ── AUTH OVERLAY ── */

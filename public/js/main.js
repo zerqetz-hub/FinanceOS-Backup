@@ -197,12 +197,26 @@ async function bootApp() {
     if (btn) btn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
   }
 
+  // Tampilkan pesan "menghubungkan..." setelah 3 detik (Railway cold start bisa 20-30 detik)
+  const msgEl = document.querySelector('#loadingOverlay .msg');
+  const wakeTimer = setTimeout(() => {
+    if (msgEl) msgEl.innerHTML = 'Menghubungkan ke server...<br><span style="font-size:11px;opacity:.6">Server sedang menyala, mohon tunggu</span>';
+  }, 3000);
+
   let loggedIn = false;
   try {
-    const r  = await fetch('/api/auth/status');
+    // Timeout 35 detik — lebih dari cukup untuk Railway cold start
+    const ctrl = new AbortController();
+    const tOut = setTimeout(() => ctrl.abort(), 35000);
+    const r  = await fetch('/api/auth/status', { signal: ctrl.signal });
+    clearTimeout(tOut);
     const st = await r.json();
     loggedIn = !!st.loggedIn;
-  } catch {}
+  } catch {
+    // Server tidak bisa dihubungi — tetap lanjutkan (tampilkan landing)
+  } finally {
+    clearTimeout(wakeTimer);
+  }
 
   if (!loggedIn) {
     const ov      = document.getElementById('loadingOverlay');
