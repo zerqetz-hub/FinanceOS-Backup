@@ -5,9 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>KepingUang — Personal Finance System</title>
 <meta name="theme-color" content="#1a6b4a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="description" content="Kelola keuangan pribadi dengan cerdas — dashboard lengkap untuk pemasukan, pengeluaran, aset, hutang, dan tujuan finansial Anda.">
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<!-- iOS PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KepingUang">
+<link rel="apple-touch-icon" href="/icons/icon.svg">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <link rel="stylesheet" href="app.css">
@@ -1813,6 +1818,73 @@ function hMakeLineChart(canvas,tooltipId,labels,datasets,ttIds,d1,d2){
     if (lp.style.display !== 'none') { mo.disconnect(); setTimeout(init, 80); }
   });
   mo.observe(lp, { attributes: true, attributeFilter: ['style'] });
+})();
+</script>
+
+<!-- ── PWA: Service Worker + iOS Install Banner ─────────────────────────── -->
+<style>
+#pwa-banner {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+  background: #1a1915; color: #f0ede4;
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: flex-start; gap: 12px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,.3);
+  animation: pwa-slide-up .35s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes pwa-slide-up { from{transform:translateY(100%)} to{transform:translateY(0)} }
+#pwa-banner .pwa-icon { width:44px;height:44px;border-radius:10px;background:#1a6b4a;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0;font-family:'DM Sans',sans-serif; }
+#pwa-banner .pwa-body { flex:1;min-width:0; }
+#pwa-banner .pwa-title { font-size:14px;font-weight:600;margin-bottom:2px; }
+#pwa-banner .pwa-desc { font-size:12px;color:#9b9a93;line-height:1.4; }
+#pwa-banner .pwa-steps { font-size:11px;color:#6b6960;margin-top:6px;line-height:1.5; }
+#pwa-banner .pwa-close { background:none;border:none;color:#9b9a93;font-size:20px;cursor:pointer;padding:0;flex-shrink:0;line-height:1; }
+</style>
+
+<script>
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .catch(err => console.warn('SW registration failed:', err));
+  });
+}
+
+// iOS Install Banner — tampilkan hanya di Safari iOS yang belum install
+(function() {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true;
+  const dismissed = localStorage.getItem('pwa_banner_dismissed');
+  if (!isIOS || isStandalone || dismissed) return;
+
+  // Tunggu user login (app div muncul) baru tampilkan banner
+  const showBanner = () => {
+    if (document.getElementById('pwa-banner')) return;
+    const banner = document.createElement('div');
+    banner.id = 'pwa-banner';
+    banner.innerHTML = `
+      <div class="pwa-icon">K</div>
+      <div class="pwa-body">
+        <div class="pwa-title">Install KepingUang di iPhone</div>
+        <div class="pwa-desc">Akses lebih cepat langsung dari Home Screen</div>
+        <div class="pwa-steps">Ketuk <strong style="color:#f0ede4">􀈂 Share</strong> → <strong style="color:#f0ede4">Tambahkan ke Layar Utama</strong></div>
+      </div>
+      <button class="pwa-close" onclick="document.getElementById('pwa-banner').remove();localStorage.setItem('pwa_banner_dismissed','1')">✕</button>`;
+    document.body.appendChild(banner);
+    // Auto-dismiss setelah 15 detik
+    setTimeout(() => {
+      const b = document.getElementById('pwa-banner');
+      if (b) { b.style.transition='transform .3s'; b.style.transform='translateY(120%)'; setTimeout(()=>b.remove(),300); }
+    }, 15000);
+  };
+
+  // Tampilkan saat user sudah login (app section visible)
+  const appEl = document.getElementById('app');
+  if (appEl) {
+    const obs = new MutationObserver(() => {
+      if (appEl.style.display !== 'none') { obs.disconnect(); setTimeout(showBanner, 2000); }
+    });
+    obs.observe(appEl, { attributes: true, attributeFilter: ['style'] });
+  }
 })();
 </script>
 </body>

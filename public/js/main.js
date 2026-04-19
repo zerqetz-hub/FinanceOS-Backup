@@ -173,6 +173,15 @@ async function bootApp() {
     }
   } catch {}
 
+  // PWA shortcut: ?shortcut=tx → langsung buka modal tambah transaksi
+  try {
+    const shortcut = new URLSearchParams(location.search).get('shortcut');
+    if (shortcut === 'tx') {
+      history.replaceState(null, '', '/');
+      setTimeout(() => { showPage('transactions'); openAddTxModal(); }, 400);
+    }
+  } catch {}
+
   // Tutorial muncul setelah dashboard selesai render (tutorial.js handles version & state)
   setTimeout(() => _checkPageTutorial('dashboard'), 1200);
 }

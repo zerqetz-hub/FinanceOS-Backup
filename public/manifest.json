@@ -1,0 +1,37 @@
+{
+  "name": "KepingUang",
+  "short_name": "KepingUang",
+  "description": "Kelola keuangan pribadi dengan cerdas — catat pemasukan, pengeluaran, aset, hutang, dan tujuan finansialmu.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f4f0",
+  "theme_color": "#1a6b4a",
+  "orientation": "portrait-primary",
+  "lang": "id",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Tambah Transaksi",
+      "short_name": "Transaksi",
+      "description": "Catat transaksi baru",
+      "url": "/?shortcut=tx",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }]
+    }
+  ]
+}
