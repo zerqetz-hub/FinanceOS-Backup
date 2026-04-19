@@ -83,7 +83,7 @@ function openPriceUpdateModal(assetId) {
     '<div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;margin-bottom:12px">' +
     '<div class="section-title" style="margin-bottom:10px">Tambah Data Nilai Baru</div>' +
     '<div class="form-grid"><div class="form-group"><label>Tanggal Update</label><input type="date" id="ph_date" value="' + today + '"></div>' +
-    '<div class="form-group"><label>Nilai Aset (Rp)</label><input type="number" id="ph_value" placeholder="0" min="0" value="' + a.value + '"></div></div></div>' +
+    '<div class="form-group"><label>Nilai Aset (Rp)</label><input type="number" id="ph_value" placeholder="0" min="0" inputmode="decimal" value="' + a.value + '"></div></div></div>' +
     '<div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button>' +
     '<button class="btn btn-primary" onclick="savePriceEntry(\'' + assetId + '\')">💾 Tambah Data</button></div>';
   // Enter key
@@ -155,7 +155,7 @@ function openTopUpModal(assetId) {
     '</strong> &nbsp;·&nbsp; Nilai pasar: <strong>' + fmtS(a.value) + '</strong></div>' +
     '<div class="form-grid">' +
     '<div class="form-group"><label>Tanggal Pembelian</label><input type="date" id="tu_date" value="' + new Date().toISOString().slice(0,10) + '"></div>' +
-    '<div class="form-group"><label>Jumlah Modal Tambahan (Rp)</label><input type="number" id="tu_amount" placeholder="0" min="1" autofocus></div>' +
+    '<div class="form-group"><label>Jumlah Modal Tambahan (Rp)</label><input type="number" id="tu_amount" placeholder="0" min="1" inputmode="decimal" autofocus></div>' +
     '</div>' +
     '<div style="font-size:12px;color:var(--text3);margin-bottom:14px">Modal dan nilai pasar aset akan naik sejumlah ini. Gunakan <strong>Update Nilai</strong> untuk update harga pasar saja.</div>' +
     '<div style="display:flex;gap:8px;justify-content:flex-end">' +
@@ -213,7 +213,7 @@ function openTransferModal(assetId) {
     '<strong>' + esc(a.name) + '</strong> &nbsp;·&nbsp; Nilai: <strong>' + fmtS(a.value) +
     '</strong> &nbsp;·&nbsp; Modal: <strong>' + fmtS(a.cost) + '</strong></div>' +
     '<div class="form-grid"><div class="form-group"><label>Jumlah Transfer (Rp)</label>' +
-    '<input type="number" id="tr_amount" placeholder="0" min="1"></div></div>' +
+    '<input type="number" id="tr_amount" placeholder="0" min="1" inputmode="decimal"></div></div>' +
     '<div class="form-group" style="margin-bottom:14px"><label>Tujuan Transfer</label>' +
     '<select id="tr_target_type" onchange="_toggleTransferTarget()">' +
     '<option value="existing">Aset yang sudah ada</option>' +

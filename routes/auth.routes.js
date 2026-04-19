@@ -103,7 +103,7 @@ router.put('/password', async (req, res) => {
     await db.destroyAllSessionsForUser(req.userId);
     res.setHeader('Set-Cookie', auth.buildClearCookie());
     res.json({ ok: true });
-  } catch (e) { console.error('Change password error:', e.message); res.status(500).json({ error: e.message }); }
+  } catch (e) { console.error('Change password error:', e.message); res.status(500).json({ error: 'Gagal mengganti password. Coba lagi.' }); }
 });
 
 // Fix: whitelist MIME — hanya jpeg, png, webp. SVG diblokir karena bisa XSS.
@@ -156,7 +156,7 @@ router.delete('/account', async (req, res) => {
     await db.deleteUser(req.userId);
     res.setHeader('Set-Cookie', auth.buildClearCookie());
     res.json({ ok: true });
-  } catch (e) { console.error('Delete account error:', e.message); res.status(500).json({ error: e.message }); }
+  } catch (e) { console.error('Delete account error:', e.message); res.status(500).json({ error: 'Gagal menghapus akun. Coba lagi.' }); }
 });
 
 module.exports = router;

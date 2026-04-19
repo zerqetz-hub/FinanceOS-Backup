@@ -79,7 +79,7 @@ function openBalanceUpdateModal(debtId) {
       <div class="section-title" style="margin-bottom:10px">Tambah Data Saldo Baru</div>
       <div class="form-grid">
         <div class="form-group"><label>Tanggal Update</label><input type="date" id="bh_date" value="${today}"></div>
-        <div class="form-group"><label>Sisa Hutang (Rp)</label><input type="number" id="bh_sisa" placeholder="0" min="0" value="${d.sisa}"></div>
+        <div class="form-group"><label>Sisa Hutang (Rp)</label><input type="number" id="bh_sisa" placeholder="0" min="0" inputmode="decimal" value="${d.sisa}"></div>
       </div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end">

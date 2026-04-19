@@ -115,7 +115,10 @@ function showPage(id, btn) {
   // Sync bottom nav active state
   const bottomNavPages = ['dashboard','cashflow','assets','debts'];
   document.querySelectorAll('.bottom-nav-item[data-page]').forEach(n => {
-    n.classList.toggle('active', n.dataset.page === id);
+    const isActive = n.dataset.page === id;
+    n.classList.toggle('active', isActive);
+    if (isActive) n.setAttribute('aria-current', 'page');
+    else n.removeAttribute('aria-current');
   });
   const moreBtn = document.getElementById('bottomNavMoreBtn');
   if (moreBtn) moreBtn.classList.toggle('active', !bottomNavPages.includes(id));

@@ -86,7 +86,7 @@ function openAddTxModal() {
   document.getElementById('modalContent').innerHTML = `
     <div class="form-grid">
       <div class="form-group full"><label>Nama Transaksi</label><input type="text" id="f_tname" placeholder="Contoh: Makan siang" autofocus></div>
-      <div class="form-group"><label>Jumlah (Rp)</label><input type="number" id="f_tamt" placeholder="0" min="0"></div>
+      <div class="form-group"><label>Jumlah (Rp)</label><input type="number" id="f_tamt" placeholder="0" min="0" inputmode="decimal"></div>
       <div class="form-group"><label>Jenis</label><select id="f_ttype" onchange="updateTxCat(this.value)">
         <option value="out">Pengeluaran (−)</option>
         <option value="in">Pemasukan (+)</option>

@@ -132,7 +132,7 @@ async function _loadCPList() {
       el.appendChild(row);
     });
   } catch (e) {
-    el.innerHTML = `<div style="color:var(--red);font-size:13px;padding:8px 0">Gagal memuat: ${e.message}</div>`;
+    el.innerHTML = '<div style="color:var(--red);font-size:13px;padding:8px 0">Gagal memuat snapshot. Coba muat ulang.</div>';
   }
 }
 

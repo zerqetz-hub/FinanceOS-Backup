@@ -13,8 +13,19 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="KepingUang">
 <link rel="apple-touch-icon" href="/icons/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<!-- OG / Social -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="KepingUang — Kelola Keuangan Pribadi">
+<meta property="og:description" content="Dashboard lengkap untuk mencatat pemasukan, pengeluaran, aset, hutang, dan tujuan finansial — gratis selamanya.">
+<meta property="og:image" content="/icons/icon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KepingUang">
+<meta name="twitter:description" content="Kelola keuangan pribadi dengan cerdas — gratis selamanya.">
+<!-- JSON-LD -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"KepingUang","description":"Kelola keuangan pribadi dengan cerdas","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"}}</script>
 <link rel="stylesheet" href="app.css">
 </head>
 <body data-theme="light">
@@ -1006,22 +1017,22 @@
       <div class="auth-sub">Selamat datang di KepingUang!<br>Daftar untuk mulai mencatat keuangan Anda.</div>
       <form onsubmit="authRegister(event)">
         <div class="auth-field">
-          <label>Email</label>
+          <label for="regEmail">Email</label>
           <input type="email" id="regEmail" placeholder="contoh@email.com" autocomplete="email" required autofocus>
         </div>
         <div class="auth-field">
-          <label>Nama <span style="font-weight:400;opacity:.6">(opsional)</span></label>
+          <label for="regName">Nama <span style="font-weight:400;opacity:.6">(opsional)</span></label>
           <input type="text" id="regName" placeholder="Contoh: Budi Santoso" autocomplete="name" maxlength="40">
         </div>
         <div class="auth-field">
-          <label>Password</label>
+          <label for="regPw">Password</label>
           <div class="auth-pw-wrap">
-            <input type="password" id="regPw" placeholder="Min 8 karakter, huruf + angka" autocomplete="new-password" required>
-            <button type="button" class="auth-pw-toggle" onclick="togglePw('regPw',this)">👁</button>
+            <input type="password" id="regPw" placeholder="Min 10 karakter, huruf + angka" autocomplete="new-password" required>
+            <button type="button" class="auth-pw-toggle" onclick="togglePw('regPw',this)" aria-label="Tampilkan password">👁</button>
           </div>
         </div>
         <div class="auth-field">
-          <label>Konfirmasi Password</label>
+          <label for="regPw2">Konfirmasi Password</label>
           <div class="auth-pw-wrap">
             <input type="password" id="regPw2" placeholder="Ulangi password" autocomplete="new-password" required>
             <button type="button" class="auth-pw-toggle" onclick="togglePw('regPw2',this)">👁</button>
@@ -1039,14 +1050,14 @@
       <div class="auth-sub">Masuk dengan email dan password Anda.</div>
       <form onsubmit="authLogin(event)">
         <div class="auth-field">
-          <label>Email</label>
+          <label for="loginEmail">Email</label>
           <input type="email" id="loginEmail" placeholder="contoh@email.com" autocomplete="email" required autofocus>
         </div>
         <div class="auth-field">
-          <label>Password</label>
+          <label for="loginPw">Password</label>
           <div class="auth-pw-wrap">
             <input type="password" id="loginPw" placeholder="Password" autocomplete="current-password" required>
-            <button type="button" class="auth-pw-toggle" onclick="togglePw('loginPw',this)">👁</button>
+            <button type="button" class="auth-pw-toggle" aria-label="Tampilkan password" onclick="togglePw('loginPw',this)">👁</button>
           </div>
         </div>
         <button type="submit" class="auth-submit" id="loginBtn">Masuk</button>
@@ -1069,15 +1080,15 @@
   <div class="nav-right">
     <span class="save-badge" id="saveBadge">✓ Tersimpan</span>
     <!-- Undo/Redo: Ctrl+Z / Ctrl+Y tersedia lewat keyboard -->
-    <button id="undoBtn" style="display:none" onclick="historyUndo()"></button>
-    <button id="redoBtn" style="display:none" onclick="historyRedo()"></button>
-    <button class="currency-btn" onclick="toggleCurrency()" id="currencyBtn">🇮🇩 IDR</button>
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-    <button class="save-checkpoint-btn" id="checkpointBtn" onclick="openCheckpointModal()" title="Kelola snapshot data">💾 <span id="checkpointMeta" style="font-size:10px;opacity:.7;font-weight:400;margin-left:2px"></span></button>
-    <button class="restore-checkpoint-btn" id="restoreBtn" onclick="restoreCheckpoint()" title="Kembalikan ke save terakhir" disabled>↩</button>
+    <button id="undoBtn" style="display:none" onclick="historyUndo()" aria-label="Undo"></button>
+    <button id="redoBtn" style="display:none" onclick="historyRedo()" aria-label="Redo"></button>
+    <button class="currency-btn" onclick="toggleCurrency()" id="currencyBtn" aria-label="Ganti mata uang">🇮🇩 IDR</button>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Ganti tema">🌙</button>
+    <button class="save-checkpoint-btn" id="checkpointBtn" onclick="openCheckpointModal()" aria-label="Kelola snapshot data">💾 <span id="checkpointMeta" style="font-size:10px;opacity:.7;font-weight:400;margin-left:2px"></span></button>
+    <button class="restore-checkpoint-btn" id="restoreBtn" onclick="restoreCheckpoint()" aria-label="Kembalikan ke snapshot terakhir" disabled>↩</button>
     <!-- Avatar dropdown -->
     <div class="avatar-wrap" id="avatarWrap">
-      <button class="avatar-btn" id="avatarBtn" onclick="toggleAvatarMenu()" title="Akun">
+      <button class="avatar-btn" id="avatarBtn" onclick="toggleAvatarMenu()" aria-label="Menu akun">
         <span id="avatarInitial">?</span>
       </button>
       <div class="avatar-menu" id="avatarMenu">
@@ -1186,7 +1197,7 @@
         <div><div class="page-title">Cash Flow Management</div><div class="page-sub">Kelola pemasukan, pengeluaran, dan tabungan</div></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <button class="tutorial-btn" onclick="startTutorial('cashflow')" title="Buka tutorial" style="display:inline-flex;align-items:center;gap:5px"><svg style="width:13px;height:13px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5c0-1 .75-1.5 1.5-1.5S11 6.5 11 7.5c0 .75-.5 1.25-1.5 1.5V10"/><circle cx="8" cy="12" r=".75" fill="currentColor" stroke="none"/></svg>Tutorial</button>
           <button class="history-btn" onclick="shiftCFMonth(-1)" id="cfMonthPrev" title="Bulan sebelumnya">‹</button>
-          <select id="cfMonthSelect" onchange="setCFMonth(this.value)" style="padding:5px 10px;border:1px solid var(--border);border-radius:20px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:12px;cursor:pointer;outline:none"></select>
+          <select id="cfMonthSelect" aria-label="Pilih bulan" onchange="setCFMonth(this.value)" style="padding:5px 10px;border:1px solid var(--border);border-radius:20px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:12px;cursor:pointer;outline:none"></select>
           <button class="history-btn" onclick="shiftCFMonth(1)" id="cfMonthNext" title="Bulan berikutnya">›</button>
           <!-- Kategori dikelola langsung dari form tambah income/expense -->
           <span id="cfManualAddBtns" style="display:inline-flex;gap:8px">
@@ -1408,16 +1419,16 @@
 </div>
 
 <!-- CHECKPOINT MODAL -->
-<div class="modal-overlay" id="cpModal" style="display:none">
+<div class="modal-overlay" id="cpModal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="cpModalTitle">
   <div class="modal-box" style="max-width:560px">
     <div class="modal-header">
-      <div style="font-size:15px;font-weight:600">💾 Kelola Snapshots</div>
-      <button class="modal-close" onclick="closeCPModal()">×</button>
+      <div id="cpModalTitle" style="font-size:15px;font-weight:600">💾 Kelola Snapshots</div>
+      <button class="modal-close" onclick="closeCPModal()" aria-label="Tutup">×</button>
     </div>
     <div style="padding-bottom:12px">
       <div style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5">Snapshot menyimpan semua data kamu saat ini. Kamu bisa restore ke snapshot mana pun kapan saja.</div>
       <div style="display:flex;gap:8px;margin-bottom:16px">
-        <input id="cpLabelInput" type="text" placeholder="Nama snapshot (wajib diisi)" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:13px;outline:none">
+        <input id="cpLabelInput" type="text" placeholder="Nama snapshot (wajib diisi)" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:16px;outline:none">
         <button onclick="doCreateCP()" class="btn btn-primary" style="white-space:nowrap">+ Simpan Sekarang</button>
       </div>
       <div id="cpList"></div>
@@ -1444,11 +1455,11 @@
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay">
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-box">
     <div class="modal-header">
       <div style="font-size:15px;font-weight:600" id="modalTitle">Tambah Data</div>
-      <button class="modal-close" onclick="closeModal()">×</button>
+      <button class="modal-close" onclick="closeModal()" aria-label="Tutup">×</button>
     </div>
     <div id="modalContent"></div>
   </div>

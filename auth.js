@@ -107,7 +107,7 @@ async function requireAuth(req, res, next) {
 
 function validatePasswordRules(password) {
   if (typeof password !== 'string') return 'Password harus string';
-  if (password.length < 8)          return 'Password minimal 8 karakter';
+  if (password.length < 10)         return 'Password minimal 10 karakter';
   if (password.length > 128)        return 'Password maksimal 128 karakter';
   if (!/[A-Za-z]/.test(password))   return 'Password harus mengandung huruf';
   if (!/[0-9]/.test(password))      return 'Password harus mengandung angka';

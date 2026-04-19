@@ -34,10 +34,20 @@ app.set('trust proxy', 1);
 
 // ─── MIDDLEWARE ───────────────────────────────────────────────────────────────
 
-// Security headers (helmet). contentSecurityPolicy dinonaktifkan agar
-// CDN scripts (Chart.js, XLSX) tetap bisa dimuat oleh browser.
+// Security headers — CSP dikonfigurasi untuk izinkan CDN yang digunakan
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc:  ["'self'"],
+      scriptSrc:   ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://browser.sentry-cdn.com"],
+      styleSrc:    ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc:     ["'self'", "https://fonts.gstatic.com"],
+      imgSrc:      ["'self'", "data:", "https:"],
+      connectSrc:  ["'self'", "https://open.er-api.com", "https://*.ingest.sentry.io"],
+      objectSrc:   ["'none'"],
+      frameAncestors: ["'none'"],
+    },
+  },
   crossOriginEmbedderPolicy: false,
 }));
 

@@ -132,7 +132,7 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center}
 .modal-box{background:var(--surface);border-radius:var(--radius);padding:24px;width:480px;max-width:90vw;max-height:90vh;overflow-y:auto}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.modal-close{background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;padding:0 4px;line-height:1}
+.modal-close{background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;padding:6px 10px;line-height:1;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
 
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 @media(max-width:900px){
@@ -720,7 +720,7 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 }
 .hs-peek-icon-sm { font-size: 14px; opacity: .7; }
 .hs-peek-title {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text2);
   writing-mode: vertical-rl;
@@ -791,8 +791,8 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
   text-align: center; pointer-events: none;
 }
 .hs-gauge-pct { display: block; font-size: 22px; font-weight: 700; font-family: var(--font); color: var(--text); line-height: 1; }
-.hs-gauge-sublabel { font-size: 9px; font-family: var(--font); color: var(--text3); text-transform: uppercase; letter-spacing: .4px; }
-.hs-gauge-ticks { display: flex; justify-content: space-between; padding: 0 20px; font-size: 9px; font-family: var(--font); margin-top: 2px; }
+.hs-gauge-sublabel { font-size: 10px; font-family: var(--font); color: var(--text3); text-transform: uppercase; letter-spacing: .4px; }
+.hs-gauge-ticks { display: flex; justify-content: space-between; padding: 0 20px; font-size: 10px; font-family: var(--font); margin-top: 2px; }
 
 /* ── Donut (Asset) ── */
 .hs-donut-wrap { display: flex; align-items: center; gap: 14px; flex-shrink: 0; margin-top: 8px; }
@@ -804,7 +804,7 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
   pointer-events: none; text-align: center;
 }
 .hs-donut-total { font-size: 10px; font-weight: 700; font-family: var(--font); color: var(--text); line-height: 1.2; }
-.hs-donut-label { font-size: 8px; font-family: var(--font); color: var(--text3); text-transform: uppercase; }
+.hs-donut-label { font-size: 10px; font-family: var(--font); color: var(--text3); text-transform: uppercase; }
 .hs-donut-legend { flex: 1; display: flex; flex-direction: column; gap: 5px; }
 .hs-donut-leg-item { display: flex; align-items: center; gap: 6px; }
 .hs-donut-leg-item span:first-child { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
@@ -829,11 +829,11 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .hs-ring-pct { font-size: 15px; font-weight: 700; font-family: var(--font); color: var(--text); line-height: 1; }
-.hs-ring-label { font-size: 8px; font-family: var(--font); color: var(--text3); text-transform: uppercase; letter-spacing: .4px; }
+.hs-ring-label { font-size: 10px; font-family: var(--font); color: var(--text3); text-transform: uppercase; letter-spacing: .4px; }
 .hs-ring-info { flex: 1; display: flex; flex-direction: column; gap: 10px; }
 .hs-ring-row { display: flex; flex-direction: column; gap: 2px; }
 .hs-ring-key { font-size: 14px; font-weight: 700; font-family: var(--font); color: var(--text); }
-.hs-ring-sub { font-size: 9px; font-family: var(--font); color: var(--text3); text-transform: uppercase; letter-spacing: .4px; }
+.hs-ring-sub { font-size: 10px; font-family: var(--font); color: var(--text3); text-transform: uppercase; letter-spacing: .4px; }
 
 /* ── Inv chart ── */
 .preview-chart-wrap { position: relative; height: 120px; margin-bottom: 4px; flex-shrink: 0; }
@@ -1094,7 +1094,7 @@ tr:hover .row-actions,.debt-item:hover .row-actions,.goal-item:hover .row-action
 
   /* Compact bottom nav — shorter items so content area isn't eaten */
   .bottom-nav { padding: 2px 0 env(safe-area-inset-bottom, 2px); }
-  .bottom-nav-item { padding: 4px 6px; gap: 1px; font-size: 9px; }
+  .bottom-nav-item { padding: 4px 6px; gap: 1px; font-size: 10px; }
   .bottom-nav-item svg { width: 18px; height: 18px; }
 
   /* Less bottom clearance to match slimmer nav */
